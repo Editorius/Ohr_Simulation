@@ -4,6 +4,9 @@ Kurze fachlich relevante Historie. Die älteren Einträge sind aus lokalen Proje
 
 ## Unveröffentlicht
 
+- Parallele Bearbeitung mit getrennten Worktrees, Branches und Vorschau-Ports dokumentiert.
+- Zeilenenden zweier historischer Prüfberichte an die Repository-Vorgaben angepasst, damit frische Checkouts sauber bleiben.
+
 - Projektpflege: kurze AGENTS.md, CONTRIBUTING.md und aktueller Modellvertrag MODEL.md ergänzt.
 - Automatische Node- und Python-Reproduktionsprüfungen; kein automatisches Deployment.
 - Gezielte Original-Eingabedaten mit Prüfsummen sowie Generatoren für Mechanik, Strömungsgeometrie, Messkurven und Referenzantworten ergänzt.
