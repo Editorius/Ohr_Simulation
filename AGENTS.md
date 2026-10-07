@@ -17,6 +17,12 @@
 - Didaktische Skalierung nicht als physiologische Verstärkung oder Hörschaden ausgeben.
 - Bestehende Arbeitsstände und nicht zum Auftrag gehörende Änderungen bewahren.
 
+## Parallele Bearbeitung
+- Pro unabhängigem Auftrag einen eigenen Branch und Git-Worktree verwenden; nie im gemeinsam bearbeiteten Verzeichnis den Branch wechseln.
+- Vor Änderungen Status und Ausgangsbranch prüfen. Fremde Änderungen nicht zurücksetzen oder überschreiben.
+- Gleichzeitige Vorschauen über unterschiedliche PORT-Werte starten; Datenerzeugung und Export nur im eigenen Worktree ausführen.
+- Änderungen über geprüfte Pull Requests zusammenführen; danach den gemeinsamen Ausgangsstand aktualisieren.
+
 ## Prüfung und Abschluss
 - Lokal starten: npm start. Gesamte automatisierte Prüfung: npm test.
 - Keine npm-Installation nötig. Datengenerator: Python 3.12 und scripts/requirements.txt.

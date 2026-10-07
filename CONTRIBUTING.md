@@ -21,6 +21,34 @@ Die Tests benötigen `tests/`, `research/` und die in package.json benannten Dat
 5. Pull Request mit Problem, Änderung, Prüfungen und verbleibenden Grenzen erstellen. Fehlende Browserprüfung ausdrücklich benennen.
 6. Nach Prüfung zusammenführen und veröffentlichte Seite neu laden. Version und Bedienung kurz kontrollieren.
 
+## Mehrere Terminals und parallele Aufträge
+
+Für unabhängige Änderungen braucht jeder Auftrag einen eigenen Branch **und einen eigenen Git-Worktree**. Zwei Terminals im selben Verzeichnis teilen Dateien, Index und aktiven Branch; ein Branchwechsel wirkt deshalb auf beide.
+
+Aus einem bestehenden Repository einen Arbeitsstand auf Basis des aktuellen Hauptbranches anlegen (Namen je Auftrag anpassen):
+
+```powershell
+git fetch origin
+git worktree add -b arbeit/layout ../Ohr_Simulation_layout origin/main
+cd ../Ohr_Simulation_layout
+git status --short --branch
+```
+
+Für einen zweiten Auftrag einen anderen Branch und Ordner wählen, zum Beispiel `arbeit/modell` und `../Ohr_Simulation_modell`. Nicht gleichzeitig dieselben Dateien in einem gemeinsamen Worktree bearbeiten. Änderungen anderer Aufträge weder zurücksetzen noch durch Kopieren ersetzen.
+
+Jede gleichzeitig laufende Vorschau braucht einen eigenen Port. Im jeweiligen PowerShell-Terminal beispielsweise:
+
+```powershell
+$env:PORT = '8767'
+npm start
+```
+
+Die Vorschau dieses Worktrees ist dann unter http://127.0.0.1:8767/ erreichbar. Für den nächsten Worktree etwa 8768 verwenden. Der Standard bleibt 8766. Beim Vergleichen stets URL und zugehörigen Arbeitsstand beachten.
+
+Generatoren schreiben nach `.generated/`, Exporte nach `dist/`. Diese Verzeichnisse sind je Worktree getrennt. Dieselbe Datenerzeugung oder denselben Export nicht gleichzeitig mehrfach im gleichen Worktree starten.
+
+Vor einem Pull Request die vorgesehenen Prüfungen im eigenen Worktree ausführen und nur auftragsbezogene Änderungen committen. Nach dem Zusammenführen `git fetch origin` ausführen; neue Aufträge wieder von `origin/main` starten. Bei bereits laufenden Aufträgen den neuen Hauptbranch bewusst integrieren, Konflikte prüfen und betroffene Tests wiederholen. Einen Worktree erst nach Sicherung seiner Arbeit und Beenden der zugehörigen Vorschau entfernen.
+
 ## Automatische Prüfung und Veröffentlichung
 
 `.github/workflows/tests.yml` prüft Pushes und Pull Requests und lässt sich manuell starten. Er veröffentlicht nichts und benötigt keine zusätzlichen Secrets. Er verwendet GitHubs normale read-only Repository-Berechtigung.
