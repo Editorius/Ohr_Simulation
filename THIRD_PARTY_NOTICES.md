@@ -1,0 +1,8 @@
+# Quellen und Rechte
+
+- Mechanischer Kern und Geometrie: abgeleitet vom historischen MATLAB-Modell von R. Nobili und F. Mammano, Revision 1997 (lokale Vorlage Model_2_fixed). Im aktuellen Projekt nach JavaScript übertragen, am unteren Helicotrema-Beitrag korrigiert und auf 600 Abschnitte gebracht. Ausgangsarchiv: https://au.mathworks.com/matlabcentral/answers/uploaded_files/91907/Model_2.zip . Das Upload-Datum ist nicht das wissenschaftliche Entstehungsjahr.
+- Wissenschaftlicher Hintergrund: Mammano & Nobili (1993), „Biophysics of the cochlea. Linear approximation“; Elliott et al., „An elemental approach to modelling the mechanics of the cochlea“, https://pmc.ncbi.nlm.nih.gov/articles/PMC5854296/ . Das Paket beansprucht keine vollständige Implementierung aller Ansätze dieser Arbeiten.
+- Menschliche Mittelohrmessdaten in human-input-data.js: O’Connell-Rodwell et al. (2024), S2, https://doi.org/10.1371/journal.pone.0298535.s009 ; in den Quelldaten mit CC BY 4.0 gekennzeichnet. Abgeleitet: geometrisches Mittel von drei Präparaten, Auswahl/Export für Kalibrierungstests.
+- Steigbügel-Projektionsfläche 2,86 mm²: Sim et al. (2013), https://pmc.ncbi.nlm.nih.gov/articles/PMC3660917/ .
+
+Original-Paper, Präsentationen und fremder MATLAB-Quellcode werden nicht mitgeliefert. Die daraus abgeleiteten mechanischen Arrays und Geometriewerte sind für die App enthalten. Eine ausdrückliche Weiterverbreitungslizenz des historischen Modells ist in diesem Paket nicht belegt. Daher wurde keine MIT- oder andere pauschale Lizenz hinzugefügt; vor öffentlicher Weiterverbreitung ist diese Herkunftsfrage zu klären. Die Zusammenstellung selbst veröffentlicht noch nichts.
