@@ -1,0 +1,11 @@
+{
+  "inputs": {
+    "data/human-middle-ear-source.csv": "578f3c5d76fa704b101b69a24c3ca08d100c68980bc2641e5294fd6a8c071078",
+    "data/historical/bmw_man.mat": "3aa136cf2f44bba2eaf55cf5ca85531679666b05b52dac328175ee43a9b61553",
+    "data/historical/man_data.mat": "4cfafa362c05b23303e9249484b678fe3b74a3ac3f483213e024d0f09f669c82"
+  },
+  "historical_source": "https://au.mathworks.com/matlabcentral/answers/uploaded_files/91907/Model_2.zip",
+  "human_source": "https://doi.org/10.1371/journal.pone.0298535.s009",
+  "human_license": "CC BY 4.0",
+  "historical_license": "Not established; see THIRD_PARTY_NOTICES.md"
+}

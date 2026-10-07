@@ -31,3 +31,15 @@ Details: [Strömungsanzeige](STROEMUNGSANZEIGE_0.11.0.md), [Kalibrierung](KALIBR
 `index.html`, `style.css`, `app.js`: Oberfläche. `cochlea-model.js`, `cochlea-data.js`, `numerics.js`: Rechenkern. `solver-client.js`: Hintergrundberechnung. `response-view.js`: Anzeigeskalen. `fluid-geometry.js`, `fluid-view.js`: Strömungsrekonstruktion. `audio.js`: Ton. `serve.cjs`: lokaler Server. `tests/`, `research/`: Prüfungen und Referenzwerte.
 
 Siehe [Quellen und Rechte](THIRD_PARTY_NOTICES.md). Dieses Paket legt keine pauschale Open-Source-Lizenz für fremde Modell- und Datenbestandteile fest.
+
+## Weiterentwicklung und Reproduktion
+
+- [AGENTS.md](AGENTS.md): kurze KI-Arbeitsregeln.
+- [CONTRIBUTING.md](CONTRIBUTING.md): Änderungs- und Prüfablauf.
+- [MODEL.md](MODEL.md): maßgeblicher aktueller Modellvertrag.
+- [CHANGELOG.md](CHANGELOG.md): Änderungshistorie.
+- [scripts/README.md](scripts/README.md): reproduzierbare Daten und Hosting-Export.
+
+Das Repository enthält jetzt gezielt benötigte Entwicklungsdaten und Generatoren. Für Hosting-Uploads kann ein separates Paket mit `python scripts/export_release.py` erzeugt werden. Es liegt unter `dist/` und enthält nur Website-Dateien sowie aktuelle Prüfsummen. Der historische Prüfsummenstand liegt unter `research/releases/0.11.0/`; er beschreibt nicht den laufenden Git-Stand.
+
+Automatische Prüfungen stehen in `.github/workflows/tests.yml`. Der Workflow veröffentlicht nichts. Bei branchbasiertem GitHub Pages begrenzt der Testworkflow nicht automatisch, welche Dateien GitHub bereitstellt; vor einer Umstellung auf einen gezielten Deployment-Export die Pages-Konfiguration separat ändern.

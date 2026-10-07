@@ -1,0 +1,9 @@
+* text=auto
+*.md text eol=lf
+*.py text eol=lf
+*.yml text eol=lf
+*.mat -text whitespace=cr-at-eol
+*.csv -text whitespace=cr-at-eol
+*.png -text
+*.jpg -text
+research/releases/0.11.0/SHA256.json -text
