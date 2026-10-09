@@ -8,6 +8,9 @@
         maximumFractionDigits: d,
       });
   const audio = new TonePlayer();
+  const contour = CochleaContour.outline();
+  $("scala-fill").setAttribute("d", contour.fill);
+  $("scala-wall").setAttribute("d", contour.wall);
   let result,
     reference,
     pair,
@@ -196,13 +199,14 @@
     );
     // Local complex mean velocity, not the BM envelope or a uniform sine.
     const arrows=[];
-    for(const [y,scala] of [[62,'sv'],[158,'st']]) {
+    for(const scala of ['sv','st']) {
       for(let x=146;x<=914;x+=48) {
         const position=(x-130)/800*viewLength();
         const velocity=CochleaFluid.sample(fluidFlow,scala,position,phase);
         const span=32*velocity/fluidReference;
         if(Math.abs(span)<.08)continue;
         const end=x+span/2,begin=x-span/2;
+        const y=CochleaContour.arrowY(scala,begin,end);
         const head=Math.min(3.5,Math.abs(span)*.35),back=end-Math.sign(span)*head;
         arrows.push(`<path data-scala="${scala}" data-velocity="${velocity}" d="M${begin} ${y} H${end} M${back} ${y-head} L${end} ${y} L${back} ${y+head}" fill="none" stroke="#438d99" stroke-width="1.4" opacity=".8"/>`);
       }

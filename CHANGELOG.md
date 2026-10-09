@@ -4,6 +4,10 @@ Kurze fachlich relevante Historie. Die älteren Einträge sind aus lokalen Proje
 
 ## Unveröffentlicht
 
+- Cochlea-Kontur aus den vorhandenen Scalenflächen abgeleitet; geglättete, überhöhte Darstellung mit basaler Erweiterung und schmalerem Apex.
+- Offene Steigbügelform, zugeordnete Beschriftungen und Strömungspfeile außerhalb der neuen Kontur. Rechenkern und Amplitudenmaßstab unverändert.
+
+
 - Parallele Bearbeitung mit getrennten Worktrees, Branches und Vorschau-Ports dokumentiert.
 - Zeilenenden zweier historischer Prüfberichte an die Repository-Vorgaben angepasst, damit frische Checkouts sauber bleiben.
 
