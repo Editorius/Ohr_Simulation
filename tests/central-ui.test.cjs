@@ -37,7 +37,7 @@ test('Central B controls, phase, zero drive, boundaries and reset remain coheren
  for(const id of ['diagnostics','phase-svg','greenwood','greenwood-wave','period-time','phase-value','calibration-note','amplitude-note','amplitude-values'])assert.equal(elements.has(id),false,id);
  assert.match(html,/Modellhinweis/);
  assert.equal(el('animation-toggle').textContent,'Ⅱ Pause');
- assert.equal(el('stapes-motion').attrs.transform,'translate(3 0)');assert.equal(el('round-window-motion').attrs.transform,'translate(-3 0)');assert.match(el('flow-arrows').innerHTML,/data-velocity/);
+ assert.equal(el('stapes-motion').attrs.transform,'translate(6 0)');assert.equal(el('round-window-motion').attrs.transform,'translate(-6 0)');assert.match(el('flow-arrows').innerHTML,/data-velocity/);
  const full=el('drive-value').textContent;change('drive',600,'input');finite();assert.equal(el('drive-value').textContent,'1 nm');assert.notEqual(el('drive-value').textContent,full);assert.notEqual(detailAxis(),firstDetailAxis);
  change('drive',-1,'input');assert.equal(el('drive').value,0);change('drive',1001,'input');assert.equal(el('drive').value,1000);
  const wave=el('wave-line').attrs.d;change('phase-position',90,'input');assert.equal(el('instant-time').textContent,'0,25 ms');assert.equal(el('period-end').textContent,'1,00 ms');assert.equal(el('phase-position').attrs['aria-valuetext'],'0,25 ms');assert.notEqual(el('wave-line').attrs.d,wave);const arrows=Array.from(el('flow-arrows').innerHTML.matchAll(/data-scala="(sv|st)"[^>]*d="M([\d.]+) ([\d.]+) H([\d.]+)/g));assert.ok(arrows.length>0);
@@ -47,5 +47,20 @@ test('Central B controls, phase, zero drive, boundaries and reset remain coheren
  }
  assert.match(el('spiral-svg').innerHTML,/stroke-width=".8"/);assert.match(el('spiral-svg').innerHTML,/x="244"/);
  change('frequency',50);finite();change('frequency',20000);finite();assert.equal(el('drive-value').textContent,'100 nm');change('frequency',20001);assert.equal(el('input-error').hidden,false);
+ // Opposite window positions and half-cycle reversal of every fluid sample.
+ change('frequency',1000);change('drive',800,'input');
+ const fields=[];
+ for(const degrees of [0,90,180,270]) {
+  change('phase-position',degrees,'input');finite();
+  const shift=Number(el('stapes-motion').attrs.transform.match(/translate\(([^ ]+)/)[1]);
+  const opposite=Number(el('round-window-motion').attrs.transform.match(/translate\(([^ ]+)/)[1]);
+  assert.ok(Math.abs(shift+opposite)<1e-12);
+  assert.ok(Math.abs(shift-6*Math.cos(degrees*Math.PI/180))<1e-12);
+  fields.push(Array.from(el('flow-arrows').innerHTML.matchAll(/data-velocity="([^"]+)"/g),m=>Number(m[1])));
+ }
+ for(const [a,b] of [[0,2],[1,3]]) {
+  assert.equal(fields[a].length,fields[b].length);
+  fields[a].forEach((v,i)=>assert.ok(Math.abs(v+fields[b][i])<1e-10*Math.max(1,Math.abs(v))));
+ }
  el('reset').handlers.click();flush();finite();assert.equal(Number(el('active-amplitude').value),100);assert.equal(el('drive').value,800);assert.equal(el('drive-value').textContent,'10 nm');assert.equal(el('mode-passive').attrs['aria-pressed'],'true');
 });

@@ -1,6 +1,6 @@
 # Aktueller Modellvertrag
 
-Stand: App 0.11.1; Dokumentation vom 07.10.2026. Beschreibt die implementierte Näherung, keine vollständige physiologische Validierung. Historische Berichte können frühere Einstellungen beschreiben.
+Stand: App 0.11.2; Dokumentation vom 07.10.2026. Beschreibt die implementierte Näherung, keine vollständige physiologische Validierung. Historische Berichte können frühere Einstellungen beschreiben.
 
 ## Mechanischer Kern
 
@@ -59,11 +59,15 @@ cochlea-model.js/numerics.js: Solver; cochlea-data.js: eingebettete Mechanik; re
 
 Quellen und Rechte: THIRD_PARTY_NOTICES.md. Fachliche Details: STROEMUNGSANZEIGE_0.11.0.md und KALIBRIERUNG_0.10.0.md (historischer Kalibrierungsschritt). Die aktuelle Erzeugungskette liegt unter scripts/ und data/. python scripts/reproduce.py vergleicht neu berechnete Arrays, Geometrie, Messdaten und 32 komplexe Referenzantworten. --stability berechnet zusätzlich die Eigenwerte. Details und Toleranzen: scripts/README.md.
 
-## Cochlea-Kontur der Animation (0.11.1)
+## Cochlea-Kontur und Animation (0.11.2)
 
-cochlea-contour.js verwendet die vorhandenen Scalenflächen ausschließlich für die Darstellung. Entsprechend der Halbkreis-Annahme ihrer Erzeugung wird ein effektiver Radius r = sqrt(2 A / pi) bestimmt. Die treppenförmigen Daten werden mit einem gaußförmigen, nach Abschnittslänge gewichteten Fenster (Sigma 0,5 mm) geglättet. Die Kanalhöhe beträgt im SVG 36 + 18 r_mm Einheiten; dieser zusätzliche Darstellungsraum und die Höhenüberhöhung sind keine anatomische Millimeterskala. Der apikale Rundbogen ist schematisch. Die Kontur ist keine patientenspezifische Rekonstruktion und keine Digitalisierung der Paper-Abbildung.
+Die Außenkontur ist die freigegebene SVG-Gestaltung mit ausgeprägter basaler Erweiterung und Verjüngung zum Apex. Sie ist bewusst schematisch und in der Höhe überhöht: Die grafischen Bézierkurven in cochlea-contour.js sind keine aus Messdaten rekonstruierte Kanalgeometrie. Sie ersetzen die frühere, optisch zu gleichförmige Kontur aus effektiven Scalenradien. Der Rechenkern verwendet weiterhin ausschließlich seine unveränderten Geometriedaten und Matrizen.
 
-Die BM behält die bisherige gerade Ortsachse und den ortsunabhängigen Maßstab ±16 µm (±34 SVG-Einheiten). Strömungspfeile liegen mit Abstand außerhalb der jeweiligen Kontur; ihre horizontalen Längen, Vorzeichen und Phasen bleiben unverändert aus der Strömungsrechnung abgeleitet. Steigbügel und rundes Fenster bleiben getrennte, gegenläufig bewegte Elemente mit schematischem Hub. Sämtliche mechanischen Matrizen und Geometriedaten bleiben unverändert.
+Die BM liegt auf einer geraden Ortsachse (0–33,5 mm). Ihre Auslenkung wird weiterhin überall mit demselben festen Maßstab ±16 µm auf ±34 SVG-Einheiten abgebildet. Es gibt keine örtliche Anpassung der Amplitude an die Kanalhöhe. Welle, Hüllkurven und Markierungen sind auf diesen Auslenkungsbereich begrenzt. Die Kammern bleiben im gesamten BM-Bereich breiter als dieser Zeichenbereich. Zwischen BM-Ende und apikaler Außenwand bleibt die schematische Verbindung frei.
+
+Steigbügel einschließlich Fußplatte sowie rundes Fenster sind eigene SVG-Gruppen. Ihr schematisch vergrößerter Hub beträgt ±6 SVG-Einheiten mit gegenläufigem cos(omega t). Flexible Verbindungslinien halten den Anschluss an die feste Außenwand. Die sichtbaren Hübe sind weder absolute Steigbügelwerte noch eine aus Fensterflächen bestimmte Volumenbilanz. Die Strömungsrechnung verwendet unverändert die eingestellte reale Steigbügelamplitude; an der Basis ist ihre Geschwindigkeit gegenüber der Auslenkung um eine Viertelperiode verschoben.
+
+Die 17 Pfeilpositionen pro Scala liegen außerhalb der Kontur und bleiben zeitlich fest. Die horizontale Pfeillänge (maximal 44 SVG-Einheiten), Richtung und Phase stammen aus der komplexen lokalen mittleren Geschwindigkeit in fluid-view.js. Der gemeinsame Referenzbetrag ist innerhalb einer Periode und bei Passiv/Aktiv sowie aktiver Amplitude unverändert. Kleine Momentanwerte dürfen verschwinden; die Pfeile sind keine Teilchenbahnen. Die schematische Kontur wird niemals zur Neuberechnung der Strömung verwendet.
 
 ## Unterrichtsansicht
 Die Oberfläche zeigt keine Greenwood-Referenzlinie, kein Phasendiagramm und keine technische Prüftabelle mehr. Diese Vereinfachung entfernt ausschließlich Darstellungsfunktionen; komplexe Antworten und Phasen bleiben für die Wanderwelle und Strömungsrechnung erhalten. Der Zeitregler zeigt den aktuellen Zeitpunkt in ms bzw. µs, am rechten Ende die Periodendauer. Seine interne Einteilung bleibt 0–360; ein Einzelschritt entspricht 1/24 Periode. Die Zeitlupe steuert ausschließlich die Abspieldauer. Die Skalen und Einheiten der beiden Auslenkungsanzeigen bleiben unverändert.

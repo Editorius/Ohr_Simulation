@@ -4,6 +4,8 @@ Kurze fachlich relevante Historie. Die älteren Einträge sind aus lokalen Proje
 
 ## Unveröffentlicht
 
+- 0.11.2: Freigegebene SVG-Außenkontur übernommen; gegenläufige Fensterbewegung mit verbundenen Anschlüssen, berechnete BM-Wanderwelle und zeitlich feste außenliegende Strömungspfeile integriert. Beschriftungen der Fenster liegen außerhalb. Rechenkern und globaler Auslenkungsmaßstab unverändert.
+
 - Unterrichtsansicht vereinfacht: Hinweise aus Verstärkungs- und Auslenkungskachel entfernt, kompakte Zeitleiste mit Zeitpunkt t, verständliche Animationsknöpfe; Greenwood-Anzeige und technische Diagnostik durch kurzen Modellhinweis ersetzt.
 
 - Cochlea-Kontur aus den vorhandenen Scalenflächen abgeleitet; geglättete, überhöhte Darstellung mit basaler Erweiterung und schmalerem Apex.

@@ -8,7 +8,13 @@
         maximumFractionDigits: d,
       });
   const audio = new TonePlayer();
+  const waveLayout = CochleaContour.layout;
+  const waveX = x => waveLayout.left + (waveLayout.right-waveLayout.left)*x/viewLength();
   const contour = CochleaContour.outline();
+  const arrowSites = Array.from({length:17}, (_,j) => {
+    const x=waveLayout.left+30+j*(waveLayout.right-waveLayout.left-60)/16;
+    return {x,sv:CochleaContour.arrowY('sv',x-22,x+22),st:CochleaContour.arrowY('st',x-22,x+22)};
+  });
   $("scala-fill").setAttribute("d", contour.fill);
   $("scala-wall").setAttribute("d", contour.wall);
   let result,
@@ -161,46 +167,37 @@
 
   function wave() {
     if (!result) return;
-    const scale = 34 / reference.peakAmplitude;
-    const xs = result.x.map((x) => 130 + (800 * x) / viewLength());
+    const scale = waveLayout.halfHeight / reference.peakAmplitude;
+    const xs = result.x.map((x) => waveX(x));
     $("wave-line").setAttribute(
       "d",
       path(
         xs,
         result.real.map(
           (v, i) =>
-            110 -
+            waveLayout.center -
             scale * (v * Math.cos(phase) - result.imag[i] * Math.sin(phase)),
         ),
       ),
     );
     // Same phase as the prescribed stapes displacement. Window excursions are
     // illustrative: no round-window area or membrane shape is inferred here.
-    const windowShift =
-      3 * Math.cos(phase);
-    $("stapes-motion").setAttribute("transform", `translate(${windowShift} 0)`);
-    $("round-window-motion").setAttribute(
-      "transform",
-      `translate(${-windowShift} 0)`,
-    );
-    $("oval-attachment").setAttribute(
-      "d",
-      `M130 74 H${130 + windowShift} M130 96 H${130 + windowShift}`,
-    );
-    $("round-attachment").setAttribute(
-      "d",
-      `M130 125 H${130 - windowShift} M130 145 H${130 - windowShift}`,
-    );
+    const motion = CochleaContour.windowMotion(phase);
+    $("stapes-motion").setAttribute("transform", `translate(${motion.shift} 0)`);
+    $("round-window-motion").setAttribute("transform", `translate(${-motion.shift} 0)`);
+    $("oval-attachment").setAttribute("d", motion.oval);
+    $("round-attachment").setAttribute("d", motion.round);
     // Local complex mean velocity, not the BM envelope or a uniform sine.
     const arrows=[];
     for(const scala of ['sv','st']) {
-      for(let x=146;x<=914;x+=48) {
-        const position=(x-130)/800*viewLength();
+      for(const site of arrowSites) {
+        const x=site.x;
+        const position=(x-waveLayout.left)/(waveLayout.right-waveLayout.left)*viewLength();
         const velocity=CochleaFluid.sample(fluidFlow,scala,position,phase);
-        const span=32*velocity/fluidReference;
+        const span=44*velocity/fluidReference;
         if(Math.abs(span)<.08)continue;
         const end=x+span/2,begin=x-span/2;
-        const y=CochleaContour.arrowY(scala,begin,end);
+        const y=site[scala];
         const head=Math.min(3.5,Math.abs(span)*.35),back=end-Math.sign(span)*head;
         arrows.push(`<path data-scala="${scala}" data-velocity="${velocity}" d="M${begin} ${y} H${end} M${back} ${y-head} L${end} ${y} L${back} ${y+head}" fill="none" stroke="#438d99" stroke-width="1.4" opacity=".8"/>`);
       }
@@ -317,15 +314,15 @@
   }
   function draw() {
     if (!result) return;
-    const scale = 34 / reference.peakAmplitude,
-      xs = result.x.map((x) => 130 + (800 * x) / viewLength()),
-      peak = 130 + (800 * result.peakX) / viewLength();
+    const scale = waveLayout.halfHeight / reference.peakAmplitude,
+      xs = result.x.map((x) => waveX(x)),
+      peak = waveX(result.peakX);
 
     $("plot-legend").textContent = activeMode ? (comparing() ? "Aktiv · Passiv gestrichelt" : "Aktiv") : "Passiv";
-    const px = 130 + (800 * passive.peakX) / viewLength();
+    const px = waveX(passive.peakX);
     $("passive-marker").innerHTML =
       comparing() && result.peakAmplitude && !passive.peakOutside
-        ? `<path d="M${px} 70 V150" stroke="#697c85" stroke-dasharray="4 4"/><circle cx="${px}" cy="${110 - scale * passive.peakAmplitude}" r="4" fill="#697c85"/>`
+        ? `<path d="M${px} 236 V304" stroke="#697c85" stroke-dasharray="4 4"/><circle cx="${px}" cy="${waveLayout.center - scale * passive.peakAmplitude}" r="4" fill="#697c85"/>`
         : "";
     for (const [id, sign] of [
       ["passive-envelope-top", -1],
@@ -335,38 +332,38 @@
         "d",
         path(
           xs,
-          passive.amplitude.map((a) => 110 + sign * scale * a),
+          passive.amplitude.map((a) => waveLayout.center + sign * scale * a),
         ),
       );
       $(id).style.display = $("envelope").checked ? "" : "none";
     }
     $("wave-marker").innerHTML = result.peakAmplitude && !result.peakOutside
-      ? `<path d="M${peak} 65 V155" stroke="#c95454" opacity=".16" stroke-width="16"/><circle cx="${peak}" cy="${110 - scale * result.peakAmplitude}" r="5" fill="#c95454" stroke="white" stroke-width="2"/>${text(Math.min(peak + 12, 805), 35, "Maximum", 'style="fill:#c95454" class="svg-small"')}`
+      ? `<path d="M${peak} 236 V304" stroke="#c95454" opacity=".16" stroke-width="16"/><circle cx="${peak}" cy="${waveLayout.center - scale * result.peakAmplitude}" r="5" fill="#c95454" stroke="white" stroke-width="2"/>`
       : "";
     $("envelope-top").setAttribute(
       "d",
       path(
         xs,
-        result.amplitude.map((a) => 110 - scale * a),
+        result.amplitude.map((a) => waveLayout.center - scale * a),
       ),
     );
     $("envelope-bottom").setAttribute(
       "d",
       path(
         xs,
-        result.amplitude.map((a) => 110 + scale * a),
+        result.amplitude.map((a) => waveLayout.center + scale * a),
       ),
     );
     for (const id of ["envelope-top", "envelope-bottom"])
       $(id).style.display = activeMode && $("envelope").checked ? "" : "none";
-    let axis = '<path d="M130 238 H930" stroke="#8da0a8"/>';
+    let axis = '<path d="M317 495 H1505" stroke="#8da0a8"/>';
     for (const mm of axisTicks()) {
-      const x = 130 + (800 * mm) / (viewLength()*1000);
+      const x = waveX(mm/1000);
       axis +=
-        `<path d="M${x} 238 v6" stroke="#8da0a8"/>` +
+        `<path d="M${x} 495 v6" stroke="#8da0a8"/>` +
         text(
           x,
-          258,
+          520,
           mm === viewLength()*1000 ? fmt(mm,1) + " mm" : mm,
           'text-anchor="middle" class="svg-small"',
         );
