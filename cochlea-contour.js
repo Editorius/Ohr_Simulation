@@ -29,9 +29,18 @@
     const a=p[hi-1],b=p[hi],t=(x-a[0])/(b[0]-a[0]||1);
     return a[1]+t*(b[1]-a[1]);
   }
-  function arrowY(scala,begin,end) {
-    const ys=Array.from({length:33},(_,i)=>boundary(scala,begin+(end-begin)*i/32));
-    return scala==='sv'?Math.min(...ys)-15:Math.max(...ys)+15;
+  function arrowFrame(scala,x) {
+    const slope=(boundary(scala,x+1)-boundary(scala,x-1))/2;
+    const length=Math.hypot(1,slope),tx=1/length,ty=slope/length;
+    const side=scala==='sv'?-1:1;
+    // A fixed normal offset keeps the arrow outside the wall throughout a cycle.
+    return {x:x-side*ty*20,y:boundary(scala,x)+side*tx*20,tx,ty};
+  }
+  function arrowPath(frame,span) {
+    const {x,y,tx,ty}=frame,head=Math.min(3.5,Math.abs(span)*.35);
+    const point=(along,normal=0)=>`${x+tx*along-ty*normal} ${y+ty*along+tx*normal}`;
+    const end=span/2,back=end-Math.sign(span)*head;
+    return `M${point(-span/2)} L${point(end)} M${point(back,-head)} L${point(end)} L${point(back,head)}`;
   }
   function windowMotion(phase) {
     // Visible schematic excursion, not another scale for absolute BM values.
@@ -40,7 +49,7 @@
       oval:`M300 170 H${300+shift} M301 210 L${300+shift} 210`,
       round:`M298 344 H${295-shift} M293 372 H${295-shift}`};
   }
-  const api={layout,boundary,arrowY,windowMotion,outline:()=>({fill,wall})};
+  const api={layout,boundary,arrowFrame,arrowPath,windowMotion,outline:()=>({fill,wall})};
   if(typeof module!=="undefined"&&module.exports)module.exports=api;
   root.CochleaContour=api;
 })(globalThis);

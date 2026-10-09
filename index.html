@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Innenohr · Wanderwelle</title>
+    <title>Innenohr Â· Wanderwelle</title>
     <link rel="stylesheet" href="style.css" />
     <script defer src="numerics.js"></script>
     <script defer src="cochlea-data.js"></script>
@@ -19,18 +19,18 @@
   <body>
     <header class="header">
       <div class="brand">
-        <span class="brand-icon" aria-hidden="true">∿</span>
+        <span class="brand-icon" aria-hidden="true">âˆ¿</span>
         <div>
-          <h1>Innenohr · Wanderwelle</h1>
+          <h1>Innenohr Â· Wanderwelle</h1>
           <p>Modell des menschlichen Ohrs</p>
         </div>
       </div>
       <nav aria-label="Ohrbereiche">
         <button class="selected" aria-current="page">Innenohr</button
-        ><button disabled>Mittelohr · später</button
-        ><button disabled>Außenohr · später</button>
+        ><button disabled>Mittelohr Â· spÃ¤ter</button
+        ><button disabled>AuÃŸenohr Â· spÃ¤ter</button>
       </nav>
-      <span class="version">Arbeitsstand 0.11.2 · Innenohr</span>
+      <span class="version">Arbeitsstand 0.11.3 Â· Innenohr</span>
     </header>
     <main class="workspace">
       <aside class="sidebar" aria-label="Einstellungen">
@@ -70,7 +70,7 @@
                 type="button"
                 class="secondary"
                 data-frequency-step="50"
-                aria-label="Frequenz um 50 Hertz erhöhen"
+                aria-label="Frequenz um 50 Hertz erhÃ¶hen"
               >
                 +50 Hz</button
               ><button
@@ -79,7 +79,7 @@
                 data-frequency-step="-50"
                 aria-label="Frequenz um 50 Hertz senken"
               >
-                −50 Hz
+                âˆ’50 Hz
               </button>
             </div>
           </div>
@@ -95,7 +95,7 @@
           </div>
         </section>
         <section class="panel">
-          <h2><span class="number">2</span> Cochleäre Verstärkung</h2>
+          <h2><span class="number">2</span> CochleÃ¤re VerstÃ¤rkung</h2>
           <div class="segmented">
             <button id="mode-passive" class="selected" aria-pressed="true">
               Passiv</button
@@ -103,16 +103,16 @@
               Aktiv
             </button>
           </div>
-          <label for="drive">Anregung am Steigbügel <output id="drive-value">10 nm</output></label><input id="drive" type="range" min="0" max="1000" step="1" value="800"/>
+          <label for="drive">Anregung am SteigbÃ¼gel <output id="drive-value">10 nm</output></label><input id="drive" type="range" min="0" max="1000" step="1" value="800"/>
           <label for="active-amplitude">Aktive Amplitude <output id="active-amplitude-value">100 %</output></label><input id="active-amplitude" type="range" min="30" max="100" step="1" value="100" disabled/>
 
         </section>
         <section class="panel">
-          <h2><span class="number">3</span> Ton hören</h2>
+          <h2><span class="number">3</span> Ton hÃ¶ren</h2>
           <button id="audio-toggle" aria-pressed="false">
-            ♫ &nbsp; Ton einschalten</button
+            â™« &nbsp; Ton einschalten</button
           ><label for="volume"
-            >Wiedergabelautstärke <output id="volume-value">10 %</output></label
+            >WiedergabelautstÃ¤rke <output id="volume-value">10 %</output></label
           ><input id="volume" type="range" min="0" max="100" value="10" />
 
           <p id="audio-status" class="small-status" role="status">Ton aus</p>
@@ -124,7 +124,7 @@
             <h2>Wanderwelle auf der Basilarmembran</h2>
             <span id="confirmed-frequency">Entrollte Cochlea</span>
           </div>
-<svg id="wave-svg" viewBox="0 0 1600 550" role="img" aria-label="Entrollte Cochlea mit bewegten Fenstern, berechneter Wanderwelle und Strömungspfeilen">
+<svg id="wave-svg" viewBox="0 0 1600 550" role="img" aria-label="Entrollte Cochlea mit bewegten Fenstern, berechneter Wanderwelle und StrÃ¶mungspfeilen">
 <defs>
  <linearGradient id="fluid" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fffaf0"/><stop offset="1" stop-color="#f5ecd0"/></linearGradient>
  <linearGradient id="bone" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e4eaeb"/><stop offset="1" stop-color="#b8c8cd"/></linearGradient>
@@ -136,7 +136,7 @@
 </g>
 
 <path id="bm-rest" d="M317 270 H1505" fill="none" stroke="#87b9ba" stroke-width="2.6"/>
-<g id="flow-arrows" aria-label="Berechnete mittlere Strömungsgeschwindigkeit"/>
+<g id="flow-arrows" aria-label="Berechnete mittlere StrÃ¶mungsgeschwindigkeit"/>
 <g clip-path="url(#wave-displacement-clip)">
  <g id="wave-marker"/><g id="passive-marker"/>
  <path id="passive-envelope-top" class="comparison-curve"/><path id="passive-envelope-bottom" class="comparison-curve"/>
@@ -155,14 +155,14 @@
 </g>
 
 <g id="labels-layer">
- <text x="54" y="103" class="label">Steigbügel</text><path d="M169 108 L207 172" class="leader" />
+ <text x="54" y="103" class="label">SteigbÃ¼gel</text><path d="M169 108 L207 172" class="leader" />
  <text x="42" y="244" class="label">Ovales Fenster</text><path d="M183 239 L260 231 L296 204" class="leader" />
  <text x="40" y="406" class="label">Rundes Fenster</text><path d="M197 400 L248 391 L288 361" class="leader" />
  <text x="795" y="101" text-anchor="middle" class="label">Scala vestibuli</text>
  <text x="795" y="428" text-anchor="middle" class="label">Scala tympani</text>
  <text x="1552" y="151" text-anchor="end">Helicotrema</text><path d="M1538 160 L1524 266" class="leader" />
- <text x="1100" y="432" text-anchor="middle">Basilarmembran</text><path d="M1065 411 L1035 390 L1035 272" class="leader" />
- <text x="317" y="482" class="label">Basis</text><text x="1505" y="482" text-anchor="end" class="label">Apex</text><text x="1140" y="540" text-anchor="middle" class="small">Höhe schematisch · Auslenkung ±16 µm</text></g>
+ <text x="1100" y="432" text-anchor="middle">Basilarmembran</text><path d="M1100 411 L1087 390 L1087 272" class="leader" />
+ <text x="317" y="482" class="label">Basis</text><text x="1505" y="482" text-anchor="end" class="label">Apex</text><text x="1140" y="540" text-anchor="middle" class="small">HÃ¶he schematisch Â· Auslenkung Â±16 Âµm</text></g>
 <g id="wave-axis"/>
 </svg>
           <div class="period-player">
@@ -175,12 +175,12 @@
           </div>
           <section class="controls compact-controls" aria-label="Darstellung">
               <button id="animation-toggle" aria-pressed="false">
-                ▶ Abspielen</button
+                â–¶ Abspielen</button
               ><button id="next-state" class="secondary">Einzelschritt</button
               >
 
-            <button id="stop" class="secondary">■ &nbsp; Stopp</button
-            ><button id="reset" class="secondary">Zurücksetzen</button
+            <button id="stop" class="secondary">â–  &nbsp; Stopp</button
+            ><button id="reset" class="secondary">ZurÃ¼cksetzen</button
             ><label class="inline" for="speed"
               >Zeitlupe
               <select id="speed">
@@ -189,7 +189,7 @@
                 <option value="1">1 s / Periode</option>
               </select></label
             ><label class="check"
-              ><input id="envelope" type="checkbox" checked /> Hüllkurve</label>
+              ><input id="envelope" type="checkbox" checked /> HÃ¼llkurve</label>
           </section>
         </section>
         <div class="lower-grid">
@@ -213,12 +213,12 @@
               role="img"
               aria-label="Schematische Schnecke mit berechnetem Maximum"
             ></svg>
-            <p class="hint">Schematisch · Zuordnung entlang der Bogenlänge</p>
+            <p class="hint">Schematisch Â· Zuordnung entlang der BogenlÃ¤nge</p>
           </section>
         </div>
         <details class="panel model-note">
           <summary>Modellhinweis <span>Vereinfachtes mechanisches Modell</span></summary>
-          <p>Die Cochlea ist entrollt und in der Höhe vergrößert dargestellt. Die aktive Verstärkung ist vereinfacht; die gezeigten Auslenkungen sind Modellwerte. Die Tonlautstärke ist unabhängig von der Anregung am Steigbügel.</p>
+          <p>Die Cochlea ist entrollt und in der HÃ¶he vergrÃ¶ÃŸert dargestellt. Die aktive VerstÃ¤rkung ist vereinfacht; die gezeigten Auslenkungen sind Modellwerte. Die TonlautstÃ¤rke ist unabhÃ¤ngig von der Anregung am SteigbÃ¼gel.</p>
         </details>
         <p id="status" class="small-status" role="status"></p>
       </div>

@@ -17,10 +17,10 @@ test('Central B controls, phase, zero drive, boundaries and reset remain coheren
  for(const file of ['numerics.js','cochlea-data.js','cochlea-model.js','solver-client.js','audio.js','response-view.js','fluid-geometry.js','fluid-view.js','cochlea-contour.js','app.js'])vm.runInContext(fs.readFileSync(require.resolve('../'+file),'utf8'),ctx);
  function flush(){while(queue.length)queue.shift()();}
  function change(id,value,event='change'){el(id).value=String(value);el(id).handlers[event]();flush();}
- function finite(){assert.match(el('amplitude-svg').attrs['aria-label'],/1 pm bis 16 µm/);assert.equal(elements.has('passive-detail'),false);for(const e of elements.values())assert.doesNotMatch(e.innerHTML+JSON.stringify(e.attrs),/NaN|Infinity/);}
+ function finite(){assert.match(el('amplitude-svg').attrs['aria-label'],/1 pm bis 16 Âµm/);assert.equal(elements.has('passive-detail'),false);for(const e of elements.values())assert.doesNotMatch(e.innerHTML+JSON.stringify(e.attrs),/NaN|Infinity/);}
  flush();finite();assert.match(el('status').textContent,/Berechnet/);
  assert.equal(elements.has('extended-frequency'),false);assert.equal(el('frequency').min,50);assert.equal(el('frequency').max,20000);
- assert.match(el('amplitude-svg').innerHTML,/Auslenkung \(µm\) · linear/);assert.equal(el('drive-value').textContent,'10 nm');assert.equal(el('active-amplitude').disabled,true);
+ assert.match(el('amplitude-svg').innerHTML,/Auslenkung \(Âµm\) Â· linear/);assert.equal(el('drive-value').textContent,'10 nm');assert.equal(el('active-amplitude').disabled,true);
  const detailAxis=()=>el('amplitude-svg').innerHTML.match(/<g id="maximum-detail-axis"[\s\S]*?<\/g>/)[0];
  const firstDetailAxis=detailAxis();
  const passiveBar=()=>el('amplitude-svg').innerHTML.match(/<rect id="maximum-passive-bar"[^>]+/)[0];
@@ -36,14 +36,25 @@ test('Central B controls, phase, zero drive, boundaries and reset remain coheren
  assert.equal(el('active-amplitude-value').textContent,'100 %');
  for(const id of ['diagnostics','phase-svg','greenwood','greenwood-wave','period-time','phase-value','calibration-note','amplitude-note','amplitude-values'])assert.equal(elements.has(id),false,id);
  assert.match(html,/Modellhinweis/);
- assert.equal(el('animation-toggle').textContent,'Ⅱ Pause');
+ assert.equal(el('animation-toggle').textContent,'â…¡ Pause');
  assert.equal(el('stapes-motion').attrs.transform,'translate(6 0)');assert.equal(el('round-window-motion').attrs.transform,'translate(-6 0)');assert.match(el('flow-arrows').innerHTML,/data-velocity/);
  const full=el('drive-value').textContent;change('drive',600,'input');finite();assert.equal(el('drive-value').textContent,'1 nm');assert.notEqual(el('drive-value').textContent,full);assert.notEqual(detailAxis(),firstDetailAxis);
  change('drive',-1,'input');assert.equal(el('drive').value,0);change('drive',1001,'input');assert.equal(el('drive').value,1000);
- const wave=el('wave-line').attrs.d;change('phase-position',90,'input');assert.equal(el('instant-time').textContent,'0,25 ms');assert.equal(el('period-end').textContent,'1,00 ms');assert.equal(el('phase-position').attrs['aria-valuetext'],'0,25 ms');assert.notEqual(el('wave-line').attrs.d,wave);const arrows=Array.from(el('flow-arrows').innerHTML.matchAll(/data-scala="(sv|st)"[^>]*d="M([\d.]+) ([\d.]+) H([\d.]+)/g));assert.ok(arrows.length>0);
- for(const [,scala,begin,y,end] of arrows) for(const x of [Number(begin),Number(end)]) {
-  const wall=ctx.CochleaContour.boundary(scala,x);
-  assert.ok(scala==='sv'?Number(y)<wall-4:Number(y)>wall+4);
+ const wave=el('wave-line').attrs.d;change('phase-position',90,'input');assert.equal(el('instant-time').textContent,'0,25 ms');assert.equal(el('period-end').textContent,'1,00 ms');assert.equal(el('phase-position').attrs['aria-valuetext'],'0,25 ms');assert.notEqual(el('wave-line').attrs.d,wave);const arrows=Array.from(el('flow-arrows').innerHTML.matchAll(/data-scala="(sv|st)"[^>]*d="([^"]+)"/g));assert.ok(arrows.length>0);
+ for(const [,scala,d] of arrows) for(const m of d.matchAll(/[ML]([^ ]+) ([^ ML]+)/g)) {
+  const wall=ctx.CochleaContour.boundary(scala,Number(m[1]));
+  assert.ok(scala==='sv'?Number(m[2])<wall-4:Number(m[2])>wall+4);
+ }
+ // Maximum arrow extents remain separated and outside the wall, both directions.
+ for(const scala of ['sv','st']) {
+  let previousRight=-Infinity;
+  for(let j=0;j<17;j++) {
+   const x=347+j*1128/16,frame=ctx.CochleaContour.arrowFrame(scala,x);
+   const vertices=[-44,44].flatMap(span=>Array.from(ctx.CochleaContour.arrowPath(frame,span).matchAll(/[ML]([^ ]+) ([^ ML]+)/g),m=>[Number(m[1]),Number(m[2])]));
+   assert.ok(Math.min(...vertices.map(p=>p[0]))>previousRight+8);
+   previousRight=Math.max(...vertices.map(p=>p[0]));
+   for(const [px,py] of vertices) assert.ok(scala==='sv'?py<ctx.CochleaContour.boundary(scala,px)-4:py>ctx.CochleaContour.boundary(scala,px)+4);
+  }
  }
  assert.match(el('spiral-svg').innerHTML,/stroke-width=".8"/);assert.match(el('spiral-svg').innerHTML,/x="244"/);
  change('frequency',50);finite();change('frequency',20000);finite();assert.equal(el('drive-value').textContent,'100 nm');change('frequency',20001);assert.equal(el('input-error').hidden,false);
