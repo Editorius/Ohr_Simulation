@@ -8,6 +8,9 @@
         maximumFractionDigits: d,
       });
   const audio = new TonePlayer();
+  const contour = CochleaContour.outline();
+  $("scala-fill").setAttribute("d", contour.fill);
+  $("scala-wall").setAttribute("d", contour.wall);
   let result,
     reference,
     pair,
@@ -30,7 +33,6 @@
     $("frequency-max-label").textContent = fmt(hi, 0) + " Hz";
 
   }
-  const modelName = r => r.modelLabel;
   const comparing = () => activeMode;
   const path = (xs, ys) =>
     xs
@@ -54,13 +56,13 @@
   }
   function stopAnimation() {
     running = false;
-    $("animation-toggle").textContent = "▶  Animation starten";
+    $("animation-toggle").textContent = "▶ Abspielen";
     $("animation-toggle").setAttribute("aria-pressed", "false");
   }
   function startAnimation() {
     running = true;
     last = performance.now();
-    $("animation-toggle").textContent = "Ⅱ  Bildpause";
+    $("animation-toggle").textContent = "Ⅱ Pause";
     $("animation-toggle").setAttribute("aria-pressed", "true");
   }
   function periodTime(seconds, period = seconds) {
@@ -72,10 +74,9 @@
     if (!result) return;
     const fraction = phase / (2 * Math.PI);
     $("phase-position").value = fraction * 360;
-    $("phase-value").textContent = fmt(fraction * 360, 0) + "°";
-    $("period-time").textContent = "T = " + periodTime(1 / result.frequency);
     $("instant-time").textContent =
-      "t = " + periodTime(fraction / result.frequency, 1 / result.frequency);
+      periodTime(fraction / result.frequency, 1 / result.frequency);
+    $("phase-position").setAttribute("aria-valuetext", $("instant-time").textContent);
     $("period-end").textContent = periodTime(1 / result.frequency);
 
   }
@@ -97,7 +98,6 @@
     $("drive").value = Math.max(0,Math.min(1000,Number($("drive").value)));
     driveNm=.001*10**(5*Number($("drive").value)/1000);
     $("drive-value").textContent=lengthText(driveNm*1e-9);
-    $("calibration-note").textContent="Scheitelamplitude aus der Ruhelage."+(activeMode ? " Aktiv: lineares Kleinsignalmodell, noch ohne Kompression." : "");
   }
   function selectResult() {
     $("active-amplitude").value=Math.min(100,Math.max(30,Number($("active-amplitude").value)));
@@ -119,9 +119,6 @@
     const fullActive=CochleaResponse.scaleResponse(pair.active,driveNm*1e-9);
     fullActive.stapesDisplacement=driveNm*1e-9;
     fluidReference=Math.max(CochleaFluid.reconstruct(passive).maxSpeed,CochleaFluid.reconstruct(fullActive).maxSpeed,1e-30);
-    $("model-warning").hidden = false;
-    $("model-warning").textContent = result.warning;
-    $("model-warning").classList.toggle("error",result.unstable);
     $("confirmed-frequency").textContent =
       (activeMode ? "Aktiv" : "Passiv") +
       " · " +
@@ -196,13 +193,14 @@
     );
     // Local complex mean velocity, not the BM envelope or a uniform sine.
     const arrows=[];
-    for(const [y,scala] of [[62,'sv'],[158,'st']]) {
+    for(const scala of ['sv','st']) {
       for(let x=146;x<=914;x+=48) {
         const position=(x-130)/800*viewLength();
         const velocity=CochleaFluid.sample(fluidFlow,scala,position,phase);
         const span=32*velocity/fluidReference;
         if(Math.abs(span)<.08)continue;
         const end=x+span/2,begin=x-span/2;
+        const y=CochleaContour.arrowY(scala,begin,end);
         const head=Math.min(3.5,Math.abs(span)*.35),back=end-Math.sign(span)*head;
         arrows.push(`<path data-scala="${scala}" data-velocity="${velocity}" d="M${begin} ${y} H${end} M${back} ${y-head} L${end} ${y} L${back} ${y+head}" fill="none" stroke="#438d99" stroke-width="1.4" opacity=".8"/>`);
       }
@@ -280,10 +278,6 @@
         'text-anchor="middle" class="svg-small"',
       );
     s += `<path d="M${left} ${top} V${bottom} H${right}" fill="none" stroke="#8498a1"/>`;
-    if ($("greenwood").checked) {
-      const x = X(result.greenwoodX);
-      s += `<path d="M${x} ${top} V${bottom}" stroke="#bd8a34" stroke-dasharray="4 4"/>`;
-    }
     s += `<g clip-path="url(#amplitude-clip)">`;
     s += `<path id="passive-amplitude-curve" d="${path(passive.x.map(X),passive.amplitude.map(Y))}" class="comparison-curve"/><circle cx="${X(passive.peakX)}" cy="${Y(passive.peakAmplitude)}" r="${passive.peakAmplitude && !passive.peakOutside ? 4 : 0}" fill="#697c85"/>`;
     if(activeMode)s += `<path id="active-amplitude-curve" d="${path(result.x.map(X),result.amplitude.map(Y))}" fill="none" stroke="#126e72" stroke-width="2.7"/>`;
@@ -319,41 +313,7 @@
     s+=maximumBar("maximum-passive-bar",581,passive.peakAmplitude,"Passiv","#3f4348");
     if(activeMode)s+=maximumBar("maximum-detail-bar",640,result.peakAmplitude,"Aktiv","#126e72");
     $("amplitude-svg").innerHTML = s;
-    $("amplitude-note").textContent="Feste lineare Skala: 1 pm bis 16 µm · keine automatische Anpassung. Werte außerhalb des Bereichs werden abgeschnitten. Rechts: eigene lineare Skala, angepasst an Frequenz und Steigbügelanregung; fest bei Passiv/Aktiv und aktiver Amplitude.";
-    $("amplitude-values").textContent="Maximum passiv: "+lengthText(passive.peakAmplitude)+(activeMode ? " · aktiv: "+lengthText(result.peakAmplitude)+" · Verhältnis der Maxima: "+(passive.peakAmplitude>0?fmt(result.peakAmplitude/passive.peakAmplitude,2)+"-fach":"–") : "");
     $("amplitude-svg").setAttribute("aria-label","BM-Auslenkung links fest linear von 1 pm bis 16 µm; rechts passive und bei Aktiv zusätzlich aktive Maxima auf gemeinsamer eigener linearer Skala");
-  }
-  function phasePlot() {
-    // Suppress meaningless far-tail phases below 0.1% of the peak.
-    const ids = result.amplitude
-        .map((a, i) => (a > result.peakAmplitude * 0.001 ? i : -1))
-        .filter((i) => i >= 0),
-      values = ids.map((i) => result.phase[i] / (2 * Math.PI));
-    const min = values.length ? Math.floor(Math.min(...values)) : 0,
-      max = values.length
-        ? Math.max(min + 1, Math.ceil(Math.max(...values)))
-        : 1;
-    const X = (x) => 45 + (470 * x) / viewLength(),
-      Y = (y) => 145 - (120 * (y - min)) / (max - min);
-    let s =
-      `<path d="M45 20 V145 H515" fill="none" stroke="#8498a1"/>` +
-      text(45, 170, "Basis", 'class="svg-small"') +
-      text(480, 170, "Apex", 'class="svg-small"');
-    s +=
-      text(38, 27, max, 'text-anchor="end" class="svg-small"') +
-      text(38, 145, min, 'text-anchor="end" class="svg-small"') +
-      text(
-        52,
-        17,
-        "Perioden · sehr kleine Amplituden ausgeblendet",
-        'class="svg-small"',
-      );
-    if (ids.length)
-      s += `<path d="${path(
-        ids.map((i) => X(result.x[i])),
-        values.map(Y),
-      )}" fill="none" stroke="#126e72" stroke-width="2"/>`;
-    $("phase-svg").innerHTML = s;
   }
   function draw() {
     if (!result) return;
@@ -361,32 +321,6 @@
       xs = result.x.map((x) => 130 + (800 * x) / viewLength()),
       peak = 130 + (800 * result.peakX) / viewLength();
 
-    const assessment = result.peakAnalysis,
-      notes = [];
-    if (result.peakAmplitude) {
-      if (assessment.edgeLimited)
-        notes.push(
-          "Hüllkurve erreicht den Modellrand: Ortszuordnung eingeschränkt",
-        );
-      if (assessment.competing) notes.push("Mehrere ähnlich starke Maxima");
-      if (!result.peakOutside && assessment.widthMm !== null)
-        notes.push(
-          "Räumliche −3-dB-Breite: " + fmt(assessment.widthMm, 2) + " mm",
-        );
-      if (result.frequency < 150)
-        notes.push(
-          "Tieffrequenter Prüfbereich: Abschluss und Mechanik beeinflussen die Ortslage",
-        );
-      notes.push("600 Rechenabschnitte · Knotenmaximum; zwei Nachkommastellen sind keine Genauigkeitszusage");
-      if (result.normalized && result.frequency >= 14000) notes.push("Basaler Prüfbereich: noch gitterabhängig");
-      notes.push("Berechnetes Schwingungsmaximum, kein nachgewiesener Hörort");
-    } else notes.push("Keine Anregung – kein Maximum");
-    $("peak-assessment").textContent = notes.join(" · ");
-    $("peak-assessment").classList.toggle(
-      "error",
-      !!result.peakAmplitude &&
-        (result.peakOutside || assessment.edgeLimited || assessment.competing),
-    );
     $("plot-legend").textContent = activeMode ? (comparing() ? "Aktiv · Passiv gestrichelt" : "Aktiv") : "Passiv";
     const px = 130 + (800 * passive.peakX) / viewLength();
     $("passive-marker").innerHTML =
@@ -438,15 +372,9 @@
         );
     }
     $("wave-axis").innerHTML = axis;
-    const gx = 130 + (800 * result.greenwoodX) / viewLength();
-    $("greenwood-wave").innerHTML = $("greenwood").checked
-      ? `<path d="M${gx} 70 V155" stroke="#bd8a34" stroke-dasharray="5 4"/>${text(Math.min(gx + 8, 770), 219, "Greenwood " + fmt(result.greenwoodX * 1000) + " mm", 'style="fill:#9a7028" class="svg-small"')}`
-      : "";
-    $("diagnostics").innerHTML = `<dt>Modell</dt><dd>${modelName(result)}</dd><dt>Gitter</dt><dd>${result.cells} Abschnitte · ca. 0,024–0,108 mm</dd><dt>Relativer Gleichungsfehler</dt><dd>${result.residual.toExponential(2)}</dd><dt>Mechanik</dt><dd>${result.mechanicsLabel}</dd><dt>Anregung</dt><dd>${result.sourceLabel}</dd><dt>Maximaler Polrealteil</dt><dd>${fmt(result.maxRealPole,3)} s⁻¹</dd><dt>BM-Maximum</dt><dd>${lengthText(result.peakAmplitude)}</dd><dt>Aktive Amplitude</dt><dd>${activeMode ? fmt(Number($("active-amplitude").value),0)+" %" : "Passiv"}</dd><dt>Steigbügelhub</dt><dd>${lengthText(driveNm*1e-9)}</dd><dt>Einordnung</dt><dd>${result.warning}</dd>`;
     wave();
     plot();
     spiral();
-    phasePlot();
   }
   $("frequency").addEventListener("change", () =>
     calculate(Number($("frequency").value)),
@@ -484,8 +412,7 @@
       selectResult();
     });
   $("active-amplitude").addEventListener("input",selectResult);
-  for (const id of ["envelope", "greenwood"])
-    $(id).addEventListener("change", draw);
+  $("envelope").addEventListener("change", draw);
   $("volume").addEventListener("input", () => {
     audio.setVolume(Number($("volume").value));
     $("volume-value").textContent = $("volume").value + " %";
@@ -515,7 +442,7 @@
   $("animation-toggle").addEventListener("click", () => {
     if (running) {
       stopAnimation();
-      $("animation-toggle").textContent = "▶  Animation fortsetzen";
+      $("animation-toggle").textContent = "▶ Fortsetzen";
     } else startAnimation();
   });
   $("phase-position").addEventListener("input", () => {
@@ -552,7 +479,6 @@
     $("volume-value").textContent = "10 %";
     $("speed").value = 0.5;
     $("envelope").checked = true;
-    $("greenwood").checked = false;
     calculate(1000);
   });
   document.addEventListener("visibilitychange", () => {
