@@ -353,13 +353,6 @@ summary span {
   font-size: 12px;
   color: var(--muted);
 }
-.details-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 25px;
-  font-size: 13px;
-  line-height: 1.6;
-}
 dl {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -449,9 +442,6 @@ dd {
   .sidebar button {
     font-size: 12px;
   }
-  .details-grid {
-    grid-template-columns: 1fr;
-  }
 }
 @media (max-width: 560px) {
   .sidebar {
@@ -494,39 +484,6 @@ dd {
   }
 }
 
-.period-player {
-  padding: 14px 0;
-  border-top: 1px solid var(--border);
-  margin-top: 8px;
-}
-.period-heading {
-  display: flex;
-  gap: 18px;
-  flex-wrap: wrap;
-  font-size: 14px;
-}
-.period-heading span {
-  color: var(--teal);
-  font-variant-numeric: tabular-nums;
-  min-width: 110px;
-}
-.period-buttons {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 14px;
-}
-.period-buttons button {
-  font-size: 13px;
-}
-.period-buttons > span {
-  font-size: 12px;
-  color: var(--muted);
-}
-.period-player label {
-  font-size: 12px;
-}
 
 .comparison-curve {
   fill: none;
@@ -554,9 +511,6 @@ dd {
 #comparison-readout {
   color: #64747e;
 }
-.period-player button:disabled {
-  opacity: 0.55;
-}
 
 /* Compact presentation: geometry and amplitudes retain separate display scales. */
 .header {
@@ -577,29 +531,6 @@ dd {
 }
 #wave-svg {
   max-height: 260px;
-}
-.period-player {
-  padding: 10px 0;
-  margin-top: 2px;
-}
-.period-heading {
-  font-size: 12px;
-  gap: 14px;
-}
-.period-player label {
-  margin-top: 8px;
-}
-.period-player input[type="range"] {
-  height: 20px;
-  margin: 2px 0;
-}
-.period-buttons {
-  margin-top: 8px;
-  gap: 8px;
-}
-.period-buttons button {
-  min-height: 34px;
-  padding: 6px 10px;
 }
 .compact-controls {
   padding: 8px 0 10px;
@@ -650,9 +581,6 @@ dd {
 @media (max-width: 560px) {
   .lower-grid {
     grid-template-columns: 1fr;
-  }
-  .period-heading {
-    gap: 8px;
   }
   .compact-controls {
     gap: 8px;
@@ -721,3 +649,25 @@ dd {
 #calibration-note {font-size:11px;line-height:1.4;}
 #passive-detail summary {font-size:12px;cursor:pointer;}
 #passive-detail-svg {width:100%;}
+
+/* Compact time control: actual time is separate from playback speed. */
+.period-player {
+  display: grid;
+  grid-template-columns: auto minmax(120px, 500px) auto;
+  align-items: center;
+  justify-content: start;
+  gap: 16px;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+.period-player label { margin: 0; font-size: 13px; }
+.period-player input[type="range"] { width: 100%; height: 20px; margin: 0; }
+.period-player output { color: var(--teal); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.time-track { min-width: 0; }
+.time-track .endpoints { margin-top: 0; }
+.model-note { padding: 12px 18px; }
+.model-note p { font-size: 13px; line-height: 1.5; color: var(--muted); margin-bottom: 0; }
+@media (max-width: 600px) {
+  .period-player { grid-template-columns: auto 1fr; gap: 8px 12px; }
+  .period-player output { grid-column: 2; text-align: right; }
+}

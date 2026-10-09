@@ -104,7 +104,6 @@
             </button>
           </div>
           <label for="drive">Anregung am Steigbügel <output id="drive-value">10 nm</output></label><input id="drive" type="range" min="0" max="1000" step="1" value="800"/>
-          <p id="calibration-note" class="hint" role="status"></p>
           <label for="active-amplitude">Aktive Amplitude <output id="active-amplitude-value">100 %</output></label><input id="active-amplitude" type="range" min="30" max="100" step="1" value="100" disabled/>
 
         </section>
@@ -192,7 +191,6 @@
             <text x="909" y="230" class="svg-bold">Apex</text>
             <g id="flow-arrows" aria-label="Mittlere lokale Strömungsgeschwindigkeit, Pfeillänge proportional zum Momentanwert"></g>
             <g id="wave-axis"></g>
-            <g id="greenwood-wave"></g>
             <g id="wave-marker"></g>
             <g id="passive-marker"></g>
             <defs><clipPath id="wave-displacement-clip"><rect x="130" y="76" width="800" height="68"/></clipPath></defs>
@@ -206,47 +204,30 @@
             <text x="545" y="210" class="svg-small">Höhe schematisch · Auslenkung ±16 µm</text>
           </svg>
           <div class="period-player">
-            <div class="period-heading">
-              <strong>Eine Schwingungsperiode</strong
-              ><span id="period-time"></span><span id="instant-time"></span>
+            <label for="phase-position">Zeitpunkt t</label>
+            <div class="time-track">
+              <input id="phase-position" type="range" min="0" max="360" step="1" value="0" aria-describedby="instant-time" />
+              <div class="endpoints"><span>0</span><span id="period-end"></span></div>
             </div>
-            <label for="phase-position"
-              >Zeitpunkt in der Periode
-              <output id="phase-value">0°</output></label
-            ><input
-              id="phase-position"
-              type="range"
-              min="0"
-              max="360"
-              step="1"
-              value="0"
-            />
-            <div class="endpoints">
-              <span>0</span><span>T/4</span><span>T/2</span><span>3T/4</span
-              ><span id="period-end"></span>
-            </div>
-
+            <output id="instant-time" for="phase-position">0,00 ms</output>
           </div>
           <section class="controls compact-controls" aria-label="Darstellung">
               <button id="animation-toggle" aria-pressed="false">
-                ▶ Animation starten</button
-              ><button id="next-state" class="secondary">Schritt · 15°</button
+                ▶ Abspielen</button
+              ><button id="next-state" class="secondary">Einzelschritt</button
               >
 
             <button id="stop" class="secondary">■ &nbsp; Stopp</button
             ><button id="reset" class="secondary">Zurücksetzen</button
             ><label class="inline" for="speed"
-              >Abspieldauer
+              >Zeitlupe
               <select id="speed">
-                <option value="0.25">4 s je Periode</option>
-                <option value="0.5" selected>2 s je Periode</option>
-                <option value="1">1 s je Periode</option>
+                <option value="0.25">4 s / Periode</option>
+                <option value="0.5" selected>2 s / Periode</option>
+                <option value="1">1 s / Periode</option>
               </select></label
             ><label class="check"
-              ><input id="envelope" type="checkbox" checked /> Hüllkurve</label
-            ><label class="check"
-              ><input id="greenwood" type="checkbox" /> Greenwood</label
-            >
+              ><input id="envelope" type="checkbox" checked /> Hüllkurve</label>
           </section>
         </section>
         <div class="lower-grid">
@@ -261,7 +242,6 @@
               role="img"
               aria-label="Auslenkung in Nanometern entlang der Basilarmembran"
             ></svg>
-            <p id="amplitude-values" class="small-status"></p><p id="amplitude-note" class="hint"></p>
           </section>
           <section class="panel spiral-panel">
             <h2>Ort in der Cochlea</h2>
@@ -274,31 +254,9 @@
             <p class="hint">Schematisch · Zuordnung entlang der Bogenlänge</p>
           </section>
         </div>
-        <details class="panel">
-          <summary>
-            Modell, Phase und Prüfwerte
-            <span>Lineares räumliches Lehrmodell</span>
-          </summary>
-          <div class="details-grid">
-            <div>
-              <h3>Was wird berechnet?</h3><p>Fensterbewegung und Strömungspfeile sind schematisch vergrößert. Die Pfeile zeigen rekonstruierte mittlere Längsgeschwindigkeiten in den Scalen: lokale Phase und Betrag aus Volumenerhaltung, effektiver BM-Breite und Scalenquerschnitten des Rechenkerns. Die Pfeillänge ist gemeinsam vergrößert; ihr Maßstab bleibt innerhalb einer Periode sowie bei Passiv/Aktiv und aktiver Amplitude gleich. Keine lokalen Wirbel oder dreidimensionalen Nahfelder. Bei reduzierter „Aktiver Amplitude“ ist auch diese Rekonstruktion didaktisch verändert. Positive BM-Auslenkung zeigt in Richtung Scala vestibuli.</p><p>Direkte mechanische Anregung am Steigbügel: Scheitelamplitude von 1 pm bis 100 nm, Startwert 10 nm. Der Eingaberegler ist logarithmisch verteilt; die Auslenkungsgrafiken bleiben linear. Eine Schalldruckzuordnung wird nicht vorgenommen. Die Audiowiedergabe ist nicht auf einen Schalldruck kalibriert.</p>
-              <p>Aktiv: stabiles lineares Kleinsignalmodell (λ = 0,80), keine pegelabhängige Kompression. Die aktive Rechnung bei mittleren und hohen Pegeln ist nicht physiologisch validiert. „Aktive Amplitude“ verändert didaktisch nur die Antwort, nicht die Rückkopplung. Die Hüllkurvengrafik nutzt eine feste lineare y-Achse von 1 pm bis 16 µm. Die Animation bildet vorzeichenbehaftete Auslenkungen linear mit einem festen Bereich von −16 µm bis +16 µm ab. Die globalen Maßstäbe bleiben bei allen Einstellungen unverändert. Die zusätzliche Maximum-Anzeige rechts verwendet eine eigene lineare Skala: Ihre Obergrenze berücksichtigt die größere passive oder vollständig aktive Antwort. Sie passt sich nur an Frequenz und Steigbügelanregung an, nicht an Modus oder aktive Amplitude. Werte außerhalb der Bereiche werden abgeschnitten; sehr kleine Auslenkungen sind gegebenenfalls nicht erkennbar. Die numerischen Maximalwerte bleiben unverändert. Aktiv und Passiv nutzen dieselbe Steigbügelanregung und denselben Maßstab.</p>
-              <p>Projizierte Steigbügelfläche: 2,86 mm². Quellen: <a href="https://doi.org/10.1371/journal.pone.0298535" target="_blank" rel="noopener">O’Connell-Rodwell et al. 2024, menschliche Messdaten S2</a>; <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3660917/" target="_blank" rel="noopener">Sim et al. 2013, Tabelle 2</a>. Die BM-Absolutwerte sind Modellwerte, noch keine menschliche Messvalidierung.</p>
-              <p>600 Membranabschnitte auf 33,5 mm, ohne virtuelle Verlängerung. Flüssigkeitskopplung mit Fern- und Nahanteil, Tektorialmembranresonanz und Scherkopplung. Der untere Helicotrema-Beitrag ist korrigiert.</p>
-              <p>Die Animation zeigt Betrag und Phase der harmonischen Lösung. Aktive und passive Maxima werden unabhängig berechnet. Die feinere Unterteilung reduziert räumliche Ecken; sie ersetzt keine Stabilitäts- oder Konvergenzprüfung.</p>
-              <p>Die geringe basale Amplitude allein beweist keine feste Einspannung. Eine anatomisch vollständige Randbedingung oder menschliche Messvalidierung ist damit nicht nachgewiesen.</p>
-            </div>
-            <div>
-              <h3>Phase relativ zur Steigbügelauslenkung</h3>
-              <svg
-                id="phase-svg"
-                viewBox="0 0 540 180"
-                role="img"
-                aria-label="Entfaltete Phase in Schwingungsperioden"
-              ></svg>
-              <p id="model-warning" class="hint" role="status"></p><p id="peak-assessment" class="hint"></p><dl id="diagnostics"></dl>
-            </div>
-          </div>
+        <details class="panel model-note">
+          <summary>Modellhinweis <span>Vereinfachtes mechanisches Modell</span></summary>
+          <p>Die Cochlea ist entrollt und in der Höhe vergrößert dargestellt. Die aktive Verstärkung ist vereinfacht; die gezeigten Auslenkungen sind Modellwerte. Die Tonlautstärke ist unabhängig von der Anregung am Steigbügel.</p>
         </details>
         <p id="status" class="small-status" role="status"></p>
       </div>
