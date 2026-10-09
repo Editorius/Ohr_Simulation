@@ -17,10 +17,10 @@ test('Central B controls, phase, zero drive, boundaries and reset remain coheren
  for(const file of ['numerics.js','cochlea-data.js','cochlea-model.js','solver-client.js','audio.js','response-view.js','fluid-geometry.js','fluid-view.js','cochlea-contour.js','app.js'])vm.runInContext(fs.readFileSync(require.resolve('../'+file),'utf8'),ctx);
  function flush(){while(queue.length)queue.shift()();}
  function change(id,value,event='change'){el(id).value=String(value);el(id).handlers[event]();flush();}
- function finite(){assert.match(el('amplitude-svg').attrs['aria-label'],/1 pm bis 16 Âµm/);assert.equal(elements.has('passive-detail'),false);for(const e of elements.values())assert.doesNotMatch(e.innerHTML+JSON.stringify(e.attrs),/NaN|Infinity/);}
+ function finite(){assert.match(el('amplitude-svg').attrs['aria-label'],/1 pm bis 16 µm/);assert.equal(elements.has('passive-detail'),false);for(const e of elements.values())assert.doesNotMatch(e.innerHTML+JSON.stringify(e.attrs),/NaN|Infinity/);}
  flush();finite();assert.match(el('status').textContent,/Berechnet/);
  assert.equal(elements.has('extended-frequency'),false);assert.equal(el('frequency').min,50);assert.equal(el('frequency').max,20000);
- assert.match(el('amplitude-svg').innerHTML,/Auslenkung \(Âµm\) Â· linear/);assert.equal(el('drive-value').textContent,'10 nm');assert.equal(el('active-amplitude').disabled,true);
+ assert.match(el('amplitude-svg').innerHTML,/Auslenkung \(µm\) · linear/);assert.equal(el('drive-value').textContent,'10 nm');assert.equal(el('active-amplitude').disabled,true);
  const detailAxis=()=>el('amplitude-svg').innerHTML.match(/<g id="maximum-detail-axis"[\s\S]*?<\/g>/)[0];
  const firstDetailAxis=detailAxis();
  const passiveBar=()=>el('amplitude-svg').innerHTML.match(/<rect id="maximum-passive-bar"[^>]+/)[0];
@@ -36,7 +36,7 @@ test('Central B controls, phase, zero drive, boundaries and reset remain coheren
  assert.equal(el('active-amplitude-value').textContent,'100 %');
  for(const id of ['diagnostics','phase-svg','greenwood','greenwood-wave','period-time','phase-value','calibration-note','amplitude-note','amplitude-values'])assert.equal(elements.has(id),false,id);
  assert.match(html,/Modellhinweis/);
- assert.equal(el('animation-toggle').textContent,'â…¡ Pause');
+ assert.equal(el('animation-toggle').textContent,'Ⅱ Pause');
  assert.equal(el('stapes-motion').attrs.transform,'translate(6 0)');assert.equal(el('round-window-motion').attrs.transform,'translate(-6 0)');assert.match(el('flow-arrows').innerHTML,/data-velocity/);
  const full=el('drive-value').textContent;change('drive',600,'input');finite();assert.equal(el('drive-value').textContent,'1 nm');assert.notEqual(el('drive-value').textContent,full);assert.notEqual(detailAxis(),firstDetailAxis);
  change('drive',-1,'input');assert.equal(el('drive').value,0);change('drive',1001,'input');assert.equal(el('drive').value,1000);
