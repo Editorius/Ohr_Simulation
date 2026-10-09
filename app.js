@@ -8,7 +8,13 @@
         maximumFractionDigits: d,
       });
   const audio = new TonePlayer();
+  const waveLayout = CochleaContour.layout;
+  const waveX = x => waveLayout.left + (waveLayout.right-waveLayout.left)*x/viewLength();
   const contour = CochleaContour.outline();
+  const arrowSites = Array.from({length:17}, (_,j) => {
+    const x=waveLayout.left+30+j*(waveLayout.right-waveLayout.left-60)/16;
+    return {x,sv:CochleaContour.arrowFrame('sv',x),st:CochleaContour.arrowFrame('st',x)};
+  });
   $("scala-fill").setAttribute("d", contour.fill);
   $("scala-wall").setAttribute("d", contour.wall);
   let result,
@@ -42,12 +48,12 @@
     `<text x="${x}" y="${y}" ${extra}>${t}</text>`;
   function audioState(message) {
     $("audio-toggle").textContent = audio.on
-      ? "♫  Ton ausschalten"
-      : "♫  Ton einschalten";
+      ? "â™«  Ton ausschalten"
+      : "â™«  Ton einschalten";
     $("audio-toggle").setAttribute("aria-pressed", String(audio.on));
     $("audio-status").textContent =
       message ||
-      (audio.on ? `Ton an · ${fmt(result.frequency, 0)} Hz` : "Ton aus");
+      (audio.on ? `Ton an Â· ${fmt(result.frequency, 0)} Hz` : "Ton aus");
   }
   function stopAudio() {
     pendingAudio = false;
@@ -56,19 +62,19 @@
   }
   function stopAnimation() {
     running = false;
-    $("animation-toggle").textContent = "▶ Abspielen";
+    $("animation-toggle").textContent = "â–¶ Abspielen";
     $("animation-toggle").setAttribute("aria-pressed", "false");
   }
   function startAnimation() {
     running = true;
     last = performance.now();
-    $("animation-toggle").textContent = "Ⅱ Pause";
+    $("animation-toggle").textContent = "â…¡ Pause";
     $("animation-toggle").setAttribute("aria-pressed", "true");
   }
   function periodTime(seconds, period = seconds) {
     return period >= 0.001
       ? fmt(seconds * 1000, 2) + " ms"
-      : fmt(seconds * 1e6, 2) + " µs";
+      : fmt(seconds * 1e6, 2) + " Âµs";
   }
   function timeline() {
     if (!result) return;
@@ -86,13 +92,13 @@
     $("wave-svg").setAttribute("aria-busy", "false");
     $("input-error").hidden = false;
     $("input-error").textContent =
-      message + " Die letzte gültige Rechnung bleibt angezeigt.";
+      message + " Die letzte gÃ¼ltige Rechnung bleibt angezeigt.";
   }
   function configureInput() {
     $("drive").min = 0;
     $("drive").max = 1000;
     $("drive").value = Math.round(1000*Math.log10(driveNm/.001)/5);
-    $("drive").setAttribute("aria-label","Anregung am Steigbügel, logarithmisch von 1 pm bis 100 nm");
+    $("drive").setAttribute("aria-label","Anregung am SteigbÃ¼gel, logarithmisch von 1 pm bis 100 nm");
   }
   function updateInput() {
     $("drive").value = Math.max(0,Math.min(1000,Number($("drive").value)));
@@ -121,7 +127,7 @@
     fluidReference=Math.max(CochleaFluid.reconstruct(passive).maxSpeed,CochleaFluid.reconstruct(fullActive).maxSpeed,1e-30);
     $("confirmed-frequency").textContent =
       (activeMode ? "Aktiv" : "Passiv") +
-      " · " +
+      " Â· " +
       fmt(result.frequency, 0) +
       " Hz";
     draw();
@@ -136,7 +142,7 @@
     audioState(
       playable
         ? undefined
-        : "Ton aus · Frequenz über der Audiogrenze dieses Geräts",
+        : "Ton aus Â· Frequenz Ã¼ber der Audiogrenze dieses GerÃ¤ts",
     );
     $("status").textContent = "Berechnet";
     $("status").classList.remove("error");
@@ -154,55 +160,44 @@
       (Math.log(frequency / lo) / Math.log(hi / lo)) * 1000,
     );
     $("status").textContent =
-      "Berechnung läuft … die letzte bestätigte Antwort bleibt sichtbar.";
+      "Berechnung lÃ¤uft â€¦ die letzte bestÃ¤tigte Antwort bleibt sichtbar.";
     $("wave-svg").setAttribute("aria-busy", "true");
     solver.request({frequency,activity:.8});
   }
 
   function wave() {
     if (!result) return;
-    const scale = 34 / reference.peakAmplitude;
-    const xs = result.x.map((x) => 130 + (800 * x) / viewLength());
+    const scale = waveLayout.halfHeight / reference.peakAmplitude;
+    const xs = result.x.map((x) => waveX(x));
     $("wave-line").setAttribute(
       "d",
       path(
         xs,
         result.real.map(
           (v, i) =>
-            110 -
+            waveLayout.center -
             scale * (v * Math.cos(phase) - result.imag[i] * Math.sin(phase)),
         ),
       ),
     );
     // Same phase as the prescribed stapes displacement. Window excursions are
     // illustrative: no round-window area or membrane shape is inferred here.
-    const windowShift =
-      3 * Math.cos(phase);
-    $("stapes-motion").setAttribute("transform", `translate(${windowShift} 0)`);
-    $("round-window-motion").setAttribute(
-      "transform",
-      `translate(${-windowShift} 0)`,
-    );
-    $("oval-attachment").setAttribute(
-      "d",
-      `M130 74 H${130 + windowShift} M130 96 H${130 + windowShift}`,
-    );
-    $("round-attachment").setAttribute(
-      "d",
-      `M130 125 H${130 - windowShift} M130 145 H${130 - windowShift}`,
-    );
+    const motion = CochleaContour.windowMotion(phase);
+    $("stapes-motion").setAttribute("transform", `translate(${motion.shift} 0)`);
+    $("round-window-motion").setAttribute("transform", `translate(${-motion.shift} 0)`);
+    $("oval-attachment").setAttribute("d", motion.oval);
+    $("round-attachment").setAttribute("d", motion.round);
     // Local complex mean velocity, not the BM envelope or a uniform sine.
     const arrows=[];
     for(const scala of ['sv','st']) {
-      for(let x=146;x<=914;x+=48) {
-        const position=(x-130)/800*viewLength();
+      for(const site of arrowSites) {
+        const x=site.x;
+        const position=(x-waveLayout.left)/(waveLayout.right-waveLayout.left)*viewLength();
         const velocity=CochleaFluid.sample(fluidFlow,scala,position,phase);
-        const span=32*velocity/fluidReference;
+        const span=44*velocity/fluidReference;
         if(Math.abs(span)<.08)continue;
-        const end=x+span/2,begin=x-span/2;
-        const y=CochleaContour.arrowY(scala,begin,end);
-        const head=Math.min(3.5,Math.abs(span)*.35),back=end-Math.sign(span)*head;
-        arrows.push(`<path data-scala="${scala}" data-velocity="${velocity}" d="M${begin} ${y} H${end} M${back} ${y-head} L${end} ${y} L${back} ${y+head}" fill="none" stroke="#438d99" stroke-width="1.4" opacity=".8"/>`);
+        const d=CochleaContour.arrowPath(site[scala],span);
+        arrows.push(`<path data-scala="${scala}" data-velocity="${velocity}" d="${d}" fill="none" stroke="#438d99" stroke-width="1.4" opacity=".8"/>`);
       }
     }
     $("flow-arrows").innerHTML=arrows.join("");
@@ -270,7 +265,7 @@
         'text-anchor="middle" class="svg-small"',
       );
     s +=
-      text(left, 14, "Auslenkung (µm) · linear", 'class="svg-small"') +
+      text(left, 14, "Auslenkung (Âµm) Â· linear", 'class="svg-small"') +
       text(
         (left + right) / 2,
         224,
@@ -286,7 +281,7 @@
       const y = Y(result.peakAmplitude / Math.sqrt(2));
       s +=
         `<path d="M${X(band.left)} ${y} H${X(band.right)} M${X(band.left)} ${y - 4} v8 M${X(band.right)} ${y - 4} v8" stroke="#bd8a34" stroke-width="1.5" fill="none"/>` +
-        text(X(band.right) + 5, y - 5, "−3 dB", 'class="svg-small"');
+        text(X(band.right) + 5, y - 5, "âˆ’3 dB", 'class="svg-small"');
     }
     if (result.peakAmplitude && !result.peakOutside)
       s += `<path d="M${X(result.peakX)} ${top} V${bottom}" stroke="#c95454" opacity=".25" stroke-width="12"/><circle cx="${X(result.peakX)}" cy="${Y(result.peakAmplitude)}" r="5" fill="#c95454" stroke="white" stroke-width="2"/>`;
@@ -296,7 +291,7 @@
     const detailUnit=CochleaResponse.unit(detailMax);
     const detailY=v=>bottom-(bottom-top)*v/detailMax;
     s+=`<path d="M495 5 V225" stroke="#e2e8eb"/>`;
-    s+=text(510,14,"Maximum · eigene Skala",'class="svg-small"');
+    s+=text(510,14,"Maximum Â· eigene Skala",'class="svg-small"');
     s+=`<g id="maximum-detail-axis" data-maximum="${detailMax}">`;
     s+=text(661,34,detailUnit.label,'text-anchor="end" class="svg-small"');
     s+=`<path d="M550 ${top} V${bottom}" fill="none" stroke="#8498a1"/>`;
@@ -313,19 +308,19 @@
     s+=maximumBar("maximum-passive-bar",581,passive.peakAmplitude,"Passiv","#3f4348");
     if(activeMode)s+=maximumBar("maximum-detail-bar",640,result.peakAmplitude,"Aktiv","#126e72");
     $("amplitude-svg").innerHTML = s;
-    $("amplitude-svg").setAttribute("aria-label","BM-Auslenkung links fest linear von 1 pm bis 16 µm; rechts passive und bei Aktiv zusätzlich aktive Maxima auf gemeinsamer eigener linearer Skala");
+    $("amplitude-svg").setAttribute("aria-label","BM-Auslenkung links fest linear von 1 pm bis 16 Âµm; rechts passive und bei Aktiv zusÃ¤tzlich aktive Maxima auf gemeinsamer eigener linearer Skala");
   }
   function draw() {
     if (!result) return;
-    const scale = 34 / reference.peakAmplitude,
-      xs = result.x.map((x) => 130 + (800 * x) / viewLength()),
-      peak = 130 + (800 * result.peakX) / viewLength();
+    const scale = waveLayout.halfHeight / reference.peakAmplitude,
+      xs = result.x.map((x) => waveX(x)),
+      peak = waveX(result.peakX);
 
-    $("plot-legend").textContent = activeMode ? (comparing() ? "Aktiv · Passiv gestrichelt" : "Aktiv") : "Passiv";
-    const px = 130 + (800 * passive.peakX) / viewLength();
+    $("plot-legend").textContent = activeMode ? (comparing() ? "Aktiv Â· Passiv gestrichelt" : "Aktiv") : "Passiv";
+    const px = waveX(passive.peakX);
     $("passive-marker").innerHTML =
       comparing() && result.peakAmplitude && !passive.peakOutside
-        ? `<path d="M${px} 70 V150" stroke="#697c85" stroke-dasharray="4 4"/><circle cx="${px}" cy="${110 - scale * passive.peakAmplitude}" r="4" fill="#697c85"/>`
+        ? `<path d="M${px} 236 V304" stroke="#697c85" stroke-dasharray="4 4"/><circle cx="${px}" cy="${waveLayout.center - scale * passive.peakAmplitude}" r="4" fill="#697c85"/>`
         : "";
     for (const [id, sign] of [
       ["passive-envelope-top", -1],
@@ -335,38 +330,38 @@
         "d",
         path(
           xs,
-          passive.amplitude.map((a) => 110 + sign * scale * a),
+          passive.amplitude.map((a) => waveLayout.center + sign * scale * a),
         ),
       );
       $(id).style.display = $("envelope").checked ? "" : "none";
     }
     $("wave-marker").innerHTML = result.peakAmplitude && !result.peakOutside
-      ? `<path d="M${peak} 65 V155" stroke="#c95454" opacity=".16" stroke-width="16"/><circle cx="${peak}" cy="${110 - scale * result.peakAmplitude}" r="5" fill="#c95454" stroke="white" stroke-width="2"/>${text(Math.min(peak + 12, 805), 35, "Maximum", 'style="fill:#c95454" class="svg-small"')}`
+      ? `<path d="M${peak} 236 V304" stroke="#c95454" opacity=".16" stroke-width="16"/><circle cx="${peak}" cy="${waveLayout.center - scale * result.peakAmplitude}" r="5" fill="#c95454" stroke="white" stroke-width="2"/>`
       : "";
     $("envelope-top").setAttribute(
       "d",
       path(
         xs,
-        result.amplitude.map((a) => 110 - scale * a),
+        result.amplitude.map((a) => waveLayout.center - scale * a),
       ),
     );
     $("envelope-bottom").setAttribute(
       "d",
       path(
         xs,
-        result.amplitude.map((a) => 110 + scale * a),
+        result.amplitude.map((a) => waveLayout.center + scale * a),
       ),
     );
     for (const id of ["envelope-top", "envelope-bottom"])
       $(id).style.display = activeMode && $("envelope").checked ? "" : "none";
-    let axis = '<path d="M130 238 H930" stroke="#8da0a8"/>';
+    let axis = '<path d="M317 495 H1505" stroke="#8da0a8"/>';
     for (const mm of axisTicks()) {
-      const x = 130 + (800 * mm) / (viewLength()*1000);
+      const x = waveX(mm/1000);
       axis +=
-        `<path d="M${x} 238 v6" stroke="#8da0a8"/>` +
+        `<path d="M${x} 495 v6" stroke="#8da0a8"/>` +
         text(
           x,
-          258,
+          520,
           mm === viewLength()*1000 ? fmt(mm,1) + " mm" : mm,
           'text-anchor="middle" class="svg-small"',
         );
@@ -442,7 +437,7 @@
   $("animation-toggle").addEventListener("click", () => {
     if (running) {
       stopAnimation();
-      $("animation-toggle").textContent = "▶ Fortsetzen";
+      $("animation-toggle").textContent = "â–¶ Fortsetzen";
     } else startAnimation();
   });
   $("phase-position").addEventListener("input", () => {

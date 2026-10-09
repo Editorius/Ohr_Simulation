@@ -671,3 +671,10 @@ dd {
   .period-player { grid-template-columns: auto 1fr; gap: 8px 12px; }
   .period-player output { grid-column: 2; text-align: right; }
 }
+
+/* Approved enlarged-baseline silhouette, with labels outside the fluid. */
+#wave-svg .wall { fill:none; stroke:#a6b5bc; stroke-width:4; stroke-linejoin:round; stroke-linecap:round; }
+#wave-svg text { font-size:19px; }
+#wave-svg .small, #wave-svg .svg-small { font-size:15px; }
+#wave-svg .label { font-weight:600; }
+#wave-svg .wave-line { stroke-width:3; }
