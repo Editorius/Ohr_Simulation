@@ -678,3 +678,6 @@ dd {
 #wave-svg .small, #wave-svg .svg-small { font-size:15px; }
 #wave-svg .label { font-weight:600; }
 #wave-svg .wave-line { stroke-width:3; }
+
+/* Envelopes share a navy color; the later wave path stays in the foreground. */
+#wave-svg .envelope, #wave-svg .comparison-curve { stroke:#163b65; }

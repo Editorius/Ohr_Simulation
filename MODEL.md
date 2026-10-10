@@ -1,6 +1,6 @@
 # Aktueller Modellvertrag
 
-Stand: App 0.11.4; Dokumentation vom 07.10.2026. Beschreibt die implementierte Näherung, keine vollständige physiologische Validierung. Historische Berichte können frühere Einstellungen beschreiben.
+Stand: App 0.11.5; Dokumentation vom 07.10.2026. Beschreibt die implementierte Näherung, keine vollständige physiologische Validierung. Historische Berichte können frühere Einstellungen beschreiben.
 
 ## Mechanischer Kern
 
@@ -71,3 +71,5 @@ Die 17 Pfeilpositionen pro Scala liegen außerhalb der Kontur und bleiben zeitli
 
 ## Unterrichtsansicht
 Die Oberfläche zeigt keine Greenwood-Referenzlinie, kein Phasendiagramm und keine technische Prüftabelle mehr. Diese Vereinfachung entfernt ausschließlich Darstellungsfunktionen; komplexe Antworten und Phasen bleiben für die Wanderwelle und Strömungsrechnung erhalten. Der Zeitregler zeigt den aktuellen Zeitpunkt in ms bzw. µs, am rechten Ende die Periodendauer. Seine interne Einteilung bleibt 0–360; ein Einzelschritt entspricht 1/24 Periode. Die Zeitlupe steuert ausschließlich die Abspieldauer. Die Skalen und Einheiten der beiden Auslenkungsanzeigen bleiben unverändert.
+
+Die schematische Kontur einschließlich Fenster und Steigbügel ist seit 0.11.5 vertikal um 10 % zur BM-Ruhelage komprimiert (y = 270 + 0,9 · (y_original − 270)). Strömungspfeile folgen der komprimierten Kontur. BM, Hüllkurven und Auslenkungsmaßstab werden nicht komprimiert; die Hüllkurven liegen marineblau hinter der Wanderwelle.

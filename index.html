@@ -4,17 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Innenohr · Wanderwelle</title>
-    <link rel="stylesheet" href="style.css?v=0.11.4" />
-    <script defer src="numerics.js?v=0.11.4"></script>
-    <script defer src="cochlea-data.js?v=0.11.4"></script>
-    <script defer src="cochlea-model.js?v=0.11.4"></script>
-    <script defer src="solver-client.js?v=0.11.4"></script>
-    <script defer src="audio.js?v=0.11.4"></script>
-    <script defer src="response-view.js?v=0.11.4"></script>
-    <script defer src="fluid-geometry.js?v=0.11.4"></script>
-    <script defer src="fluid-view.js?v=0.11.4"></script>
-    <script defer src="cochlea-contour.js?v=0.11.4"></script>
-    <script defer src="app.js?v=0.11.4"></script>
+    <link rel="stylesheet" href="style.css?v=0.11.5" />
+    <script defer src="numerics.js?v=0.11.5"></script>
+    <script defer src="cochlea-data.js?v=0.11.5"></script>
+    <script defer src="cochlea-model.js?v=0.11.5"></script>
+    <script defer src="solver-client.js?v=0.11.5"></script>
+    <script defer src="audio.js?v=0.11.5"></script>
+    <script defer src="response-view.js?v=0.11.5"></script>
+    <script defer src="fluid-geometry.js?v=0.11.5"></script>
+    <script defer src="fluid-view.js?v=0.11.5"></script>
+    <script defer src="cochlea-contour.js?v=0.11.5"></script>
+    <script defer src="app.js?v=0.11.5"></script>
   </head>
   <body>
     <header class="header">
@@ -30,7 +30,7 @@
         ><button disabled>Mittelohr · später</button
         ><button disabled>Außenohr · später</button>
       </nav>
-      <span class="version">Arbeitsstand 0.11.4 · Innenohr</span>
+      <span class="version">Arbeitsstand 0.11.5 · Innenohr</span>
     </header>
     <main class="workspace">
       <aside class="sidebar" aria-label="Einstellungen">
@@ -130,7 +130,7 @@
  <linearGradient id="bone" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e4eaeb"/><stop offset="1" stop-color="#b8c8cd"/></linearGradient>
  <clipPath id="wave-displacement-clip"><rect x="317" y="236" width="1188" height="68"/></clipPath>
 </defs>
-<g id="cochlea-background">
+<g id="cochlea-background" transform="translate(0 27) scale(1 0.9)">
  <path id="scala-fill" d="M300 174 C298 116 314 79 344 81 C382 82 408 127 494 150 C677 178 1120 202 1480 224 C1523 227 1540 241 1540 270 C1540 296 1522 314 1480 317 C1210 329 757 347 568 377 C511 386 491 416 442 431 C379 450 320 443 302 412 C285 383 293 350 306 322 C319 292 320 274 314 251 C308 230 300 205 300 174 Z" fill="url(#fluid)" />
  <path id="scala-wall" class="wall" d="M300 170 C298 116 314 79 344 81 C382 82 408 127 494 150 C677 178 1120 202 1480 224 C1523 227 1540 241 1540 270 C1540 296 1522 314 1480 317 C1210 329 757 347 568 377 C511 386 491 416 442 431 C379 450 320 443 302 412 C291 394 290 381 293 372 M298 344 C300 336 304 328 306 322 C319 292 320 274 314 251 C309 232 303 216 301 210" />
 </g>
@@ -143,6 +143,7 @@
  <path id="envelope-top" class="envelope"/><path id="envelope-bottom" class="envelope"/>
  <path id="wave-line" class="wave-line"/>
 </g>
+<g id="window-geometry" transform="translate(0 27) scale(1 0.9)">
 <path id="oval-attachment" fill="none" stroke="#64747e" stroke-width="2"/>
 <path id="round-attachment" fill="none" stroke="#64747e" stroke-width="2"/>
 <g id="windows-layer">
@@ -154,10 +155,11 @@
  <ellipse id="round-window-motion" cx="295" cy="358" rx="7" ry="14" fill="url(#bone)" stroke="#64747e" stroke-width="2" />
 </g>
 
+</g>
 <g id="labels-layer">
- <text x="54" y="103" class="label">Steigbügel</text><path d="M169 108 L207 172" class="leader" />
- <text x="42" y="244" class="label">Ovales Fenster</text><path d="M183 239 L260 231 L296 204" class="leader" />
- <text x="40" y="406" class="label">Rundes Fenster</text><path d="M197 400 L248 391 L288 361" class="leader" />
+ <text x="54" y="103" class="label">Steigbügel</text><path d="M169 108 L207 181.8" class="leader" />
+ <text x="42" y="244" class="label">Ovales Fenster</text><path d="M183 239 L260 231 L296 210.6" class="leader" />
+ <text x="40" y="406" class="label">Rundes Fenster</text><path d="M197 400 L248 391 L288 351.9" class="leader" />
  <text x="795" y="101" text-anchor="middle" class="label">Scala vestibuli</text>
  <text x="795" y="428" text-anchor="middle" class="label">Scala tympani</text>
  <text x="1552" y="151" text-anchor="end">Helicotrema</text><path d="M1538 160 L1524 266" class="leader" />
