@@ -4,6 +4,8 @@ Kurze fachlich relevante Historie. Die älteren Einträge sind aus lokalen Proje
 
 ## Unveröffentlicht
 
+- 0.11.6: Höhenhinweis und kleine Modusüberschrift entfernt; Säulendiagramm mit „Maximum in …“ und dynamischer Einheit der Achsenskalierung beschriftet.
+
 - 0.11.5: Cochlea-Kontur und Fenster um 10 % zur ruhenden BM abgeflacht; tangentiale Strömungspfeile nachgeführt. Hüllkurven marineblau hinter der Wanderwelle. Rechenkern und Auslenkungsmaßstab unverändert.
 
 - 0.11.4: Beschädigte UTF-8-Sonderzeichen in Oberfläche und Dokumentation repariert. Versionsgebundene CSS-/JavaScript-Verweise verhindern die Wiederverwendung alter Browserdateien nach einem Update. Neue Veröffentlichungstests prüfen Kodierung und Dateiverweise.

@@ -291,9 +291,8 @@
     const detailUnit=CochleaResponse.unit(detailMax);
     const detailY=v=>bottom-(bottom-top)*v/detailMax;
     s+=`<path d="M495 5 V225" stroke="#e2e8eb"/>`;
-    s+=text(510,14,"Maximum · eigene Skala",'class="svg-small"');
+    s+=text(510,14,`Maximum in ${detailUnit.label}`,'class="svg-small"');
     s+=`<g id="maximum-detail-axis" data-maximum="${detailMax}">`;
-    s+=text(661,34,detailUnit.label,'text-anchor="end" class="svg-small"');
     s+=`<path d="M550 ${top} V${bottom}" fill="none" stroke="#8498a1"/>`;
     for(let i=0;i<=4;i++){
       const value=detailMax*i/4,y=detailY(value);
@@ -316,7 +315,6 @@
       xs = result.x.map((x) => waveX(x)),
       peak = waveX(result.peakX);
 
-    $("plot-legend").textContent = activeMode ? (comparing() ? "Aktiv · Passiv gestrichelt" : "Aktiv") : "Passiv";
     const px = waveX(passive.peakX);
     $("passive-marker").innerHTML =
       comparing() && result.peakAmplitude && !passive.peakOutside

@@ -17,7 +17,7 @@ test('Central B controls, phase, zero drive, boundaries and reset remain coheren
  for(const file of ['numerics.js','cochlea-data.js','cochlea-model.js','solver-client.js','audio.js','response-view.js','fluid-geometry.js','fluid-view.js','cochlea-contour.js','app.js'])vm.runInContext(fs.readFileSync(require.resolve('../'+file),'utf8'),ctx);
  function flush(){while(queue.length)queue.shift()();}
  function change(id,value,event='change'){el(id).value=String(value);el(id).handlers[event]();flush();}
- function finite(){assert.match(el('amplitude-svg').attrs['aria-label'],/1 pm bis 16 µm/);assert.equal(elements.has('passive-detail'),false);for(const e of elements.values())assert.doesNotMatch(e.innerHTML+JSON.stringify(e.attrs),/NaN|Infinity/);}
+ function finite(){const max=Number(el('amplitude-svg').innerHTML.match(/data-maximum="([^"]+)"/)[1]);assert.ok(el('amplitude-svg').innerHTML.includes('Maximum in '+ctx.CochleaResponse.unit(max).label));assert.equal(elements.has('plot-legend'),false);assert.match(el('amplitude-svg').attrs['aria-label'],/1 pm bis 16 µm/);assert.equal(elements.has('passive-detail'),false);for(const e of elements.values())assert.doesNotMatch(e.innerHTML+JSON.stringify(e.attrs),/NaN|Infinity/);}
  flush();finite();assert.match(el('status').textContent,/Berechnet/);
  assert.equal(elements.has('extended-frequency'),false);assert.equal(el('frequency').min,50);assert.equal(el('frequency').max,20000);
  assert.match(el('amplitude-svg').innerHTML,/Auslenkung \(µm\) · linear/);assert.equal(el('drive-value').textContent,'10 nm');assert.equal(el('active-amplitude').disabled,true);
