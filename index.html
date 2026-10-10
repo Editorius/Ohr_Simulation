@@ -4,17 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Innenohr · Wanderwelle</title>
-    <link rel="stylesheet" href="style.css?v=0.11.5" />
-    <script defer src="numerics.js?v=0.11.5"></script>
-    <script defer src="cochlea-data.js?v=0.11.5"></script>
-    <script defer src="cochlea-model.js?v=0.11.5"></script>
-    <script defer src="solver-client.js?v=0.11.5"></script>
-    <script defer src="audio.js?v=0.11.5"></script>
-    <script defer src="response-view.js?v=0.11.5"></script>
-    <script defer src="fluid-geometry.js?v=0.11.5"></script>
-    <script defer src="fluid-view.js?v=0.11.5"></script>
-    <script defer src="cochlea-contour.js?v=0.11.5"></script>
-    <script defer src="app.js?v=0.11.5"></script>
+    <link rel="stylesheet" href="style.css?v=0.11.6" />
+    <script defer src="numerics.js?v=0.11.6"></script>
+    <script defer src="cochlea-data.js?v=0.11.6"></script>
+    <script defer src="cochlea-model.js?v=0.11.6"></script>
+    <script defer src="solver-client.js?v=0.11.6"></script>
+    <script defer src="audio.js?v=0.11.6"></script>
+    <script defer src="response-view.js?v=0.11.6"></script>
+    <script defer src="fluid-geometry.js?v=0.11.6"></script>
+    <script defer src="fluid-view.js?v=0.11.6"></script>
+    <script defer src="cochlea-contour.js?v=0.11.6"></script>
+    <script defer src="app.js?v=0.11.6"></script>
   </head>
   <body>
     <header class="header">
@@ -30,7 +30,7 @@
         ><button disabled>Mittelohr · später</button
         ><button disabled>Außenohr · später</button>
       </nav>
-      <span class="version">Arbeitsstand 0.11.5 · Innenohr</span>
+      <span class="version">Arbeitsstand 0.11.6 · Innenohr</span>
     </header>
     <main class="workspace">
       <aside class="sidebar" aria-label="Einstellungen">
@@ -164,7 +164,7 @@
  <text x="795" y="428" text-anchor="middle" class="label">Scala tympani</text>
  <text x="1552" y="151" text-anchor="end">Helicotrema</text><path d="M1538 160 L1524 266" class="leader" />
  <text x="1100" y="432" text-anchor="middle">Basilarmembran</text><path d="M1100 411 L1087 390 L1087 272" class="leader" />
- <text x="317" y="482" class="label">Basis</text><text x="1505" y="482" text-anchor="end" class="label">Apex</text><text x="1140" y="540" text-anchor="middle" class="small">Höhe schematisch · Auslenkung ±16 µm</text></g>
+ <text x="317" y="482" class="label">Basis</text><text x="1505" y="482" text-anchor="end" class="label">Apex</text></g>
 <g id="wave-axis"/>
 </svg>
           <div class="period-player">
@@ -198,7 +198,6 @@
           <section class="panel">
             <div class="panel-heading">
               <h2>Auslenkung der Basilarmembran</h2>
-              <span id="plot-legend" class="legend"><i></i> Passiv</span>
             </div>
             <svg
               id="amplitude-svg"
