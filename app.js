@@ -48,12 +48,12 @@
     `<text x="${x}" y="${y}" ${extra}>${t}</text>`;
   function audioState(message) {
     $("audio-toggle").textContent = audio.on
-      ? "â™«  Ton ausschalten"
-      : "â™«  Ton einschalten";
+      ? "♫  Ton ausschalten"
+      : "♫  Ton einschalten";
     $("audio-toggle").setAttribute("aria-pressed", String(audio.on));
     $("audio-status").textContent =
       message ||
-      (audio.on ? `Ton an Â· ${fmt(result.frequency, 0)} Hz` : "Ton aus");
+      (audio.on ? `Ton an · ${fmt(result.frequency, 0)} Hz` : "Ton aus");
   }
   function stopAudio() {
     pendingAudio = false;
@@ -62,19 +62,19 @@
   }
   function stopAnimation() {
     running = false;
-    $("animation-toggle").textContent = "â–¶ Abspielen";
+    $("animation-toggle").textContent = "▶ Abspielen";
     $("animation-toggle").setAttribute("aria-pressed", "false");
   }
   function startAnimation() {
     running = true;
     last = performance.now();
-    $("animation-toggle").textContent = "â…¡ Pause";
+    $("animation-toggle").textContent = "Ⅱ Pause";
     $("animation-toggle").setAttribute("aria-pressed", "true");
   }
   function periodTime(seconds, period = seconds) {
     return period >= 0.001
       ? fmt(seconds * 1000, 2) + " ms"
-      : fmt(seconds * 1e6, 2) + " Âµs";
+      : fmt(seconds * 1e6, 2) + " µs";
   }
   function timeline() {
     if (!result) return;
@@ -92,13 +92,13 @@
     $("wave-svg").setAttribute("aria-busy", "false");
     $("input-error").hidden = false;
     $("input-error").textContent =
-      message + " Die letzte gÃ¼ltige Rechnung bleibt angezeigt.";
+      message + " Die letzte gültige Rechnung bleibt angezeigt.";
   }
   function configureInput() {
     $("drive").min = 0;
     $("drive").max = 1000;
     $("drive").value = Math.round(1000*Math.log10(driveNm/.001)/5);
-    $("drive").setAttribute("aria-label","Anregung am SteigbÃ¼gel, logarithmisch von 1 pm bis 100 nm");
+    $("drive").setAttribute("aria-label","Anregung am Steigbügel, logarithmisch von 1 pm bis 100 nm");
   }
   function updateInput() {
     $("drive").value = Math.max(0,Math.min(1000,Number($("drive").value)));
@@ -127,7 +127,7 @@
     fluidReference=Math.max(CochleaFluid.reconstruct(passive).maxSpeed,CochleaFluid.reconstruct(fullActive).maxSpeed,1e-30);
     $("confirmed-frequency").textContent =
       (activeMode ? "Aktiv" : "Passiv") +
-      " Â· " +
+      " · " +
       fmt(result.frequency, 0) +
       " Hz";
     draw();
@@ -142,7 +142,7 @@
     audioState(
       playable
         ? undefined
-        : "Ton aus Â· Frequenz Ã¼ber der Audiogrenze dieses GerÃ¤ts",
+        : "Ton aus · Frequenz über der Audiogrenze dieses Geräts",
     );
     $("status").textContent = "Berechnet";
     $("status").classList.remove("error");
@@ -160,7 +160,7 @@
       (Math.log(frequency / lo) / Math.log(hi / lo)) * 1000,
     );
     $("status").textContent =
-      "Berechnung lÃ¤uft â€¦ die letzte bestÃ¤tigte Antwort bleibt sichtbar.";
+      "Berechnung läuft … die letzte bestätigte Antwort bleibt sichtbar.";
     $("wave-svg").setAttribute("aria-busy", "true");
     solver.request({frequency,activity:.8});
   }
@@ -265,7 +265,7 @@
         'text-anchor="middle" class="svg-small"',
       );
     s +=
-      text(left, 14, "Auslenkung (Âµm) Â· linear", 'class="svg-small"') +
+      text(left, 14, "Auslenkung (µm) · linear", 'class="svg-small"') +
       text(
         (left + right) / 2,
         224,
@@ -281,7 +281,7 @@
       const y = Y(result.peakAmplitude / Math.sqrt(2));
       s +=
         `<path d="M${X(band.left)} ${y} H${X(band.right)} M${X(band.left)} ${y - 4} v8 M${X(band.right)} ${y - 4} v8" stroke="#bd8a34" stroke-width="1.5" fill="none"/>` +
-        text(X(band.right) + 5, y - 5, "âˆ’3 dB", 'class="svg-small"');
+        text(X(band.right) + 5, y - 5, "−3 dB", 'class="svg-small"');
     }
     if (result.peakAmplitude && !result.peakOutside)
       s += `<path d="M${X(result.peakX)} ${top} V${bottom}" stroke="#c95454" opacity=".25" stroke-width="12"/><circle cx="${X(result.peakX)}" cy="${Y(result.peakAmplitude)}" r="5" fill="#c95454" stroke="white" stroke-width="2"/>`;
@@ -291,7 +291,7 @@
     const detailUnit=CochleaResponse.unit(detailMax);
     const detailY=v=>bottom-(bottom-top)*v/detailMax;
     s+=`<path d="M495 5 V225" stroke="#e2e8eb"/>`;
-    s+=text(510,14,"Maximum Â· eigene Skala",'class="svg-small"');
+    s+=text(510,14,"Maximum · eigene Skala",'class="svg-small"');
     s+=`<g id="maximum-detail-axis" data-maximum="${detailMax}">`;
     s+=text(661,34,detailUnit.label,'text-anchor="end" class="svg-small"');
     s+=`<path d="M550 ${top} V${bottom}" fill="none" stroke="#8498a1"/>`;
@@ -308,7 +308,7 @@
     s+=maximumBar("maximum-passive-bar",581,passive.peakAmplitude,"Passiv","#3f4348");
     if(activeMode)s+=maximumBar("maximum-detail-bar",640,result.peakAmplitude,"Aktiv","#126e72");
     $("amplitude-svg").innerHTML = s;
-    $("amplitude-svg").setAttribute("aria-label","BM-Auslenkung links fest linear von 1 pm bis 16 Âµm; rechts passive und bei Aktiv zusÃ¤tzlich aktive Maxima auf gemeinsamer eigener linearer Skala");
+    $("amplitude-svg").setAttribute("aria-label","BM-Auslenkung links fest linear von 1 pm bis 16 µm; rechts passive und bei Aktiv zusätzlich aktive Maxima auf gemeinsamer eigener linearer Skala");
   }
   function draw() {
     if (!result) return;
@@ -316,7 +316,7 @@
       xs = result.x.map((x) => waveX(x)),
       peak = waveX(result.peakX);
 
-    $("plot-legend").textContent = activeMode ? (comparing() ? "Aktiv Â· Passiv gestrichelt" : "Aktiv") : "Passiv";
+    $("plot-legend").textContent = activeMode ? (comparing() ? "Aktiv · Passiv gestrichelt" : "Aktiv") : "Passiv";
     const px = waveX(passive.peakX);
     $("passive-marker").innerHTML =
       comparing() && result.peakAmplitude && !passive.peakOutside
@@ -437,7 +437,7 @@
   $("animation-toggle").addEventListener("click", () => {
     if (running) {
       stopAnimation();
-      $("animation-toggle").textContent = "â–¶ Fortsetzen";
+      $("animation-toggle").textContent = "▶ Fortsetzen";
     } else startAnimation();
   });
   $("phase-position").addEventListener("input", () => {

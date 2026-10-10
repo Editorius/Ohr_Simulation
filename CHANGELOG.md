@@ -1,40 +1,42 @@
-# Ã„nderungen
+# Änderungen
 
-Kurze fachlich relevante Historie. Die Ã¤lteren EintrÃ¤ge sind aus lokalen ProjektstÃ¤nden rekonstruiert und keine Behauptung bereits vorhandener Git-Tags. Release-Daten werden erst bei tatsÃ¤chlicher VerÃ¶ffentlichung ergÃ¤nzt.
+Kurze fachlich relevante Historie. Die älteren Einträge sind aus lokalen Projektständen rekonstruiert und keine Behauptung bereits vorhandener Git-Tags. Release-Daten werden erst bei tatsächlicher Veröffentlichung ergänzt.
 
-## UnverÃ¶ffentlicht
+## Unveröffentlicht
 
-- 0.11.2: Freigegebene SVG-AuÃŸenkontur Ã¼bernommen; gegenlÃ¤ufige Fensterbewegung mit verbundenen AnschlÃ¼ssen, berechnete BM-Wanderwelle und zeitlich feste auÃŸenliegende StrÃ¶mungspfeile integriert. Beschriftungen der Fenster liegen auÃŸerhalb. Rechenkern und globaler AuslenkungsmaÃŸstab unverÃ¤ndert.
+- 0.11.4: Beschädigte UTF-8-Sonderzeichen in Oberfläche und Dokumentation repariert. Versionsgebundene CSS-/JavaScript-Verweise verhindern die Wiederverwendung alter Browserdateien nach einem Update. Neue Veröffentlichungstests prüfen Kodierung und Dateiverweise.
 
-- Unterrichtsansicht vereinfacht: Hinweise aus VerstÃ¤rkungs- und Auslenkungskachel entfernt, kompakte Zeitleiste mit Zeitpunkt t, verstÃ¤ndliche AnimationsknÃ¶pfe; Greenwood-Anzeige und technische Diagnostik durch kurzen Modellhinweis ersetzt.
+- 0.11.2: Freigegebene SVG-Außenkontur übernommen; gegenläufige Fensterbewegung mit verbundenen Anschlüssen, berechnete BM-Wanderwelle und zeitlich feste außenliegende Strömungspfeile integriert. Beschriftungen der Fenster liegen außerhalb. Rechenkern und globaler Auslenkungsmaßstab unverändert.
 
-- Cochlea-Kontur aus den vorhandenen ScalenflÃ¤chen abgeleitet; geglÃ¤ttete, Ã¼berhÃ¶hte Darstellung mit basaler Erweiterung und schmalerem Apex.
-- Offene SteigbÃ¼gelform, zugeordnete Beschriftungen und StrÃ¶mungspfeile auÃŸerhalb der neuen Kontur. Rechenkern und AmplitudenmaÃŸstab unverÃ¤ndert.
+- Unterrichtsansicht vereinfacht: Hinweise aus Verstärkungs- und Auslenkungskachel entfernt, kompakte Zeitleiste mit Zeitpunkt t, verständliche Animationsknöpfe; Greenwood-Anzeige und technische Diagnostik durch kurzen Modellhinweis ersetzt.
+
+- Cochlea-Kontur aus den vorhandenen Scalenflächen abgeleitet; geglättete, überhöhte Darstellung mit basaler Erweiterung und schmalerem Apex.
+- Offene Steigbügelform, zugeordnete Beschriftungen und Strömungspfeile außerhalb der neuen Kontur. Rechenkern und Amplitudenmaßstab unverändert.
 
 
 - Parallele Bearbeitung mit getrennten Worktrees, Branches und Vorschau-Ports dokumentiert.
-- Zeilenenden zweier historischer PrÃ¼fberichte an die Repository-Vorgaben angepasst, damit frische Checkouts sauber bleiben.
+- Zeilenenden zweier historischer Prüfberichte an die Repository-Vorgaben angepasst, damit frische Checkouts sauber bleiben.
 
-- Projektpflege: kurze AGENTS.md, CONTRIBUTING.md und aktueller Modellvertrag MODEL.md ergÃ¤nzt.
-- Automatische Node- und Python-ReproduktionsprÃ¼fungen; kein automatisches Deployment.
-- Gezielte Original-Eingabedaten mit PrÃ¼fsummen sowie Generatoren fÃ¼r Mechanik, StrÃ¶mungsgeometrie, Messkurven und Referenzantworten ergÃ¤nzt.
-- Hosting-Export mit frischen PaketprÃ¼fsummen, ZIP-PrÃ¼fung und Schutz vor Ãœberschreiben.
-- Historische SHA256.json archiviert; fehlende .gitignore/.nojekyll ergÃ¤nzt.
-- App und mechanische Baseline bleiben unverÃ¤ndert.
+- Projektpflege: kurze AGENTS.md, CONTRIBUTING.md und aktueller Modellvertrag MODEL.md ergänzt.
+- Automatische Node- und Python-Reproduktionsprüfungen; kein automatisches Deployment.
+- Gezielte Original-Eingabedaten mit Prüfsummen sowie Generatoren für Mechanik, Strömungsgeometrie, Messkurven und Referenzantworten ergänzt.
+- Hosting-Export mit frischen Paketprüfsummen, ZIP-Prüfung und Schutz vor Überschreiben.
+- Historische SHA256.json archiviert; fehlende .gitignore/.nojekyll ergänzt.
+- App und mechanische Baseline bleiben unverändert.
 
 ## 0.11.0
 
-- StrÃ¶mung: lokale mittlere Scala-Geschwindigkeiten und Phasen aus Volumenbilanz und Originalgeometrie.
+- Strömung: lokale mittlere Scala-Geschwindigkeiten und Phasen aus Volumenbilanz und Originalgeometrie.
 - Darstellung: BM-Vorzeichen zur historischen Quellkonvention ausgerichtet.
-- PrÃ¼fung: zusÃ¤tzliche analytische und modellbasierte StrÃ¶mungstests; insgesamt 17 Tests bestanden. Keine neue visuelle BrowserprÃ¼fung dokumentiert.
+- Prüfung: zusätzliche analytische und modellbasierte Strömungstests; insgesamt 17 Tests bestanden. Keine neue visuelle Browserprüfung dokumentiert.
 
 ## 0.10.8
 
-- Wanderwelle nutzt mehr ScalenhÃ¶he; physikalischer Bereich bleibt Â±16 Âµm.
+- Wanderwelle nutzt mehr Scalenhöhe; physikalischer Bereich bleibt ±16 µm.
 
 ## 0.10.7
 
-- Passive VergleichssÃ¤ule neben aktiver SÃ¤ule; globales Diagramm verbreitert.
+- Passive Vergleichssäule neben aktiver Säule; globales Diagramm verbreitert.
 
 ## 0.10.6
 
@@ -42,26 +44,26 @@ Kurze fachlich relevante Historie. Die Ã¤lteren EintrÃ¤ge sind aus lokalen P
 
 ## 0.10.5
 
-- AusschlieÃŸlich direkte SteigbÃ¼gelanregung, Start/Reset 10 nm.
-- Nur ausgewÃ¤hlte Momentanwelle, dunkelgrau durchgezogen.
+- Ausschließlich direkte Steigbügelanregung, Start/Reset 10 nm.
+- Nur ausgewählte Momentanwelle, dunkelgrau durchgezogen.
 
 ## 0.10.4
 
-- Feste globale Obergrenze 16 Âµm; animierter Bereich Â±16 Âµm.
+- Feste globale Obergrenze 16 µm; animierter Bereich ±16 µm.
 
 ## 0.10.3
 
-- StrÃ¶mungspfeile auÃŸerhalb der Scalen; damalige Obergrenze 10 Âµm.
+- Strömungspfeile außerhalb der Scalen; damalige Obergrenze 10 µm.
 
 ## 0.10.2
 
-- Logarithmische Amplitudenanzeige durch feste lineare Skala ersetzt, damals bis 3 Âµm.
+- Logarithmische Amplitudenanzeige durch feste lineare Skala ersetzt, damals bis 3 µm.
 
 ## 0.10.1
 
-- Zwischenstand mit logarithmischer Amplitudenanzeige; spÃ¤ter verworfen.
+- Zwischenstand mit logarithmischer Amplitudenanzeige; später verworfen.
 
 ## 0.10.0
 
-- PrÃ¼fung absoluter Anregung, projizierte SteigbÃ¼gelflÃ¤che 2,86 mmÂ², stabile aktive UI-Einstellung 0,80.
-- Menschliche Mittelohrmesskurve fÃ¼r damaligen Schalldruckmodus; heute nur in KalibrierungsprÃ¼fungen verwendet.
+- Prüfung absoluter Anregung, projizierte Steigbügelfläche 2,86 mm², stabile aktive UI-Einstellung 0,80.
+- Menschliche Mittelohrmesskurve für damaligen Schalldruckmodus; heute nur in Kalibrierungsprüfungen verwendet.
