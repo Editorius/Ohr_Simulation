@@ -27,7 +27,8 @@
     x=Math.max(layout.left,Math.min(layout.right,x));
     while(hi<p.length-1&&p[hi][0]<x)hi++;
     const a=p[hi-1],b=p[hi],t=(x-a[0])/(b[0]-a[0]||1);
-    return a[1]+t*(b[1]-a[1]);
+    // Same 10% vertical compression as the SVG background, about the resting BM.
+    return layout.center+0.9*(a[1]+t*(b[1]-a[1])-layout.center);
   }
   function arrowFrame(scala,x) {
     const slope=(boundary(scala,x+1)-boundary(scala,x-1))/2;
