@@ -180,6 +180,16 @@
         ),
       ),
     );
+    const detail=CochleaResponse.waveDetail(result,phase);
+    const dx=detail.x.map(x=>20+260*(x-detail.left)/(detail.right-detail.left));
+    const dy=v=>130-90*v/detail.limit;
+    $("loupe-wave").setAttribute("d",path(dx,detail.displacement.map(dy)));
+    $("loupe-top").setAttribute("d",path(dx,detail.envelope.map(dy)));
+    $("loupe-bottom").setAttribute("d",path(dx,detail.envelope.map(v=>dy(-v))));
+    for(const id of ["loupe-top","loupe-bottom"])$(id).style.display=$("envelope").checked?"":"none";
+    $("loupe-region").setAttribute("x",waveX(detail.left));
+    $("loupe-region").setAttribute("width",waveX(detail.right)-waveX(detail.left));
+    $("wave-loupe").setAttribute("aria-label",`Vergrößerte Wanderwelle von ${fmt(detail.left*1000,1)} bis ${fmt(detail.right*1000,1)} mm, synchron zur Hauptansicht`);
     // Same phase as the prescribed stapes displacement. Window excursions are
     // illustrative: no round-window area or membrane shape is inferred here.
     const motion = CochleaContour.windowMotion(phase);
@@ -242,7 +252,7 @@
       right = 470,
       top = 25,
       bottom = 176,
-      axis = CochleaResponse.amplitudeScale;
+      axis = CochleaResponse.globalAmplitudeScale(activeMode);
     const X = (x) => left + ((right - left) * x) / viewLength(),
       Y = (v) => bottom - (bottom-top)*axis.fraction(v);
     let s = `<defs><clipPath id="amplitude-clip"><rect x="${left}" y="${top}" width="${right-left}" height="${bottom-top}"/></clipPath></defs>`;
@@ -307,7 +317,7 @@
     s+=maximumBar("maximum-passive-bar",581,passive.peakAmplitude,"Passiv","#3f4348");
     if(activeMode)s+=maximumBar("maximum-detail-bar",640,result.peakAmplitude,"Aktiv","#126e72");
     $("amplitude-svg").innerHTML = s;
-    $("amplitude-svg").setAttribute("aria-label","BM-Auslenkung links fest linear von 1 pm bis 16 µm; rechts passive und bei Aktiv zusätzlich aktive Maxima auf gemeinsamer eigener linearer Skala");
+    $("amplitude-svg").setAttribute("aria-label",`BM-Auslenkung links linear von 1 pm bis ${activeMode?18:8} µm; rechts passive und bei Aktiv zusätzlich aktive Maxima auf gemeinsamer eigener linearer Skala`);
   }
   function draw() {
     if (!result) return;
