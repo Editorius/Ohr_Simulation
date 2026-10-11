@@ -44,6 +44,23 @@
     ticks: Object.freeze([1e-12, 4e-6, 8e-6, 12e-6, 16e-6]),
     fraction: value => (value - 1e-12) / (16e-6 - 1e-12),
   });
+  function globalAmplitudeScale(active) {
+    const max=active?18e-6:8e-6,min=1e-12;
+    return {min,max,ticks:[min,max/4,max/2,3*max/4,max],fraction:v=>(v-min)/(max-min)};
+  }
+  function waveDetail(r,phase) {
+    const left=Math.max(r.x[0],r.peakX-.003),right=Math.min(r.x.at(-1),r.peakX+.003);
+    const xs=[left,...r.x.filter(x=>x>left&&x<right),right];
+    const sample=(values,x)=>{
+      let i=1;while(i<r.x.length-1&&r.x[i]<x)i++;
+      const f=(x-r.x[i-1])/(r.x[i]-r.x[i-1]);
+      return values[i-1]+f*(values[i]-values[i-1]);
+    };
+    const envelope=xs.map(x=>sample(r.amplitude,x));
+    const limit=Math.max(...envelope)*1.15 || 1e-12;
+    return {left,right,x:xs,envelope,limit,
+      displacement:xs.map(x=>sample(r.real,x)*Math.cos(phase)-sample(r.imag,x)*Math.sin(phase))};
+  }
   function detailMaximum(pair, driveNm) {
     // Both full responses define the range; mode and display percentage do not.
     const peak=Math.max(pair.passive.peakAmplitude,pair.active.peakAmplitude)*driveNm*1e-9;
@@ -55,7 +72,7 @@
     return value<1e-9?{factor:1e12,label:'pm'}:value<1e-6?{factor:1e9,label:'nm'}:value<1e-3?{factor:1e6,label:'µm'}:{factor:1e3,label:'mm'};
   }
   function formatLength(value){const u=unit(Math.abs(value));return (value*u.factor).toLocaleString('de-DE',{maximumSignificantDigits:3})+' '+u.label;}
-  const api = { scaleResponse, prepareComparison, amplitudeScale, detailMaximum, unit, formatLength };
+  const api = { scaleResponse, prepareComparison, amplitudeScale, globalAmplitudeScale, waveDetail, detailMaximum, unit, formatLength };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.CochleaResponse = api;
 })(globalThis);

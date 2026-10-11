@@ -1,6 +1,6 @@
 # Aktueller Modellvertrag
 
-Stand: App 0.11.5; Dokumentation vom 07.10.2026. Beschreibt die implementierte Näherung, keine vollständige physiologische Validierung. Historische Berichte können frühere Einstellungen beschreiben.
+Stand: App 0.12.0; Dokumentation vom 11.10.2026. Beschreibt die implementierte Näherung, keine vollständige physiologische Validierung. Historische Berichte können frühere Einstellungen beschreiben.
 
 ## Mechanischer Kern
 
@@ -41,7 +41,7 @@ Die Rekonstruktion bei reduzierter aktiver Amplitude erfüllt die Volumenbilanz 
 
 ## Verbindliche Darstellungsregeln
 
-- Globales Hüllkurvendiagramm: fest linear 1 pm–16 µm; keine automatische Neuskalierung.
+- Globales Hüllkurvendiagramm: linear 1 pm–8 µm in Passiv, 1 pm–18 µm in Aktiv; beim Moduswechsel ändert sich der gemeinsame Maßstab beider Kurven. Innerhalb eines Modus keine automatische Neuskalierung.
 - Momentanwelle: fest linear ±16 µm. Nur die gewählte aktive oder passive Welle wird dunkelgrau durchgezogen gezeigt.
 - Maximum-Säulen: eigene gemeinsame lineare Skala. Passiv immer, Aktiv zusätzlich im aktiven Modus. Anpassung an Frequenz/Anregung, nicht an Betriebsart oder aktiven Prozentwert.
 - Clipping verändert keine Rechenwerte. Numerische Maximalwerte bleiben verfügbar.
@@ -51,7 +51,7 @@ Die Rekonstruktion bei reduzierter aktiver Amplitude erfüllt die Volumenbilanz 
 
 Keine pegelabhängige Kompression, keine vollständige Corti-Organ-Geometrie, keine separate Scala media und keine unabhängige Validierung menschlicher BM-Absolutamplituden. Randbereiche und konkurrierende Maxima bleiben prüfbedürftig. Audio ist nicht auf Schalldruck kalibriert.
 
-Die derzeit 17 Tests prüfen komplexe Referenzlösungen, Matrix-Baseline, Worker/Fallback, Bedienlogik, Skalen, Volumenbilanz und Phasenumkehr. Erfolgreiche Regression ist keine physiologische Validierung. Für UI-Änderungen bleibt eine separate Browserprüfung nötig.
+Die automatisierten Tests prüfen komplexe Referenzlösungen, Matrix-Baseline, Worker/Fallback, Bedienlogik, Skalen, Volumenbilanz und Phasenumkehr. Erfolgreiche Regression ist keine physiologische Validierung. Für UI-Änderungen bleibt eine separate Browserprüfung nötig.
 
 ## Herkunft und Zuständigkeit
 
@@ -73,3 +73,5 @@ Die 17 Pfeilpositionen pro Scala liegen außerhalb der Kontur und bleiben zeitli
 Die Oberfläche zeigt keine Greenwood-Referenzlinie, kein Phasendiagramm und keine technische Prüftabelle mehr. Diese Vereinfachung entfernt ausschließlich Darstellungsfunktionen; komplexe Antworten und Phasen bleiben für die Wanderwelle und Strömungsrechnung erhalten. Der Zeitregler zeigt den aktuellen Zeitpunkt in ms bzw. µs, am rechten Ende die Periodendauer. Seine interne Einteilung bleibt 0–360; ein Einzelschritt entspricht 1/24 Periode. Die Zeitlupe steuert ausschließlich die Abspieldauer. Die Skalen und Einheiten der beiden Auslenkungsanzeigen bleiben unverändert.
 
 Die schematische Kontur einschließlich Fenster und Steigbügel ist seit 0.11.5 vertikal um 10 % zur BM-Ruhelage komprimiert (y = 270 + 0,9 · (y_original − 270)). Strömungspfeile folgen der komprimierten Kontur. BM, Hüllkurven und Auslenkungsmaßstab werden nicht komprimiert; die Hüllkurven liegen marineblau hinter der Wanderwelle.
+
+Die Wanderwellenlupe zeigt dieselben komplexen BM-Werte und dieselbe Phase im Bereich Peak ±3 mm, an den Modellgrenzen abgeschnitten. Ihre Höhe folgt der maximalen Hüllkurve im Ausschnitt mit 15 % Reserve und ist während der Periode konstant. Keine extrapolierten Werte, kein eigener Solver. Die Hauptanimation bleibt bei ±16 µm; die Lupe ist bewusst ohne numerische Skala und als vergrößert gekennzeichnet.

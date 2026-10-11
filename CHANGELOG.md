@@ -4,6 +4,8 @@ Kurze fachlich relevante Historie. Die älteren Einträge sind aus lokalen Proje
 
 ## Unveröffentlicht
 
+- 0.12.0: Globale Auslenkungsskala 8 µm passiv / 18 µm aktiv. Synchrone Wanderwellenlupe rechts (Maximum ±3 mm, dynamische Höhe aus der Hüllkurve). Marineblaue Hüllkurven durchgezogen; Rechenkern unverändert.
+
 - 0.11.6: Höhenhinweis und kleine Modusüberschrift entfernt; Säulendiagramm mit „Maximum in …“ und dynamischer Einheit der Achsenskalierung beschriftet.
 
 - 0.11.5: Cochlea-Kontur und Fenster um 10 % zur ruhenden BM abgeflacht; tangentiale Strömungspfeile nachgeführt. Hüllkurven marineblau hinter der Wanderwelle. Rechenkern und Auslenkungsmaßstab unverändert.
