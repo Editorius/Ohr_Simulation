@@ -1,3 +1,7 @@
+# Lokaler Test: anatomische Ortsmarkierung
+
+`index.html` öffnen oder `node serve.cjs` starten. Die 3D-Ansicht befindet sich unter dem Auslenkungsdiagramm. Frequenz ändern und Passiv/Aktiv wählen: Die rote Markierung folgt dem berechneten Maximalort. Drehen per Ziehen; Zoom per Mausrad. Dies ist ein unveröffentlichter Teststand auf Basis von 0.12.0.
+
 # Innenohr · Wanderwelle
 
 Version 0.11.0. Deutschsprachige, statische Browser-App für den Unterricht: passive und aktive Basilarmembranbewegung, Frequenz-Ort-Darstellung, Hüllkurven, lokale mittlere Strömungsgeschwindigkeiten und zuschaltbarer Ton.
