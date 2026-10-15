@@ -1,3 +1,7 @@
+## Ansichten anordnen
+
+Über „Ansichten“ oben rechts lassen sich Wanderwelle, Auslenkung und Cochlea einzeln ein-/ausblenden. Am Griff neben der Überschrift ziehen, oder den Griff mit Tab fokussieren und Pfeil hoch/runter nutzen. Auch das Menü bietet Pfeilbuttons. Während des Ziehens sind die anderen Kacheln ausgegraut; Escape bricht ab. „Ansicht zurücksetzen“ stellt alle drei Kacheln wieder her. Speicherung gilt für diesen Browser und dieselbe Seitenadresse; die Berechnung läuft unverändert weiter.
+
 # Lokaler Test: anatomische Ortsmarkierung
 
 `index.html` öffnen oder `node serve.cjs` starten. Die 3D-Ansicht befindet sich unter dem Auslenkungsdiagramm. Frequenz ändern und Passiv/Aktiv wählen: Die rote Markierung folgt dem berechneten Maximalort. Drehen per Ziehen; Zoom per Mausrad. Dies ist ein unveröffentlichter Teststand auf Basis von 0.12.0.
@@ -47,3 +51,5 @@ Siehe [Quellen und Rechte](THIRD_PARTY_NOTICES.md). Dieses Paket legt keine paus
 Das Repository enthält jetzt gezielt benötigte Entwicklungsdaten und Generatoren. Für Hosting-Uploads kann ein separates Paket mit `python scripts/export_release.py` erzeugt werden. Es liegt unter `dist/` und enthält nur Website-Dateien sowie aktuelle Prüfsummen. Der historische Prüfsummenstand liegt unter `research/releases/0.11.0/`; er beschreibt nicht den laufenden Git-Stand.
 
 Automatische Prüfungen stehen in `.github/workflows/tests.yml`. Der Workflow veröffentlicht nichts. Bei branchbasiertem GitHub Pages begrenzt der Testworkflow nicht automatisch, welche Dateien GitHub bereitstellt; vor einer Umstellung auf einen gezielten Deployment-Export die Pages-Konfiguration separat ändern.
+
+Prüfung der Kachelbedienung: Ziehen von Auslenkung vor Wanderwelle, Menüsortierung, komplettes Ausblenden, Wiederherstellen und Laden gespeicherter Einstellungen im Browser geprüft. Die Anordnung verwendet CSS-Reihenfolge, damit die 3D-Ansicht beim Verschieben nicht neu geladen wird.
