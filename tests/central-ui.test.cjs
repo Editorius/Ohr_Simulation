@@ -8,17 +8,18 @@ test('Central B controls, phase, zero drive, boundaries and reset remain coheren
    classList:{add:c=>classes.add(c),remove:c=>classes.delete(c),toggle:(c,v)=>v?classes.add(c):classes.delete(c)},
    setAttribute:(k,v)=>{attrs[k]=String(v);},removeAttribute:k=>{delete attrs[k];},addEventListener:(k,v)=>{handlers[k]=v;}});
  }
+ const learningFrequencies=[];let learningResets=0;
  const anatomyMessages=[];elements.get('anatomy-frame').contentWindow={postMessage:m=>anatomyMessages.push(m)};
  const el=id=>{assert.ok(elements.has(id),id);return elements.get(id);};
  for(const [id,value] of Object.entries({frequency:1000,drive:800,'active-amplitude':100,speed:.5,volume:10}))el(id).value=String(value);
  for(const id of ['envelope'])el(id).checked=true;
  const steps=[50,-50].map(step=>({dataset:{frequencyStep:String(step)},handlers:{},addEventListener(k,fn){this.handlers[k]=fn;}}));
- const ctx={console,performance,atob,document:{hidden:false,getElementById:el,querySelectorAll:selector=>selector==='[data-frequency-step]'?steps:[],addEventListener(){}},window:{addEventListener(){}},setTimeout:fn=>queue.push(fn),requestAnimationFrame:()=>{},URL:{},Blob:class{}};
+ const ctx={console,performance,atob,document:{hidden:false,getElementById:el,querySelectorAll:selector=>selector==='[data-frequency-step]'?steps:[],addEventListener(){}},window:{addEventListener(){},LearningView:{setFrequency:f=>learningFrequencies.push(f),reset:()=>learningResets++}},setTimeout:fn=>queue.push(fn),requestAnimationFrame:()=>{},URL:{},Blob:class{}};
  vm.createContext(ctx);
  for(const file of ['numerics.js','cochlea-data.js','cochlea-model.js','solver-client.js','audio.js','response-view.js','fluid-geometry.js','fluid-view.js','cochlea-contour.js','app.js'])vm.runInContext(fs.readFileSync(require.resolve('../'+file),'utf8'),ctx);
  function flush(){while(queue.length)queue.shift()();}
  function change(id,value,event='change'){el(id).value=String(value);el(id).handlers[event]();flush();}
- function finite(){const m=anatomyMessages.at(-1);assert.ok(m&&m.valid);assert.ok(m.positionMm>=0&&m.positionMm<=33.5);const act=el('mode-active').attrs['aria-pressed']==='true';const raw=ctx.CochleaModel.solveForView({frequency:Number(el('frequency').value),activity:act?.8:0});assert.ok(Math.abs(m.positionMm-raw.peakX*1000)<1e-9); const max=Number(el('amplitude-svg').innerHTML.match(/data-maximum="([^"]+)"/)[1]);assert.ok(el('amplitude-svg').innerHTML.includes('Maximum in '+ctx.CochleaResponse.unit(max).label));assert.equal(elements.has('plot-legend'),false);assert.ok(el('amplitude-svg').attrs['aria-label'].includes('1 pm bis '+(el('mode-active').attrs['aria-pressed']==='true'?18:8)+' µm'));assert.ok(el('loupe-wave').attrs.d);assert.equal(elements.has('passive-detail'),false);for(const e of elements.values())assert.doesNotMatch(e.innerHTML+JSON.stringify(e.attrs),/NaN|Infinity/);}
+ function finite(){assert.equal(learningFrequencies.at(-1),Number(el('frequency').value));const m=anatomyMessages.at(-1);assert.ok(m&&m.valid);assert.ok(m.positionMm>=0&&m.positionMm<=33.5);const act=el('mode-active').attrs['aria-pressed']==='true';const raw=ctx.CochleaModel.solveForView({frequency:Number(el('frequency').value),activity:act?.8:0});assert.ok(Math.abs(m.positionMm-raw.peakX*1000)<1e-9); const max=Number(el('amplitude-svg').innerHTML.match(/data-maximum="([^"]+)"/)[1]);assert.ok(el('amplitude-svg').innerHTML.includes('Maximum in '+ctx.CochleaResponse.unit(max).label));assert.equal(elements.has('plot-legend'),false);assert.ok(el('amplitude-svg').attrs['aria-label'].includes('1 pm bis '+(el('mode-active').attrs['aria-pressed']==='true'?18:8)+' µm'));assert.ok(el('loupe-wave').attrs.d);assert.equal(elements.has('passive-detail'),false);for(const e of elements.values())assert.doesNotMatch(e.innerHTML+JSON.stringify(e.attrs),/NaN|Infinity/);}
  flush();finite();assert.match(el('status').textContent,/Berechnet/);
  assert.equal(elements.has('extended-frequency'),false);assert.equal(el('frequency').min,50);assert.equal(el('frequency').max,20000);
  assert.match(el('amplitude-svg').innerHTML,/Auslenkung \(µm\) · linear/);assert.equal(el('drive-value').textContent,'10 nm');assert.equal(el('active-amplitude').disabled,true);
@@ -74,7 +75,7 @@ test('Central B controls, phase, zero drive, boundaries and reset remain coheren
   assert.equal(fields[a].length,fields[b].length);
   fields[a].forEach((v,i)=>assert.ok(Math.abs(v+fields[b][i])<1e-10*Math.max(1,Math.abs(v))));
  }
- el('reset').handlers.click();flush();finite();assert.equal(Number(el('active-amplitude').value),100);assert.equal(el('drive').value,800);assert.equal(el('drive-value').textContent,'10 nm');assert.equal(el('mode-passive').attrs['aria-pressed'],'true');
+ el('reset').handlers.click();flush();finite();assert.equal(learningResets,1);assert.equal(Number(el('active-amplitude').value),100);assert.equal(el('drive').value,800);assert.equal(el('drive-value').textContent,'10 nm');assert.equal(el('mode-passive').attrs['aria-pressed'],'true');
 });
 
 test('Anatomy receiver rejects other windows and invalid maxima',()=>{

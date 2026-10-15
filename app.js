@@ -120,6 +120,7 @@
     const comparison=CochleaResponse.prepareComparison(pair,driveNm,activeMode,Number($("active-amplitude").value));
     passive=comparison.passive;
     result=comparison.result;
+    window.LearningView?.setFrequency(result.frequency);
     reference={peakAmplitude:comparison.referencePeak};
     fluidFlow=CochleaFluid.reconstruct(result);
     const fullActive=CochleaResponse.scaleResponse(pair.active,driveNm*1e-9);
@@ -448,6 +449,7 @@
     stopAudio();
   });
   $("reset").addEventListener("click", () => {
+    window.LearningView?.reset();
     stopAnimation();
     stopAudio();
     phase = 0;

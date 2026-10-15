@@ -5,7 +5,7 @@ from export_release import ROOT,APP_FILES,build,archive
 class ReleaseTest(unittest.TestCase):
     def test_real_release_is_complete_and_excludes_development_inputs(self):
         (ROOT/'.generated').mkdir(exist_ok=True)
-        with tempfile.TemporaryDirectory(dir=ROOT/'.generated') as temporary:
+        with tempfile.TemporaryDirectory() as temporary:
             out=Path(temporary)/'release'
             manifest=build(ROOT,out)
             self.assertEqual(set(manifest),set(APP_FILES)|{'README.md'})

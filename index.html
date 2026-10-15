@@ -14,6 +14,8 @@
     <script defer src="fluid-geometry.js?v=0.12.0"></script>
     <script defer src="fluid-view.js?v=0.12.0"></script>
     <script defer src="cochlea-contour.js?v=0.12.0"></script>
+    <script defer src="learning-model.js?v=0.12.0"></script>
+    <script defer src="learning-view.js?v=0.12.0"></script>
     <script defer src="app.js?v=0.12.0"></script>
     <script defer src="panel-layout.js?v=0.12.0"></script>
   </head>
@@ -150,7 +152,7 @@
 <path id="bm-rest" d="M317 270 H1505" fill="none" stroke="#87b9ba" stroke-width="2.6"/>
 <g id="flow-arrows" aria-label="Berechnete mittlere Strömungsgeschwindigkeit"/>
 <g clip-path="url(#wave-displacement-clip)">
- <g id="wave-marker"/><g id="passive-marker"/>
+ <g id="learning-wave-marker"></g><g id="wave-marker"/><g id="passive-marker"/>
  <path id="passive-envelope-top" class="comparison-curve"/><path id="passive-envelope-bottom" class="comparison-curve"/>
  <path id="envelope-top" class="envelope"/><path id="envelope-bottom" class="envelope"/>
  <path id="wave-line" class="wave-line"/>
@@ -215,7 +217,32 @@
               ><input id="envelope" type="checkbox" checked /> Hüllkurve</label>
           </section>
         </section>
-        <section class="panel" data-view="amplitude">
+        <section class="panel" data-view="learning" id="learning-panel">
+ <h2>Warum schwingt die Basilarmembran?</h2>
+ <p class="learn-subtitle">Ein Abschnitt · Vereinfachtes Schwingungsmodell</p>
+ <div class="learn-place-row"><label for="learn-place">Abschnitt auswählen</label><input id="learn-place" type="range" min="0" max="33.5" step="0.01" value="11.26"><output id="learn-place-value" for="learn-place"></output></div>
+ <p class="hint">Ort per Regler oder Klick auf die BM wählen. Türkis: ausgewählter Abschnitt · Rot: Wellenmaximum.</p>
+ <div class="learn-columns">
+  <div><h3>Feder-Masse-Schwinger</h3><svg id="learn-mechanism" viewBox="0 0 430 300" role="img" aria-label="Erzwungener Feder-Masse-Schwinger ohne dargestellten Dämpfer">
+   <path d="M130 40H230 M130 40l12 -12 M150 40l12 -12 M170 40l12 -12 M190 40l12 -12 M210 40l12 -12" stroke="#233b49" stroke-width="3" fill="none"/>
+   <path id="learn-spring" stroke="#233b49" stroke-width="3" fill="none"/>
+   <path d="M90 205H280" stroke="#8da0a8" stroke-dasharray="5 5"/><text x="285" y="210">Ruhelage</text>
+   <text x="210" y="115">Federsteifigkeit D</text><g id="learn-block"><rect x="150" y="180" width="60" height="50" rx="4" fill="#566674"/><text x="173" y="212" fill="white">m</text></g>
+   <path d="M75 180v50m-5 -44l5 -6 5 6m-10 38l5 6 5 -6" stroke="#233b49" fill="none"/><text x="15" y="260">Auslenkung</text><text x="230" y="280">↑ Anregung</text>
+  </svg><div class="learn-motion"><button id="learn-play" aria-pressed="true">Pause</button><span class="hint">Zeitlupe · 2 s pro Periode · Höhe relativ</span></div></div>
+  <div><h3>Resonanzkurve</h3><svg id="learn-curve" viewBox="0 0 520 300" role="img" aria-label="Relative Amplitude über der Anregungsfrequenz; gestrichelt: Eigenfrequenz"></svg><p id="learn-frequency" class="learn-frequency"></p><p class="hint"><span id="learn-f0"></span> (gestrichelt)<br><span id="learn-resonance"></span></p></div>
+ </div>
+ <div class="learn-mode"><button id="learn-explain" aria-pressed="true">Cochlea erklären</button><button id="learn-experiment" aria-pressed="false">Selbst untersuchen</button><span id="learn-state"></span></div>
+ <div class="learn-controls">
+  <label for="learn-stiffness">Federsteifigkeit <output id="learn-stiffness-value"></output><input id="learn-stiffness" type="range" min="0.25" max="4" step="0.05" value="1"></label>
+  <label for="learn-mass">Masse <output id="learn-mass-value"></output><input id="learn-mass" type="range" min="0.25" max="4" step="0.05" value="1"></label>
+  <label for="learn-damping">Dämpfung <output id="learn-damping-value"></output><input id="learn-damping" type="range" min="0.05" max="0.8" step="0.01" value="0.18"></label>
+ </div>
+ <div class="learn-footer"><button id="learn-defaults" class="secondary">Zur Ortsvorgabe</button><details><summary>Zusammenhang anzeigen</summary><p>f₀ = 1/(2π) · √(D/m). Größere Steifigkeit erhöht, größere Masse senkt die Eigenfrequenz. Dämpfung begrenzt die Resonanz und verschiebt das Amplitudenmaximum.</p><p>Die Ortsvorgabe folgt einer vereinfachten Frequenz-Orts-Zuordnung. Sie ist keine berechnete Eigenfrequenz des Innenohr-Rechenkerns. Die Kurve zeigt die Antwort auf eine gleichbleibende Kraftamplitude; die Anregung am Steigbügel wird hier nicht quantitativ nachgebildet.</p></details></div>
+ <p class="hint">Änderungen gelten nur für dieses Lernmodell. Keine anatomischen Massen oder absoluten BM-Auslenkungen.</p>
+</section>
+
+<section class="panel" data-view="amplitude">
             <div class="panel-heading">
               <h2>Auslenkung der Basilarmembran</h2>
             </div>

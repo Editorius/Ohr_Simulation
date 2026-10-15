@@ -727,3 +727,20 @@ dd {
 #anatomy-frame{height:446px}
 #anatomy-position{margin:4px 0 8px}
 @media(max-width:650px){#anatomy-frame{height:480px}}
+/* Teaching view follows the app's card vocabulary. */
+.learn-subtitle,.learn-place-row{color:var(--muted)}
+.learn-place-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;border-block:1px solid #dce5eb;padding:12px 0}
+.learn-place-row input{flex:1;min-width:160px}.learn-place-row output{min-width:150px}
+.learn-columns{display:grid;grid-template-columns:1fr 1.15fr;gap:24px;margin:20px 0}
+.learn-columns>div+div{border-left:1px solid #dce5eb;padding-left:24px}
+.learn-columns h3{font-size:18px;margin:0 0 10px}.learn-columns svg{width:100%;display:block;max-height:300px}
+.learn-columns svg text{font:14px system-ui,sans-serif;fill:#233b49}.learn-columns #learn-block text{fill:white;font-style:italic;font-size:24px}
+.learn-motion,.learn-mode,.learn-footer{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.learn-mode{padding-top:15px;border-top:1px solid #dce5eb}.learn-mode button[aria-pressed=false]{background:#edf4f5;color:#233b49;border-color:#cfdde1}
+.learn-mode span{font-size:13px;color:#58707d}.learn-controls{display:grid;grid-template-columns:repeat(3,1fr);gap:25px;margin:22px 0}
+.learn-controls output{float:right;color:#147b80;font-weight:400}.learn-controls input{display:block;width:100%;margin-top:16px;accent-color:#147b80}
+.learn-frequency{padding:10px;background:#e7f4f5;color:#126e72;border-radius:6px;font-size:13px}
+.learn-footer{justify-content:space-between;border-top:1px solid #dce5eb;padding-top:15px}.learn-footer details{max-width:620px}.learn-footer summary{cursor:pointer}.learn-footer p{font-size:14px;line-height:1.5}
+@media(max-width:700px){.learn-columns,.learn-controls{grid-template-columns:1fr}.learn-columns>div+div{border-left:0;border-top:1px solid #dce5eb;padding:16px 0 0}.learn-place-row input{flex-basis:100%}}
+#learning-panel{container-type:inline-size}
+@container(max-width:650px){.learn-columns,.learn-controls{grid-template-columns:1fr}.learn-columns>div+div{border-left:0;border-top:1px solid #dce5eb;padding:16px 0 0}.learn-columns svg{max-height:300px}}

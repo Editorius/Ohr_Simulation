@@ -53,3 +53,8 @@ Das Repository enthält jetzt gezielt benötigte Entwicklungsdaten und Generator
 Automatische Prüfungen stehen in `.github/workflows/tests.yml`. Der Workflow veröffentlicht nichts. Bei branchbasiertem GitHub Pages begrenzt der Testworkflow nicht automatisch, welche Dateien GitHub bereitstellt; vor einer Umstellung auf einen gezielten Deployment-Export die Pages-Konfiguration separat ändern.
 
 Prüfung der Kachelbedienung: Ziehen von Auslenkung vor Wanderwelle, Menüsortierung, komplettes Ausblenden, Wiederherstellen und Laden gespeicherter Einstellungen im Browser geprüft. Die Anordnung verwendet CSS-Reihenfolge, damit die 3D-Ansicht beim Verschieben nicht neu geladen wird.
+
+
+### Unterrichtskachel
+
+„Warum schwingt die Basilarmembran?“ zeigt einen einzelnen Feder-Masse-Schwinger und seine Resonanzkurve. Ort per Regler oder Klick auf die BM wählen. „Selbst untersuchen“ gibt Masse, Steifigkeit und Dämpfung frei; „Zur Ortsvorgabe“ setzt die Parameter zurück. Die Dämpfung erscheint nur als Regler, nicht als Bauteil. Türkis markiert den Lernabschnitt in der Wanderwelle und 3D-Ansicht. Die Kachel kann über „Ansichten“ ausgeblendet und per Griff verschoben werden. Die Schwingerkette ist eine mögliche spätere Erweiterung.
