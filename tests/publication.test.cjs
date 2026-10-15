@@ -13,7 +13,7 @@ test('All local scripts and styles use the release version and exist',()=>{
   const {version}=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));
   const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
   const refs=[...html.matchAll(/(?:src|href)="([^"\s]+\.(?:js|css)(?:\?[^"\s]*)?)"/g)].map(m=>m[1]);
-  assert.equal(refs.length,11);
+  assert.equal(refs.length,12);
   for(const ref of refs) {
     const [file,query]=ref.split('?');
     assert.equal(query,`v=${version}`,ref);

@@ -5,7 +5,7 @@
   "description": "Didaktische Simulation der menschlichen Cochlea",
   "scripts": {
     "start": "node serve.cjs",
-    "test": "node --test tests/publication.test.cjs tests/calibration.test.cjs tests/central-model.test.cjs tests/central-ui.test.cjs tests/fluid-view.test.cjs tests/restored-b.test.cjs tests/solver-client.test.cjs"
+    "test": "node --test tests/publication.test.cjs tests/calibration.test.cjs tests/central-model.test.cjs tests/central-ui.test.cjs tests/fluid-view.test.cjs tests/restored-b.test.cjs tests/solver-client.test.cjs tests/panel-layout.test.cjs"
   },
   "engines": {
     "node": ">=20"

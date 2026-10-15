@@ -15,6 +15,7 @@
     <script defer src="fluid-view.js?v=0.12.0"></script>
     <script defer src="cochlea-contour.js?v=0.12.0"></script>
     <script defer src="app.js?v=0.12.0"></script>
+    <script defer src="panel-layout.js?v=0.12.0"></script>
   </head>
   <body>
     <header class="header">
@@ -119,7 +120,16 @@
         </section>
       </aside>
       <div class="experiment-column">
-        <section class="panel experiment">
+        <div class="view-toolbar"><details id="view-menu"><summary>☷ Ansichten</summary><div class="view-menu-content">
+          <p>Ansichten einblenden und anordnen</p>
+          <div id="view-options"></div>
+          <button id="layout-reset" type="button">Ansicht zurücksetzen</button>
+        </div></details></div>
+        <p id="layout-announcement" class="visually-hidden" role="status" aria-live="polite"></p>
+        <p id="views-empty" hidden>Alle Ansichten sind ausgeblendet. Über „Ansichten“ kannst du sie wieder einblenden.</p>
+        <div id="view-stack">
+
+        <section class="panel experiment" data-view="wave">
           <div class="panel-heading">
             <h2>Wanderwelle auf der Basilarmembran</h2>
             <span id="confirmed-frequency">Entrollte Cochlea</span>
@@ -205,8 +215,7 @@
               ><input id="envelope" type="checkbox" checked /> Hüllkurve</label>
           </section>
         </section>
-        <div class="lower-grid">
-          <section class="panel">
+        <section class="panel" data-view="amplitude">
             <div class="panel-heading">
               <h2>Auslenkung der Basilarmembran</h2>
             </div>
@@ -217,7 +226,7 @@
               aria-label="Auslenkung in Nanometern entlang der Basilarmembran"
             ></svg>
           </section>
-          <section class="panel spiral-panel">
+          <section class="panel spiral-panel" data-view="anatomy">
             <h2>Ort in der Cochlea</h2>
             <p id="anatomy-position" role="status">Maximum wird berechnet …</p>
             <iframe id="anatomy-frame" src="anatomy/index.html" title="Drehbares Cochlea-Modell mit berechnetem Maximalort"></iframe>

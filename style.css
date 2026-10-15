@@ -695,3 +695,35 @@ dd {
 #anatomy-frame{width:100%;height:560px;border:0;display:block}
 #anatomy-position{font-size:14px;color:var(--muted)}
 @media(max-width:650px){#anatomy-frame{height:620px}}
+/* Reorder using CSS order: the anatomy iframe stays mounted and keeps its camera. */
+#view-stack{display:flex;flex-direction:column;gap:14px;position:relative;isolation:isolate}
+#view-stack>[data-view]{margin:0;min-width:0;transition:opacity .15s,filter .15s;position:relative}
+#view-stack>[hidden],[hidden]{display:none!important}
+.panel-grip{font-size:23px;line-height:1;padding:2px 6px;margin-right:8px;background:transparent;border:1px solid transparent;color:var(--muted);cursor:grab;touch-action:none;vertical-align:middle}
+.panel-grip:focus-visible{outline:2px solid #126e72;outline-offset:2px}
+.panels-dragging>[data-view]:not(.panel-dragged){filter:grayscale(1);opacity:.35;pointer-events:none}
+.panels-dragging .panel-dragged{z-index:10;box-shadow:0 12px 30px #20384740;pointer-events:none}
+.panels-dragging .panel-dragged .panel-grip{pointer-events:auto;cursor:grabbing}
+.panels-dragging iframe{pointer-events:none}
+.panel-drop-line{position:fixed;height:4px;border-radius:4px;background:#137c83;z-index:1000;pointer-events:none;box-shadow:0 0 0 2px white}
+.view-toolbar{position:sticky;top:10px;z-index:40;display:flex;justify-content:flex-end;height:0;overflow:visible;transform:translateY(-6px)}
+#view-stack{padding-top:36px}
+#view-menu{position:relative;align-self:flex-start}
+#view-menu summary{cursor:pointer;background:#fffef3ee;backdrop-filter:blur(5px);border:1px solid #ccdadd;border-radius:8px;padding:7px 12px;box-shadow:0 3px 12px #21384720;font-size:13px;list-style:none}
+.view-menu-content{position:absolute;right:0;top:38px;width:290px;max-width:85vw;padding:12px;background:white;border:1px solid #ccdadd;border-radius:10px;box-shadow:0 8px 25px #21384730}
+.view-menu-content p{font-size:12px;margin:0 0 10px;color:var(--muted)}
+#view-options{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.view-option{display:flex;align-items:center;gap:5px}
+.view-option label{flex:1;font-size:14px;display:flex;gap:6px;align-items:center;margin:0}
+.view-option input{width:auto;margin:0;accent-color:#126e72}
+.view-option button{padding:4px 9px}
+#layout-reset{width:100%;font-size:12px}
+#views-empty{margin-top:45px;padding:20px;background:white;border-radius:10px}
+.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(prefers-reduced-motion:reduce){#view-stack>[data-view]{transition:none}}
+
+/* Compact cochlea card: status and controls above the image, no empty footer. */
+[data-view="anatomy"]{width:100%;max-width:1000px;align-self:center}
+#anatomy-frame{height:446px}
+#anatomy-position{margin:4px 0 8px}
+@media(max-width:650px){#anatomy-frame{height:480px}}

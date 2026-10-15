@@ -4,6 +4,14 @@ Kurze fachlich relevante Historie. Die älteren Einträge sind aus lokalen Proje
 
 ## Unveröffentlicht
 
+- Drei eingeschlossene violette Farbinseln in der SV geschlossen; basale Aussengrenze erhalten.
+
+- SV-Farbgrenze anhand des basalen Schnitts und aller Ortskonturen korrigiert; SV/ST-Beschriftungen bei 11,26 mm verankert. Farben, Drehpunkt und Rechenkern erhalten.
+
+- Cochlea-Kachel kompakter: kräftiges Blau/Goldgelb für SV/ST, feste Scalenbeschriftungen rechts übereinander, Bedienung über dem Bild, Drehpunkt zum Cochlea-Körper verschoben. Maximalort bleibt dynamisch.
+
+- Ansichten per Griff oder Pfeiltasten anordnen; schwebendes Menü zum Ein-/Ausblenden und Zurücksetzen. Übrige Kacheln beim Ziehen ausgegraut. Layout lokal gespeichert; Rechenkern und 3D-Kamera unverändert.
+
 - Lokale 3D-Integration: OpenEar-Ansicht ersetzt die schematische Spirale. Markierung folgt dem Maximum der gewählten Solverantwort in mm. Mechanik und Amplituden bleiben unverändert.
 
 - 0.12.0: Globale Auslenkungsskala 8 µm passiv / 18 µm aktiv. Synchrone Wanderwellenlupe rechts (Maximum ±3 mm, dynamische Höhe aus der Hüllkurve). Marineblaue Hüllkurven durchgezogen; Rechenkern unverändert.
