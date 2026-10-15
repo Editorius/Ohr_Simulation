@@ -4,6 +4,8 @@ Kurze fachlich relevante Historie. Die älteren Einträge sind aus lokalen Proje
 
 ## Unveröffentlicht
 
+- Cochlea-Kachel kompakter: kräftiges Blau/Goldgelb für SV/ST, feste Scalenbeschriftungen rechts übereinander, Bedienung über dem Bild, Drehpunkt zum Cochlea-Körper verschoben. Maximalort bleibt dynamisch.
+
 - Ansichten per Griff oder Pfeiltasten anordnen; schwebendes Menü zum Ein-/Ausblenden und Zurücksetzen. Übrige Kacheln beim Ziehen ausgegraut. Layout lokal gespeichert; Rechenkern und 3D-Kamera unverändert.
 
 - Lokale 3D-Integration: OpenEar-Ansicht ersetzt die schematische Spirale. Markierung folgt dem Maximum der gewählten Solverantwort in mm. Mechanik und Amplituden bleiben unverändert.

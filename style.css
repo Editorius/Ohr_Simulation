@@ -721,3 +721,9 @@ dd {
 #views-empty{margin-top:45px;padding:20px;background:white;border-radius:10px}
 .visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 @media(prefers-reduced-motion:reduce){#view-stack>[data-view]{transition:none}}
+
+/* Compact cochlea card: status and controls above the image, no empty footer. */
+[data-view="anatomy"]{width:100%;max-width:1000px;align-self:center}
+#anatomy-frame{height:446px}
+#anatomy-position{margin:4px 0 8px}
+@media(max-width:650px){#anatomy-frame{height:480px}}

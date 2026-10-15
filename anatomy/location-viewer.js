@@ -1,7 +1,13 @@
 (function(){
 'use strict';
 const source=JSON.parse(document.getElementById('mesh-data').textContent),data=source.meshes,$=id=>document.getElementById(id);
-function normalize(meshes){const vs=Object.values(meshes).flatMap(m=>m.vertices),lo=[0,1,2].map(k=>Math.min(...vs.map(v=>v[k]))),hi=[0,1,2].map(k=>Math.max(...vs.map(v=>v[k]))),c=lo.map((v,k)=>(v+hi[k])/2),s=Math.max(...hi.map((v,k)=>v-lo[k]))/1.65;
+// Camera pivot is biased toward the scala tympani (cochlear body).
+function cameraCenter(meshes){
+ const bounds=vs=>[0,1,2].map(k=>(Math.min(...vs.map(p=>p[k]))+Math.max(...vs.map(p=>p[k])))/2);
+ const all=bounds(Object.values(meshes).flatMap(m=>m.vertices)),cochlea=bounds(meshes.st.vertices);
+ return all.map((x,k)=>.2*x+.8*cochlea[k]);
+}
+function normalize(meshes){const vs=Object.values(meshes).flatMap(m=>m.vertices),lo=[0,1,2].map(k=>Math.min(...vs.map(v=>v[k]))),hi=[0,1,2].map(k=>Math.max(...vs.map(v=>v[k]))),c=cameraCenter(meshes),s=Math.max(...hi.map((v,k)=>v-lo[k]))/1.65;
  return Object.fromEntries(Object.entries(meshes).map(([k,m])=>[k,{progress:m.progress,faces:m.faces,vertices:m.vertices.map(v=>v.map((x,j)=>(x-c[j])/s))}]));}
 function buffers(mesh){const normals=mesh.vertices.map(()=>[0,0,0]);for(const face of mesh.faces){const [a,b,c]=face.map(i=>mesh.vertices[i]),u=b.map((v,k)=>v-a[k]),v=c.map((x,k)=>x-a[k]),n=[u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]];for(const i of face)for(let k=0;k<3;k++)normals[i][k]+=n[k];}
  return {vertices:new Float32Array(mesh.vertices.flatMap((v,i)=>{const n=normals[i],l=Math.hypot(...n)||1;return [...v,...n.map(x=>x/l),mesh.progress[i]];})),indices:new Uint16Array(mesh.faces.flat())};}
@@ -46,10 +52,10 @@ function create(id,meshes){const canvas=$(id),gl=canvas.getContext('webgl',{anti
  const program=gl.createProgram();gl.attachShader(program,shader(gl.VERTEX_SHADER,vertex));gl.attachShader(program,shader(gl.FRAGMENT_SHADER,fragment));gl.linkProgram(program);if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(program));
  const locations=Object.fromEntries(['angles','zoom','aspect','color','opacity'].map(k=>[k,gl.getUniformLocation(program,k)])),pos=gl.getAttribLocation(program,'position'),nor=gl.getAttribLocation(program,'normal'),along=gl.getAttribLocation(program,'progress');
  const uploaded=Object.fromEntries(Object.entries(normalize(meshes)).map(([k,m])=>{const b=buffers(m),v=gl.createBuffer(),f=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,v);gl.bufferData(gl.ARRAY_BUFFER,b.vertices,gl.STATIC_DRAW);gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,f);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,b.indices,gl.STATIC_DRAW);return [k,{v,f,mesh:m,buffer:b.vertices,count:b.indices.length}];}));
- const all=Object.values(data).flatMap(m=>m.vertices),lo=[0,1,2].map(k=>Math.min(...all.map(p=>p[k]))),hi=[0,1,2].map(k=>Math.max(...all.map(p=>p[k]))),origin=lo.map((v,k)=>(v+hi[k])/2),unit=Math.max(...hi.map((v,k)=>v-lo[k]))/1.65;
+ const all=Object.values(data).flatMap(m=>m.vertices),lo=[0,1,2].map(k=>Math.min(...all.map(p=>p[k]))),hi=[0,1,2].map(k=>Math.max(...all.map(p=>p[k]))),origin=cameraCenter(data),unit=Math.max(...hi.map((v,k)=>v-lo[k]))/1.65;
  const markers={};
  const view={yaw:0,tilt:.65,zoom:1,draw(){const r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2),w=Math.round(r.width*d),h=Math.round(r.height*d);if(!w||!h)return;if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}gl.viewport(0,0,w,h);gl.clearColor(.98,.99,.99,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.enable(gl.DEPTH_TEST);gl.useProgram(program);gl.uniform2f(locations.angles,this.yaw,this.tilt);gl.uniform1f(locations.zoom,this.zoom);gl.uniform1f(locations.aspect,w/h);
- for(const [k,m] of Object.entries(uploaded).sort(([a],[b])=>Number($(b).checked)-Number($(a).checked))){const opaque=$(k).checked;gl.depthMask(opaque);if(opaque){gl.disable(gl.BLEND);gl.disable(gl.CULL_FACE);}else{gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.enable(gl.CULL_FACE);gl.cullFace(gl.BACK);}gl.uniform1f(locations.opacity,opaque?1:.15);gl.uniform3fv(locations.color,({sv:[.41,.67,.78],st:[.86,.73,.47],eq:[.66,.59,.73],stapes:[.87,.85,.77],ow:[.18,.66,.45],rw:[.85,.37,.58]})[k]);gl.bindBuffer(gl.ARRAY_BUFFER,m.v);gl.enableVertexAttribArray(pos);gl.vertexAttribPointer(pos,3,gl.FLOAT,false,28,0);gl.enableVertexAttribArray(nor);gl.vertexAttribPointer(nor,3,gl.FLOAT,false,28,12);gl.enableVertexAttribArray(along);gl.vertexAttribPointer(along,1,gl.FLOAT,false,28,24);gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,m.f);gl.drawElements(gl.TRIANGLES,m.count,gl.UNSIGNED_SHORT,0);}gl.depthMask(true);gl.disable(gl.CULL_FACE);gl.disable(gl.BLEND);
+ for(const [k,m] of Object.entries(uploaded).sort(([a],[b])=>Number($(b).checked)-Number($(a).checked))){const opaque=$(k).checked;gl.depthMask(opaque);if(opaque){gl.disable(gl.BLEND);gl.disable(gl.CULL_FACE);}else{gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.enable(gl.CULL_FACE);gl.cullFace(gl.BACK);}gl.uniform1f(locations.opacity,opaque?1:.15);gl.uniform3fv(locations.color,({sv:[0,.447,.698],st:[.941,.749,.102],eq:[.66,.59,.73],stapes:[.87,.85,.77],ow:[.18,.66,.45],rw:[.85,.37,.58]})[k]);gl.bindBuffer(gl.ARRAY_BUFFER,m.v);gl.enableVertexAttribArray(pos);gl.vertexAttribPointer(pos,3,gl.FLOAT,false,28,0);gl.enableVertexAttribArray(nor);gl.vertexAttribPointer(nor,3,gl.FLOAT,false,28,12);gl.enableVertexAttribArray(along);gl.vertexAttribPointer(along,1,gl.FLOAT,false,28,24);gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,m.f);gl.drawElements(gl.TRIANGLES,m.count,gl.UNSIGNED_SHORT,0);}gl.depthMask(true);gl.disable(gl.CULL_FACE);gl.disable(gl.BLEND);
  for(const [key,m] of Object.entries(markerVisible?markers:{})){gl.uniform1f(locations.opacity,$(key).checked?1:.15);if(!$(key).checked){gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);}else gl.disable(gl.BLEND);gl.bindBuffer(gl.ARRAY_BUFFER,m.v);gl.vertexAttribPointer(pos,3,gl.FLOAT,false,28,0);gl.vertexAttribPointer(nor,3,gl.FLOAT,false,28,12);gl.vertexAttribPointer(along,1,gl.FLOAT,false,28,24);gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,m.f);gl.drawElements(gl.TRIANGLES,m.count,gl.UNSIGNED_SHORT,0);}gl.disable(gl.BLEND);}};
  view.select=(t)=>{const mm=Math.max(0,Math.min(lengthMm,t*lengthMm));
  for(const [key,m] of Object.entries(uploaded)){for(let i=0;i<m.mesh.vertices.length;i++)m.buffer[i*7+6]=100;gl.bindBuffer(gl.ARRAY_BUFFER,m.v);gl.bufferData(gl.ARRAY_BUFFER,m.buffer,gl.DYNAMIC_DRAW);}
@@ -64,29 +70,30 @@ function project(p){const [x,y,z]=p.map((x,k)=>(x-center[k])/scale),a=v.yaw,b=v.
 const t=Number($('position').value)/lengthMm,p=referencePoint(t*lengthMm);
 const nearest=(m,p)=>m.vertices.reduce((a,b)=>Math.hypot(...b.map((x,k)=>x-p[k]))<Math.hypot(...a.map((x,k)=>x-p[k]))?b:a);
 const eqIndices=[...new Set(data.eq.faces.flat())],eq=eqIndices.map(i=>data.eq.vertices[i]).reduce((a,b)=>b[1]>a[1]?b:a);
-const labels=[['Steigbügel',source.windows.stapes.center,24,115,'stapes'],['Ovales Fenster*',source.windows.ow.center,24,160,'ow'],['Rundes Fenster*',source.windows.rw.center,24,205,'rw'],['Scala vestibuli',source.paths.sv[60],W-175,H-55,'sv'],['Scala tympani',source.paths.st[35],24,H-55,'st'],['Gleichgewichtsorgan',eq,24,50,'eq'],['Ortsmarkierung',p,W-175,50,'st']];
+const labels=[['Steigbügel',source.windows.stapes.center,24,115,'stapes'],['Ovales Fenster*',source.windows.ow.center,24,160,'ow'],['Rundes Fenster*',source.windows.rw.center,24,205,'rw'],['Scala vestibuli',source.paths.sv[60],W-175,H-100,'sv'],['Scala tympani',source.paths.st[60],W-175,H-55,'st'],['Gleichgewichtsorgan',eq,24,50,'eq'],['Ortsmarkierung',p,W-175,50,'st']];
 let svg='';
 if($('reference').checked){
  const points=reference.map(p=>project(p).join(',')).join(' ');
  svg+=`<polyline points="${points}" stroke="white" stroke-width="5" fill="none"/><polyline points="${points}" stroke="#173d67" stroke-width="2.5" fill="none"/>`;
  for(const mm of [0,5,10,15,20,25,30,33.5]){const [x,y]=project(referencePoint(mm));svg+=`<circle cx="${x}" cy="${y}" r="3" fill="#173d67" stroke="white"/><text x="${x+6}" y="${y-6}" font-size="12" fill="#173d67" stroke="white" stroke-width="3" paint-order="stroke">${mm.toLocaleString('de-DE')} mm</text>`;}
- const [x,y]=project(p);if(markerVisible)svg+=`<circle cx="${x}" cy="${y}" r="6" fill="#c93043" stroke="white" stroke-width="2"/>`;
+
 }
+ const [x,y]=project(p);if(markerVisible)svg+=`<circle cx="${x}" cy="${y}" r="6" fill="#c93043" stroke="white" stroke-width="2"/>`;
 if($('guides').checked){
  const i=Math.round(t*100);for(const key of ['st','sv']){const contour=surfaceFrame(key,t*lengthMm).hits.map(p=>project(p).join(',')).join(' ');svg+=`<polygon points="${contour}" stroke="#c93043" stroke-width="1.5" fill="none"/>`;}
  for(const key of ['sv','st']){const points=displayPaths[key].map(p=>project(p).join(',')).join(' ');svg+=`<polyline points="${points}" stroke="${key==='sv'?'#08658d':'#875400'}" stroke-width="2" fill="none" stroke-dasharray="5 3"/>`;for(let i=0;i<=100;i+=10){const [x,y]=project(pathPoint(key,i*lengthMm/100));svg+=`<circle cx="${x}" cy="${y}" r="3" fill="white" stroke="#222"/><text x="${x+5}" y="${y-5}" font-size="11">${(i*33.5/100).toLocaleString('de-DE',{maximumFractionDigits:2})} mm</text>`;}}}
 
-for(const [text,point,x0,y,key] of labels){if(text==='Ortsmarkierung'&&!markerVisible)continue;const boxWidth=text.length*8+20,right=x0>W/2,x=right?W-boxWidth-25:x0,lineX=right?x-7:x+boxWidth+7,[px,py]=project(point);svg+=`<path d="M ${lineX} ${y-5} L ${px} ${py}" stroke="#000" stroke-width="1" fill="none"/><circle cx="${px}" cy="${py}" r="3" fill="${text==='Ortsmarkierung'?'#c93043':'#000'}"/><rect x="${x}" y="${y-21}" width="${boxWidth}" height="32" rx="7" fill="#fff0da" stroke="#e8d4b4"/><text x="${x+10}" y="${y}" fill="#243c49" font-size="14">${text}</text>`;}
+for(const [text,point,x0,y,key] of labels){if(text==='Ortsmarkierung'&&!markerVisible)continue;const boxWidth=text.startsWith('Scala ')?168:text.length*8+20,right=x0>W/2,x=right?W-boxWidth-25:x0,lineX=right?x-7:x+boxWidth+7,[px,py]=project(point);svg+=`<path d="M ${lineX} ${y-5} L ${px} ${py}" stroke="#000" stroke-width="1" fill="none"/><circle cx="${px}" cy="${py}" r="3" fill="${text==='Ortsmarkierung'?'#c93043':'#000'}"/><rect x="${x}" y="${y-21}" width="${boxWidth}" height="32" rx="7" fill="#fff0da" stroke="#e8d4b4"/><text x="${x+10}" y="${y}" fill="#243c49" font-size="14">${text}</text>`;}
 $('labels').setAttribute('viewBox',`0 0 ${W} ${H}`);$('labels').innerHTML=svg;
 }
 try{views.push(create('anatomy',data));for(const id of ['sv','st','eq','stapes','ow','rw'])$(id).onchange=draw;
 for(const [id,tilt] of [['reset',.65],['top',0],['side',Math.PI/2]])$(id).onclick=()=>{views.forEach(v=>Object.assign(v,{yaw:0,tilt,zoom:1}));draw();};
-$('guides').onchange=draw;$('reference').onchange=draw;
+$('guides').onchange=()=>{$('reference').checked=$('guides').checked;draw();};$('reference').onchange=draw;
 $('position').oninput=()=>setMaximumPositionMm(Number($('position').value));
 $('maximum-mm').onchange=()=>{try{setMaximumPositionMm(Number($('maximum-mm').value));$('input-error').textContent='';}catch(e){$('input-error').textContent=e.message;}};
 $('rw-view').onclick=()=>{for(const key of ['eq','sv','stapes','ow'])$(key).checked=false;$('st').checked=true;$('rw').checked=true;const n=source.windows.rw.normal;views.forEach(v=>Object.assign(v,{yaw:Math.atan2(n[0],n[1]),tilt:Math.acos(Math.max(-1,Math.min(1,n[2]))),zoom:1.2}));draw();};
 $('windows-view').onclick=()=>{const n=source.windows.ow.normal;views.forEach(v=>Object.assign(v,{yaw:Math.atan2(n[0],n[1]),tilt:Math.acos(Math.max(-1,Math.min(1,n[2]))),zoom:1.2}));draw();};
-$('focus').onclick=()=>{const v=views[0],t=Number($('position').value)/33.5;const p=referencePoint(t*lengthMm);const all=Object.values(data).flatMap(m=>m.vertices),lo=[0,1,2].map(k=>Math.min(...all.map(v=>v[k]))),hi=[0,1,2].map(k=>Math.max(...all.map(v=>v[k])));const c=lo.map((x,k)=>(x+hi[k])/2);v.yaw=Math.atan2(p[0]-c[0],p[1]-c[1]);v.tilt=Math.PI/2;draw();};
+$('focus').onclick=()=>{const v=views[0],t=Number($('position').value)/33.5;const p=referencePoint(t*lengthMm);const all=Object.values(data).flatMap(m=>m.vertices),lo=[0,1,2].map(k=>Math.min(...all.map(v=>v[k]))),hi=[0,1,2].map(k=>Math.max(...all.map(v=>v[k])));const c=cameraCenter(data);v.yaw=Math.atan2(p[0]-c[0],p[1]-c[1]);v.tilt=Math.PI/2;draw();};
 new ResizeObserver(draw).observe(document.querySelector('.grid'));draw();
 }catch(e){$('error').textContent=e.message;}
 window.CochleaLocation={setMarkerVisible(value){markerVisible=!!value;draw();},normalize,buffers,views,setMaximumPositionMm,referencePoint};
