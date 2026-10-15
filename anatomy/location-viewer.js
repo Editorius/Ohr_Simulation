@@ -70,7 +70,7 @@ function project(p){const [x,y,z]=p.map((x,k)=>(x-center[k])/scale),a=v.yaw,b=v.
 const t=Number($('position').value)/lengthMm,p=referencePoint(t*lengthMm);
 const nearest=(m,p)=>m.vertices.reduce((a,b)=>Math.hypot(...b.map((x,k)=>x-p[k]))<Math.hypot(...a.map((x,k)=>x-p[k]))?b:a);
 const eqIndices=[...new Set(data.eq.faces.flat())],eq=eqIndices.map(i=>data.eq.vertices[i]).reduce((a,b)=>b[1]>a[1]?b:a);
-const labels=[['Steigbügel',source.windows.stapes.center,24,115,'stapes'],['Ovales Fenster*',source.windows.ow.center,24,160,'ow'],['Rundes Fenster*',source.windows.rw.center,24,205,'rw'],['Scala vestibuli',source.paths.sv[60],W-175,H-100,'sv'],['Scala tympani',source.paths.st[60],W-175,H-55,'st'],['Gleichgewichtsorgan',eq,24,50,'eq'],['Ortsmarkierung',p,W-175,50,'st']];
+const labels=[['Steigbügel',source.windows.stapes.center,24,115,'stapes'],['Ovales Fenster*',source.windows.ow.center,24,160,'ow'],['Rundes Fenster*',source.windows.rw.center,24,205,'rw'],['Scala vestibuli',pathPoint('sv',11.26),W-175,H-100,'sv'],['Scala tympani',pathPoint('st',11.26),W-175,H-55,'st'],['Gleichgewichtsorgan',eq,24,50,'eq'],['Ortsmarkierung',p,W-175,50,'st']];
 let svg='';
 if($('reference').checked){
  const points=reference.map(p=>project(p).join(',')).join(' ');

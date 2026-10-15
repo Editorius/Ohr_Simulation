@@ -4,6 +4,8 @@ Kurze fachlich relevante Historie. Die älteren Einträge sind aus lokalen Proje
 
 ## Unveröffentlicht
 
+- SV-Farbgrenze anhand des basalen Schnitts und aller Ortskonturen korrigiert; SV/ST-Beschriftungen bei 11,26 mm verankert. Farben, Drehpunkt und Rechenkern erhalten.
+
 - Cochlea-Kachel kompakter: kräftiges Blau/Goldgelb für SV/ST, feste Scalenbeschriftungen rechts übereinander, Bedienung über dem Bild, Drehpunkt zum Cochlea-Körper verschoben. Maximalort bleibt dynamisch.
 
 - Ansichten per Griff oder Pfeiltasten anordnen; schwebendes Menü zum Ein-/Ausblenden und Zurücksetzen. Übrige Kacheln beim Ziehen ausgegraut. Layout lokal gespeichert; Rechenkern und 3D-Kamera unverändert.

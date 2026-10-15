@@ -10,4 +10,11 @@ Bearbeiten: location-template.html, location-viewer.js, integration.js. HTML rep
 
 ## Kompakte Darstellung
 
-SV: kräftiges Blau #0072b2, ST: Goldgelb #f0bf1a; Beschriftungen und Farbpunkte ergänzen die Farbkodierung. Keine individuelle Sehprüfung. Drehpunkt: 80 % Schwerpunkt der ST-Boundingbox, 20 % Mittelpunkt des Gesamtmodells; Oberflächen und Konturen verwenden dieselbe Transformation. Ortsreferenz und Rechenkern unverändert. Beide Scalenbeschriftungen stehen fest rechts übereinander und beziehen sich auf denselben Referenzindex 60. Referenzpunkte/Hilfslinien sind gemeinsam zuschaltbar. Aufsicht, Seitenansicht und Umschalten im Browser geprüft.
+SV: kräftiges Blau #0072b2, ST: Goldgelb #f0bf1a; Beschriftungen und Farbpunkte ergänzen die Farbkodierung. Keine individuelle Sehprüfung. Drehpunkt: 80 % Schwerpunkt der ST-Boundingbox, 20 % Mittelpunkt des Gesamtmodells; Oberflächen und Konturen verwenden dieselbe Transformation. Ortsreferenz und Rechenkern unverändert. Beide Scalenbeschriftungen stehen fest rechts übereinander und beziehen sich auf dieselbe Ortsreferenz bei 11,26 mm. Referenzpunkte/Hilfslinien sind gemeinsam zuschaltbar. Aufsicht, Seitenansicht und Umschalten im Browser geprüft.
+
+
+## SV-Farbgrenze
+
+Die zusammenhängende Originaloberfläche wird am basalen SV-Schnitt topologisch getrennt. Alle von den 152 SV-Konturen berührten Dreiecke bleiben blau, auch im nicht ebenen basalen Übergang. Nur die Farbzuordnung ändert sich; Koordinaten, ST, Ortsreferenz und Mechanik bleiben erhalten.
+
+Reproduzieren: `python anatomy/recolor.py` (NumPy), danach `python anatomy/build.py`. Der Generator prüft sämtliche Konturpunkte auf dem Originalnetz; Prüfzahlen stehen in `colorPartition`. Die Grenze ist eine geometrische Heuristik, keine anatomisch validierte Segmentierung.
