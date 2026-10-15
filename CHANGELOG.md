@@ -4,6 +4,8 @@ Kurze fachlich relevante Historie. Die älteren Einträge sind aus lokalen Proje
 
 ## Unveröffentlicht
 
+- Lokale 3D-Integration: OpenEar-Ansicht ersetzt die schematische Spirale. Markierung folgt dem Maximum der gewählten Solverantwort in mm. Mechanik und Amplituden bleiben unverändert.
+
 - 0.12.0: Globale Auslenkungsskala 8 µm passiv / 18 µm aktiv. Synchrone Wanderwellenlupe rechts (Maximum ±3 mm, dynamische Höhe aus der Hüllkurve). Marineblaue Hüllkurven durchgezogen; Rechenkern unverändert.
 
 - 0.11.6: Höhenhinweis und kleine Modusüberschrift entfernt; Säulendiagramm mit „Maximum in …“ und dynamischer Einheit der Achsenskalierung beschriftet.

@@ -8,6 +8,7 @@ test('Central B controls, phase, zero drive, boundaries and reset remain coheren
    classList:{add:c=>classes.add(c),remove:c=>classes.delete(c),toggle:(c,v)=>v?classes.add(c):classes.delete(c)},
    setAttribute:(k,v)=>{attrs[k]=String(v);},removeAttribute:k=>{delete attrs[k];},addEventListener:(k,v)=>{handlers[k]=v;}});
  }
+ const anatomyMessages=[];elements.get('anatomy-frame').contentWindow={postMessage:m=>anatomyMessages.push(m)};
  const el=id=>{assert.ok(elements.has(id),id);return elements.get(id);};
  for(const [id,value] of Object.entries({frequency:1000,drive:800,'active-amplitude':100,speed:.5,volume:10}))el(id).value=String(value);
  for(const id of ['envelope'])el(id).checked=true;
@@ -17,7 +18,7 @@ test('Central B controls, phase, zero drive, boundaries and reset remain coheren
  for(const file of ['numerics.js','cochlea-data.js','cochlea-model.js','solver-client.js','audio.js','response-view.js','fluid-geometry.js','fluid-view.js','cochlea-contour.js','app.js'])vm.runInContext(fs.readFileSync(require.resolve('../'+file),'utf8'),ctx);
  function flush(){while(queue.length)queue.shift()();}
  function change(id,value,event='change'){el(id).value=String(value);el(id).handlers[event]();flush();}
- function finite(){const max=Number(el('amplitude-svg').innerHTML.match(/data-maximum="([^"]+)"/)[1]);assert.ok(el('amplitude-svg').innerHTML.includes('Maximum in '+ctx.CochleaResponse.unit(max).label));assert.equal(elements.has('plot-legend'),false);assert.ok(el('amplitude-svg').attrs['aria-label'].includes('1 pm bis '+(el('mode-active').attrs['aria-pressed']==='true'?18:8)+' µm'));assert.ok(el('loupe-wave').attrs.d);assert.equal(elements.has('passive-detail'),false);for(const e of elements.values())assert.doesNotMatch(e.innerHTML+JSON.stringify(e.attrs),/NaN|Infinity/);}
+ function finite(){const m=anatomyMessages.at(-1);assert.ok(m&&m.valid);assert.ok(m.positionMm>=0&&m.positionMm<=33.5);const act=el('mode-active').attrs['aria-pressed']==='true';const raw=ctx.CochleaModel.solveForView({frequency:Number(el('frequency').value),activity:act?.8:0});assert.ok(Math.abs(m.positionMm-raw.peakX*1000)<1e-9); const max=Number(el('amplitude-svg').innerHTML.match(/data-maximum="([^"]+)"/)[1]);assert.ok(el('amplitude-svg').innerHTML.includes('Maximum in '+ctx.CochleaResponse.unit(max).label));assert.equal(elements.has('plot-legend'),false);assert.ok(el('amplitude-svg').attrs['aria-label'].includes('1 pm bis '+(el('mode-active').attrs['aria-pressed']==='true'?18:8)+' µm'));assert.ok(el('loupe-wave').attrs.d);assert.equal(elements.has('passive-detail'),false);for(const e of elements.values())assert.doesNotMatch(e.innerHTML+JSON.stringify(e.attrs),/NaN|Infinity/);}
  flush();finite();assert.match(el('status').textContent,/Berechnet/);
  assert.equal(elements.has('extended-frequency'),false);assert.equal(el('frequency').min,50);assert.equal(el('frequency').max,20000);
  assert.match(el('amplitude-svg').innerHTML,/Auslenkung \(µm\) · linear/);assert.equal(el('drive-value').textContent,'10 nm');assert.equal(el('active-amplitude').disabled,true);
@@ -56,7 +57,7 @@ test('Central B controls, phase, zero drive, boundaries and reset remain coheren
    for(const [px,py] of vertices) assert.ok(scala==='sv'?py<ctx.CochleaContour.boundary(scala,px)-4:py>ctx.CochleaContour.boundary(scala,px)+4);
   }
  }
- assert.match(el('spiral-svg').innerHTML,/stroke-width=".8"/);assert.match(el('spiral-svg').innerHTML,/x="244"/);
+ assert.ok(anatomyMessages.at(-1).valid);assert.match(el('anatomy-position').textContent,/mm ab Basis/);
  change('frequency',50);finite();change('frequency',20000);finite();assert.equal(el('drive-value').textContent,'100 nm');change('frequency',20001);assert.equal(el('input-error').hidden,false);
  // Opposite window positions and half-cycle reversal of every fluid sample.
  change('frequency',1000);change('drive',800,'input');
@@ -74,4 +75,14 @@ test('Central B controls, phase, zero drive, boundaries and reset remain coheren
   fields[a].forEach((v,i)=>assert.ok(Math.abs(v+fields[b][i])<1e-10*Math.max(1,Math.abs(v))));
  }
  el('reset').handlers.click();flush();finite();assert.equal(Number(el('active-amplitude').value),100);assert.equal(el('drive').value,800);assert.equal(el('drive-value').textContent,'10 nm');assert.equal(el('mode-passive').attrs['aria-pressed'],'true');
+});
+
+test('Anatomy receiver rejects other windows and invalid maxima',()=>{
+ let handler,visible=false,position=null,ready=false;
+ const parent={postMessage:m=>{ready=m.type==='cochlea-ready';}};
+ const context={window:{parent,addEventListener:(name,fn)=>handler=fn,CochleaLocation:{setMarkerVisible:v=>visible=v,setMaximumPositionMm:mm=>position=mm}}};
+ vm.runInNewContext(fs.readFileSync(require.resolve('../anatomy/integration.js'),'utf8'),context);
+ assert.ok(ready);handler({source:{},data:{type:'cochlea-maximum',valid:true,positionMm:10}});assert.equal(position,null);
+ for(const mm of [0,12.34,33.09,33.5]){handler({source:parent,data:{type:'cochlea-maximum',valid:true,positionMm:mm}});assert.equal(position,mm);assert.equal(visible,true);}
+ for(const mm of [null,NaN,-1,33.51,'12']){handler({source:parent,data:{type:'cochlea-maximum',valid:true,positionMm:mm}});assert.equal(visible,false);}
 });

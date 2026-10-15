@@ -213,39 +213,20 @@
     $("flow-arrows").innerHTML=arrows.join("");
     timeline();
   }
+  let anatomyMessage=null;
+  function sendAnatomy(){
+    if(anatomyMessage)$("anatomy-frame").contentWindow?.postMessage(anatomyMessage,"*");
+  }
+  window.addEventListener("message",event=>{
+    if(event.source===$("anatomy-frame").contentWindow&&event.data?.type==="cochlea-ready")sendAnatomy();
+  });
+  $("anatomy-frame").addEventListener("load",sendAnatomy);
   function spiral() {
-    const points = [];
-    let distance = 0;
-    for (let j = 0; j <= 800; j++) {
-      const t = j / 800,
-        a = 2.2 - 5 * Math.PI * t,
-        r = 91 - 81 * t,
-        x = 140 + r * Math.cos(a),
-        y = 108 + r * Math.sin(a);
-      if (j) distance += Math.hypot(x - points[j - 1].x, y - points[j - 1].y);
-      points.push({ x, y, d: distance });
-    }
-    const d = path(
-      points.map((p) => p.x),
-      points.map((p) => p.y),
-    );
-    const target = (result.peakX / viewLength()) * distance;
-    const point = points.reduce((a, b) =>
-      Math.abs(a.d - target) < Math.abs(b.d - target) ? a : b,
-    );
-    const active = points.filter((p) => Math.abs(p.d - target) < 11),
-      mark = path(
-        active.map((p) => p.x),
-        active.map((p) => p.y),
-      );
-    const pp = points.reduce((a, b) =>
-      Math.abs(a.d - (passive.peakX / viewLength()) * distance) <
-      Math.abs(b.d - (passive.peakX / viewLength()) * distance)
-        ? a
-        : b,
-    );
-    $("spiral-svg").innerHTML =
-      `<path d="${d}" fill="none" stroke="#89b5b9" stroke-width="20" stroke-linecap="round"/><path d="${d}" fill="none" stroke="#d8ebeb" stroke-width="16" stroke-linecap="round"/>${result.peakAmplitude && !result.peakOutside ? `<path d="${mark}" fill="none" stroke="#c95454" stroke-width="13" stroke-linecap="round"/><circle cx="${point.x}" cy="${point.y}" r="5" fill="#c95454" stroke="white" stroke-width="2"/>` : ""}${comparing() && result.peakAmplitude && !passive.peakOutside ? `<circle cx="${pp.x}" cy="${pp.y}" r="6" fill="none" stroke="#526770" stroke-width="2"/>` : ""}${`<path d="M18 205 L${points[0].x} ${points[0].y} M242 8 L${points.at(-1).x} ${points.at(-1).y}" fill="none" stroke="#64747e" stroke-width=".8"/>`}${text(-22, 220, "Basis", 'class="svg-small"')}${text(244, 8, "Apex", 'class="svg-small"')}`;
+    const mm=result.peakX*1000;
+    const valid=Number.isFinite(mm)&&mm>=0&&mm<=33.5&&result.peakAmplitude>0&&!result.peakOutside;
+    anatomyMessage={type:"cochlea-maximum",positionMm:valid?mm:null,valid};
+    $("anatomy-position").textContent=valid?(activeMode?"Aktiv":"Passiv")+" · Maximum bei "+fmt(mm,2)+" mm ab Basis":"Kein darstellbares Maximum";
+    sendAnatomy();
   }
   function plot() {
     const left = 40,

@@ -75,3 +75,9 @@ Die Oberfläche zeigt keine Greenwood-Referenzlinie, kein Phasendiagramm und kei
 Die schematische Kontur einschließlich Fenster und Steigbügel ist seit 0.11.5 vertikal um 10 % zur BM-Ruhelage komprimiert (y = 270 + 0,9 · (y_original − 270)). Strömungspfeile folgen der komprimierten Kontur. BM, Hüllkurven und Auslenkungsmaßstab werden nicht komprimiert; die Hüllkurven liegen marineblau hinter der Wanderwelle.
 
 Die Wanderwellenlupe zeigt dieselben komplexen BM-Werte und dieselbe Phase im Bereich Peak ±3 mm, an den Modellgrenzen abgeschnitten. Ihre Höhe folgt der maximalen Hüllkurve im Ausschnitt mit 15 % Reserve und ist während der Periode konstant. Keine extrapolierten Werte, kein eigener Solver. Die Hauptanimation bleibt bei ±16 µm; die Lupe ist bewusst ohne numerische Skala und als vergrößert gekennzeichnet.
+
+## Anatomische Orientierung (lokaler Integrationsstand)
+
+Die 3D-Ansicht OpenEar Delta erhält ausschließlich `result.peakX * 1000` (Meter nach Millimeter) der gewählten passiven/aktiven Antwort. Keine neue Tonotopieformel, Peakverschiebung oder Änderung des Rechenkerns. Die anatomische Ortsreferenz 0–33,5 mm ist eine vorläufige Registrierung, keine am Präparat gemessene BM-Länge. Rot markiert Oberflächenquerschnitte beider Scalen; eine Basilarmembran ist im Datensatz nicht segmentiert. Der rote Bezugspunkt folgt kontinuierlich, die Konturen verwenden den nächsten vorberechneten Schnitt (etwa 0,335 mm, terminal 0,01 mm). Die Zeichnungsbreite ist didaktisch vergrößert. Ohne gültiges Maximum bleibt die Markierung aus.
+
+Die iframe-Ansicht wird nach erfolgreicher Berechnung und Modus-/Anregungswechsel aktualisiert. Bei ausstehender oder ungültiger Rechnung bleibt wie in den bestehenden Diagrammen das letzte gültige Ergebnis sichtbar. Die Kamera bleibt bei solchen Wechseln erhalten. Nachrichten werden nur vom tatsächlich eingebetteten Fenster bzw. dessen Elternfenster angenommen; Positionen außerhalb 0–33,5 mm werden verworfen.
