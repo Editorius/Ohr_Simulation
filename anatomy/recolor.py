@@ -56,9 +56,23 @@ print('contour points outside SV:',len(missing),'sections',sorted(set(missing)))
 assert not missing, 'A reference contour could not be located on the original surface'
 # Preserve surface coverage of the slightly nonplanar basal reference sections.
 chosen |= covered
+# Fill enclosed vestibular-colored islands without moving the outer border.
+remaining=set(range(len(f)))-chosen
+vestibular_components=[]
+while remaining:
+ seed=min(remaining);component={seed};todo=[seed];remaining.remove(seed)
+ while todo:
+  for neighbor in adj[todo.pop()]:
+   if neighbor in remaining:
+    remaining.remove(neighbor);component.add(neighbor);todo.append(neighbor)
+ vestibular_components.append(component)
+main_vestibular=max(vestibular_components,key=len)
+islands=set().union(*(part for part in vestibular_components if part is not main_vestibular))
+print('enclosed islands:',[len(part) for part in vestibular_components if part is not main_vestibular])
+chosen |= islands
 assert len(comps)==2, 'Basal ring no longer separates two components'
 d['meshes']['sv']['faces']=[f[i].tolist() for i in sorted(chosen)]
 d['meshes']['eq']['faces']=[f[i].tolist() for i in range(len(f)) if i not in chosen]
-d['colorPartition']={'method':'closed basal SV contour and connected surface component, with contour coverage','boundarySection':0,'boundaryTriangles':len(bar),'svTriangles':len(chosen),'eqTriangles':len(f)-len(chosen),'checkedContours':len(sections),'uncoveredContourPoints':len(missing),'anatomicallyValidated':False}
+d['colorPartition']={'method':'closed basal SV contour and connected surface component, with contour coverage','boundarySection':0,'boundaryTriangles':len(bar),'svTriangles':len(chosen),'eqTriangles':len(f)-len(chosen),'checkedContours':len(sections),'uncoveredContourPoints':len(missing),'filledIslandTriangles':len(islands),'anatomicallyValidated':False}
 p.write_text(json.dumps(d,separators=(',',':'),ensure_ascii=False),encoding='utf-8')
 print(d['colorPartition'])

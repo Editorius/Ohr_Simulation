@@ -12,3 +12,13 @@ test('SV and vestibular recoloring preserves the complete original surface', () 
  assert.equal(d.colorPartition.uncoveredContourPoints,0);
  assert.equal(d.colorPartition.checkedContours,152);
 });
+test('Vestibular color has no enclosed disconnected islands', () => {
+ const faces=d.meshes.eq.faces, edges=new Map(),adj=faces.map(()=>[]);
+ faces.forEach((f,i)=>f.forEach((a,k)=>{
+  const b=f[(k+1)%3],key=[a,b].sort((x,y)=>x-y).join(',');
+  if(edges.has(key)){const j=edges.get(key);adj[i].push(j);adj[j].push(i);}else edges.set(key,i);
+ }));
+ const seen=new Set([0]),queue=[0];
+ while(queue.length)for(const j of adj[queue.pop()])if(!seen.has(j)){seen.add(j);queue.push(j);}
+ assert.equal(seen.size,faces.length);
+});

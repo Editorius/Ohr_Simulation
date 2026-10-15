@@ -18,3 +18,5 @@ SV: kräftiges Blau #0072b2, ST: Goldgelb #f0bf1a; Beschriftungen und Farbpunkte
 Die zusammenhängende Originaloberfläche wird am basalen SV-Schnitt topologisch getrennt. Alle von den 152 SV-Konturen berührten Dreiecke bleiben blau, auch im nicht ebenen basalen Übergang. Nur die Farbzuordnung ändert sich; Koordinaten, ST, Ortsreferenz und Mechanik bleiben erhalten.
 
 Reproduzieren: `python anatomy/recolor.py` (NumPy), danach `python anatomy/build.py`. Der Generator prüft sämtliche Konturpunkte auf dem Originalnetz; Prüfzahlen stehen in `colorPartition`. Die Grenze ist eine geometrische Heuristik, keine anatomisch validierte Segmentierung.
+
+Vollstaendig eingeschlossene violette Inseln werden der SV zugeordnet; die mit dem Vestibulum verbundene Hauptflaeche und damit die aeussere basale Grenze bleiben erhalten.
