@@ -1,7 +1,7 @@
 (function(root){
   'use strict';
-  const ids=['wave','amplitude','anatomy'];
-  const names={wave:'Wanderwelle',amplitude:'Auslenkung',anatomy:'Cochlea'};
+  const ids=['wave','learning','amplitude','anatomy'];
+  const names={learning:'Schwingungsmodell',wave:'Wanderwelle',amplitude:'Auslenkung',anatomy:'Cochlea'};
   const key='cochlea-panel-layout-v1';
   function sanitize(value){
     const order=Array.isArray(value?.order)?[...new Set(value.order.filter(id=>ids.includes(id)))]:[];
@@ -25,9 +25,9 @@
   function apply(){
     state.order.forEach((id,i)=>{panels[id].style.order=i;panels[id].hidden=state.hidden.includes(id);
       const row=options.querySelector(`[data-option="${id}"]`);row.style.order=i;row.querySelector('input').checked=!panels[id].hidden;
-      row.querySelector('[data-up]').disabled=i===0;row.querySelector('[data-down]').disabled=i===2;
+      row.querySelector('[data-up]').disabled=i===0;row.querySelector('[data-down]').disabled=i===ids.length-1;
     });
-    $('views-empty').hidden=state.hidden.length!==3;
+    $('views-empty').hidden=state.hidden.length!==ids.length;
   }
   function shift(id,delta){const at=state.order.indexOf(id),next=at+delta;if(next<0||next>=ids.length)return;
     [state.order[at],state.order[next]]=[state.order[next],state.order[at]];apply();announce(names[id]+' verschoben.');save();}

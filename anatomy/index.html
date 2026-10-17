@@ -82,6 +82,7 @@ const nearest=(m,p)=>m.vertices.reduce((a,b)=>Math.hypot(...b.map((x,k)=>x-p[k])
 const eqIndices=[...new Set(data.eq.faces.flat())],eq=eqIndices.map(i=>data.eq.vertices[i]).reduce((a,b)=>b[1]>a[1]?b:a);
 const labels=[['Steigbügel',source.windows.stapes.center,24,115,'stapes'],['Ovales Fenster*',source.windows.ow.center,24,160,'ow'],['Rundes Fenster*',source.windows.rw.center,24,205,'rw'],['Scala vestibuli',pathPoint('sv',11.26),W-175,H-100,'sv'],['Scala tympani',pathPoint('st',11.26),W-175,H-55,'st'],['Gleichgewichtsorgan',eq,24,50,'eq'],['Ortsmarkierung',p,W-175,50,'st']];
 let svg='';
+ if(Number.isFinite(window.learningPositionMm)){const [lx,ly]=project(referencePoint(window.learningPositionMm));svg+=`<circle cx="${lx}" cy="${ly}" r="8" fill="white" stroke="#147b80" stroke-width="3"/><text x="${lx+12}" y="${ly-10}" font-size="12" fill="#147b80" stroke="white" stroke-width="3" paint-order="stroke">Lernabschnitt</text>`;}
 if($('reference').checked){
  const points=reference.map(p=>project(p).join(',')).join(' ');
  svg+=`<polyline points="${points}" stroke="white" stroke-width="5" fill="none"/><polyline points="${points}" stroke="#173d67" stroke-width="2.5" fill="none"/>`;
@@ -106,7 +107,7 @@ $('windows-view').onclick=()=>{const n=source.windows.ow.normal;views.forEach(v=
 $('focus').onclick=()=>{const v=views[0],t=Number($('position').value)/33.5;const p=referencePoint(t*lengthMm);const all=Object.values(data).flatMap(m=>m.vertices),lo=[0,1,2].map(k=>Math.min(...all.map(v=>v[k]))),hi=[0,1,2].map(k=>Math.max(...all.map(v=>v[k])));const c=cameraCenter(data);v.yaw=Math.atan2(p[0]-c[0],p[1]-c[1]);v.tilt=Math.PI/2;draw();};
 new ResizeObserver(draw).observe(document.querySelector('.grid'));draw();
 }catch(e){$('error').textContent=e.message;}
-window.CochleaLocation={setMarkerVisible(value){markerVisible=!!value;draw();},normalize,buffers,views,setMaximumPositionMm,referencePoint};
+window.CochleaLocation={setLearningPosition(mm){window.learningPositionMm=mm;draw();},setMarkerVisible(value){markerVisible=!!value;draw();},normalize,buffers,views,setMaximumPositionMm,referencePoint};
 })();
 </script><script src="integration.js"></script></html>
 

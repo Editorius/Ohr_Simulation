@@ -4,6 +4,8 @@ Kurze fachlich relevante Historie. Die älteren Einträge sind aus lokalen Proje
 
 ## Unveröffentlicht
 
+- Unterrichtskachel mit unabhängigem Feder-Masse-Schwinger, Resonanzkurve, Ortsauswahl und türkiser 3D-Zuordnung. Dämpfung nur als Regler. Vollständiger Hosting-Export inklusive Kachelsteuerung und Anatomie.
+
 - Drei eingeschlossene violette Farbinseln in der SV geschlossen; basale Aussengrenze erhalten.
 
 - SV-Farbgrenze anhand des basalen Schnitts und aller Ortskonturen korrigiert; SV/ST-Beschriftungen bei 11,26 mm verankert. Farben, Drehpunkt und Rechenkern erhalten.
