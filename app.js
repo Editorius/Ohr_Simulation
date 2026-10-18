@@ -126,11 +126,6 @@
     const fullActive=CochleaResponse.scaleResponse(pair.active,driveNm*1e-9);
     fullActive.stapesDisplacement=driveNm*1e-9;
     fluidReference=Math.max(CochleaFluid.reconstruct(passive).maxSpeed,CochleaFluid.reconstruct(fullActive).maxSpeed,1e-30);
-    $("confirmed-frequency").textContent =
-      (activeMode ? "Aktiv" : "Passiv") +
-      " · " +
-      fmt(result.frequency, 0) +
-      " Hz";
     draw();
   }
   const solver = new SolverClient((value) => {
@@ -188,8 +183,10 @@
     $("loupe-top").setAttribute("d",path(dx,detail.envelope.map(dy)));
     $("loupe-bottom").setAttribute("d",path(dx,detail.envelope.map(v=>dy(-v))));
     for(const id of ["loupe-top","loupe-bottom"])$(id).style.display=$("envelope").checked?"":"none";
-    $("loupe-region").setAttribute("x",waveX(detail.left));
-    $("loupe-region").setAttribute("width",waveX(detail.right)-waveX(detail.left));
+    const detailLeft=waveX(detail.left),detailRight=waveX(detail.right);
+    $("loupe-region").innerHTML=`<path d="M${detailLeft} 320v12H${detailRight}v-12" fill="none" stroke="#163b65" stroke-width="2.5"/><text x="${(detailLeft+detailRight)/2}" y="359" text-anchor="middle" fill="#163b65" stroke="white" stroke-width="4" paint-order="stroke">Lupenausschnitt</text>`;
+    const detailPeak=20+260*(result.peakX-detail.left)/(detail.right-detail.left);
+    $("loupe-peak").innerHTML=result.peakAmplitude&&!result.peakOutside?`<path d="M${detailPeak} 28V232" stroke="#c93043" stroke-width="2" opacity=".7"/><circle cx="${detailPeak}" cy="${dy(result.peakAmplitude)}" r="5" fill="#c93043" stroke="white" stroke-width="2"/>`:"";
     $("wave-loupe").setAttribute("aria-label",`Vergrößerte Wanderwelle von ${fmt(detail.left*1000,1)} bis ${fmt(detail.right*1000,1)} mm, synchron zur Hauptansicht`);
     // Same phase as the prescribed stapes displacement. Window excursions are
     // illustrative: no round-window area or membrane shape is inferred here.
@@ -326,7 +323,7 @@
       $(id).style.display = $("envelope").checked ? "" : "none";
     }
     $("wave-marker").innerHTML = result.peakAmplitude && !result.peakOutside
-      ? `<path d="M${peak} 236 V304" stroke="#c95454" opacity=".16" stroke-width="16"/><circle cx="${peak}" cy="${waveLayout.center - scale * result.peakAmplitude}" r="5" fill="#c95454" stroke="white" stroke-width="2"/>`
+      ? `<path d="M${peak} 218V312 M${peak} 477V505" stroke="#c93043" stroke-width="3"/><path d="M${peak-7} 215L${peak} 225L${peak+7} 215" fill="#c93043"/><circle cx="${peak}" cy="${waveLayout.center - scale * result.peakAmplitude}" r="8" fill="#c93043" stroke="white" stroke-width="3"/>`
       : "";
     $("envelope-top").setAttribute(
       "d",
@@ -344,11 +341,11 @@
     );
     for (const id of ["envelope-top", "envelope-bottom"])
       $(id).style.display = activeMode && $("envelope").checked ? "" : "none";
-    let axis = '<path d="M317 495 H1505" stroke="#8da0a8"/>';
-    for (const mm of axisTicks()) {
+    let axis = '<path d="M317 495 H1505" stroke="#29444b" stroke-width="3"/>';
+    for (const mm of [0,5,10,15,20,25,30,33.5]) {
       const x = waveX(mm/1000);
       axis +=
-        `<path d="M${x} 495 v6" stroke="#8da0a8"/>` +
+        `<path d="M${x} 495 v10" stroke="#29444b" stroke-width="3"/>` +
         text(
           x,
           520,
@@ -356,6 +353,10 @@
           'text-anchor="middle" class="svg-small"',
         );
     }
+    axis += '<rect x="30" y="475" width="265" height="43" rx="9" fill="#e7f4f5"/>';
+    axis += text(42,503,result.peakAmplitude && !result.peakOutside
+      ? `Position: ${fmt(result.peakX*1000,2)} mm` : 'Position: —',
+      'class="wave-position"');
     $("wave-axis").innerHTML = axis;
     wave();
     plot();
@@ -444,10 +445,10 @@
     wave();
   });
   $("speed").addEventListener("change", timeline);
-  $("stop").addEventListener("click", () => {
+  window.CochleaPlayback = { pause() {
     stopAnimation();
     stopAudio();
-  });
+  } };
   $("reset").addEventListener("click", () => {
     window.LearningView?.reset();
     stopAnimation();

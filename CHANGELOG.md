@@ -1,5 +1,42 @@
 # Änderungen
 
+## Unveröffentlicht · lokale Lerntour
+
+- Resonanzachse als „Amplitude / Referenzauslenkung“ beschriftet; statische Referenz bei ursprünglicher örtlicher Federsteifigkeit erklärt.
+
+- Lehrschwinger aus dimensionalen Ortsprofilen: Masse in µg, Steifigkeit in N/m, dynamische Reglergrenzen für 50–20.000 Hz. Originalwerte beim Reset erhalten. Resonanzachsen mit Zehnerfaktor und runden Frequenzschritten.
+
+- Historische Einheiten anhand mass.m/twave.m geklärt: Modelldaten nun für einen einheitlichen lokalen 1-mm-Abschnitt in µg und N/m, statt relativer Basalverhältnisse. Frühere Einschränkung zur SI-Umrechnung korrigiert; Herleitung dokumentiert.
+
+- Rechte Diagrammansicht mit einheitlicher Kopfzeile, separater Anregungszeile und stabiler Umschalthöhe neu geordnet. „Modelldaten“ statt „Messdaten“; Achsen ausdrücklich als dimensionslose Verhältnisse gekennzeichnet, da keine SI-Umrechnung validiert ist.
+
+- Messdaten-/Resonanzumschaltung direkt unter der Anregungsinfo; Frequenzhinweise zentriert eingerückt. Wirkungsregeln entfernt, Pause neben die Eigenfrequenz gesetzt.
+
+- Konstante gemeinsame Höhe für Resonanz- und Messdatenansicht; kompakte Frequenzangaben. Masse-/Steifigkeitsregler logarithmisch erweitert, um auch tiefe Eigenfrequenzen und das volle Anregungsspektrum einstellen zu können.
+
+- Position und Eigenfrequenz hervorgehoben; Eigenfrequenz neben den Wirkungsregeln. Messdaten-Schalter ersetzt die Resonanzansicht durch zwei relative Profile der historischen BM-Modellparameter (Masse und Steifigkeit), mit Herkunftshinweis.
+
+- Maximalposition links der Streckenskala ergänzt, zusätzliche Teilstriche bei 5/15/25 mm. Schwingungsmodell umbenannt und Schwinger, Formel sowie Eigenfrequenzhinweise kompakt zusammengeführt.
+
+- Animationssteuerung rechts im Kachelkopf, ohne Stopp-Button und Frequenzhinweis. Maximum ohne Text mit unterbrochener Positionslinie bis zur kräftigeren Streckenskala markiert.
+
+- Mitlaufende Einstellungen mit eigener Scrollleiste, nativem Touch-/Mausradscrollen und Tastaturbedienung. Bis 900 px Breite als standardmäßig geschlossener Bereich „Einstellungen“; sichtbare Tour-Regler bleiben berücksichtigt.
+
+- Hüllkurvenmaximum in Hauptansicht und Lupe deutlich rot markiert; Maximalort beschriftet. Lupenausschnitt als separate Klammer statt gefüllter Fläche. Tourstation 1 erläutert beide Anzeigen.
+
+- Ortsreferenz standardmäßig aus; „Lernabschnitt“ als dauerhaftes Beschriftungsfeld rechts unter „Ortsmarkierung“ mit Verbindungslinie.
+
+- Beschriftung „Lernabschnitt“ bleibt bei eingeblendetem Lernabschnitt unabhängig vom allgemeinen Beschriftungsschalter sichtbar.
+
+- Gestrichelte Scala-Referenzen samt doppelten Längenangaben entfernt. Nur gemeinsame durchgezogene Ortsreferenz mit 0/5/10/15/20/25/30/33,5 mm; standardmäßig sichtbar und separat schaltbar.
+
+- Cochlea-Kachel über die volle Spaltenbreite; Beschriftung standardmäßig ausgeblendet und per Checkbox schaltbar. Ortsmarkierung bleibt unabhängig davon sichtbar. Trennlinie zwischen Bedienung und 3D-Modell.
+
+- Geführte Tour mit sechs Stationen, Aufgaben nach Vermuten/Beobachten/Erklären und optionaler Resonanz-/Dämpfungsvertiefung.
+- Separates Experimentierlabor: Tour überschreibt weder gespeicherte Kachelanordnung noch Sichtbarkeit; Eingaben des Labors werden beim Rückwechsel wiederhergestellt. Wiedergabe bleibt bewusst gestoppt.
+- Fachlich korrigierte SVG-Erklärung Cochlea → entrollte BM → lokaler Schwinger mit gemeinsamem Auswahlort; Eigenfrequenz als barrierearmer MathML-Formelsatz mit hinterlegter LaTeX-Quelle.
+- Innenohr-Rechenkern, Ortskalibrierung und mechanische Parameter unverändert.
+
 Kurze fachlich relevante Historie. Die älteren Einträge sind aus lokalen Projektständen rekonstruiert und keine Behauptung bereits vorhandener Git-Tags. Release-Daten werden erst bei tatsächlicher Veröffentlichung ergänzt.
 
 ## Unveröffentlicht

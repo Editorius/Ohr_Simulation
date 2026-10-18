@@ -71,8 +71,9 @@ const t=Number($('position').value)/lengthMm,p=referencePoint(t*lengthMm);
 const nearest=(m,p)=>m.vertices.reduce((a,b)=>Math.hypot(...b.map((x,k)=>x-p[k]))<Math.hypot(...a.map((x,k)=>x-p[k]))?b:a);
 const eqIndices=[...new Set(data.eq.faces.flat())],eq=eqIndices.map(i=>data.eq.vertices[i]).reduce((a,b)=>b[1]>a[1]?b:a);
 const labels=[['Steigbügel',source.windows.stapes.center,24,115,'stapes'],['Ovales Fenster*',source.windows.ow.center,24,160,'ow'],['Rundes Fenster*',source.windows.rw.center,24,205,'rw'],['Scala vestibuli',pathPoint('sv',11.26),W-175,H-100,'sv'],['Scala tympani',pathPoint('st',11.26),W-175,H-55,'st'],['Gleichgewichtsorgan',eq,24,50,'eq'],['Ortsmarkierung',p,W-175,50,'st']];
+if(Number.isFinite(window.learningPositionMm))labels.push(['Lernabschnitt',referencePoint(window.learningPositionMm),W-175,95,'learning']);
 let svg='';
- if(Number.isFinite(window.learningPositionMm)){const [lx,ly]=project(referencePoint(window.learningPositionMm));svg+=`<circle cx="${lx}" cy="${ly}" r="8" fill="white" stroke="#147b80" stroke-width="3"/><text x="${lx+12}" y="${ly-10}" font-size="12" fill="#147b80" stroke="white" stroke-width="3" paint-order="stroke">Lernabschnitt</text>`;}
+ if(Number.isFinite(window.learningPositionMm)){const [lx,ly]=project(referencePoint(window.learningPositionMm));svg+=`<circle cx="${lx}" cy="${ly}" r="8" fill="white" stroke="#147b80" stroke-width="3"/>`;}
 if($('reference').checked){
  const points=reference.map(p=>project(p).join(',')).join(' ');
  svg+=`<polyline points="${points}" stroke="white" stroke-width="5" fill="none"/><polyline points="${points}" stroke="#173d67" stroke-width="2.5" fill="none"/>`;
@@ -80,16 +81,13 @@ if($('reference').checked){
 
 }
  const [x,y]=project(p);if(markerVisible)svg+=`<circle cx="${x}" cy="${y}" r="6" fill="#c93043" stroke="white" stroke-width="2"/>`;
-if($('guides').checked){
- const i=Math.round(t*100);for(const key of ['st','sv']){const contour=surfaceFrame(key,t*lengthMm).hits.map(p=>project(p).join(',')).join(' ');svg+=`<polygon points="${contour}" stroke="#c93043" stroke-width="1.5" fill="none"/>`;}
- for(const key of ['sv','st']){const points=displayPaths[key].map(p=>project(p).join(',')).join(' ');svg+=`<polyline points="${points}" stroke="${key==='sv'?'#08658d':'#875400'}" stroke-width="2" fill="none" stroke-dasharray="5 3"/>`;for(let i=0;i<=100;i+=10){const [x,y]=project(pathPoint(key,i*lengthMm/100));svg+=`<circle cx="${x}" cy="${y}" r="3" fill="white" stroke="#222"/><text x="${x+5}" y="${y-5}" font-size="11">${(i*33.5/100).toLocaleString('de-DE',{maximumFractionDigits:2})} mm</text>`;}}}
 
-for(const [text,point,x0,y,key] of labels){if(text==='Ortsmarkierung'&&!markerVisible)continue;const boxWidth=text.startsWith('Scala ')?168:text.length*8+20,right=x0>W/2,x=right?W-boxWidth-25:x0,lineX=right?x-7:x+boxWidth+7,[px,py]=project(point);svg+=`<path d="M ${lineX} ${y-5} L ${px} ${py}" stroke="#000" stroke-width="1" fill="none"/><circle cx="${px}" cy="${py}" r="3" fill="${text==='Ortsmarkierung'?'#c93043':'#000'}"/><rect x="${x}" y="${y-21}" width="${boxWidth}" height="32" rx="7" fill="#fff0da" stroke="#e8d4b4"/><text x="${x+10}" y="${y}" fill="#243c49" font-size="14">${text}</text>`;}
+for(const [text,point,x0,y,key] of labels){if(text==='Ortsmarkierung'?!markerVisible:text!=='Lernabschnitt'&&!$('show-labels').checked)continue;const boxWidth=text.startsWith('Scala ')?168:['Ortsmarkierung','Lernabschnitt'].includes(text)?144:text.length*8+20,right=x0>W/2,x=right?W-boxWidth-25:x0,lineX=right?x-7:x+boxWidth+7,[px,py]=project(point);svg+=`<path d="M ${lineX} ${y-5} L ${px} ${py}" stroke="#000" stroke-width="1" fill="none"/><circle cx="${px}" cy="${py}" r="3" fill="${text==='Ortsmarkierung'?'#c93043':text==='Lernabschnitt'?'#147b80':'#000'}"/><rect x="${x}" y="${y-21}" width="${boxWidth}" height="32" rx="7" fill="#fff0da" stroke="#e8d4b4"/><text x="${x+10}" y="${y}" fill="#243c49" font-size="14">${text}</text>`;}
 $('labels').setAttribute('viewBox',`0 0 ${W} ${H}`);$('labels').innerHTML=svg;
 }
 try{views.push(create('anatomy',data));for(const id of ['sv','st','eq','stapes','ow','rw'])$(id).onchange=draw;
 for(const [id,tilt] of [['reset',.65],['top',0],['side',Math.PI/2]])$(id).onclick=()=>{views.forEach(v=>Object.assign(v,{yaw:0,tilt,zoom:1}));draw();};
-$('guides').onchange=()=>{$('reference').checked=$('guides').checked;draw();};$('reference').onchange=draw;
+$('reference').onchange=draw;$('show-labels').onchange=draw;
 $('position').oninput=()=>setMaximumPositionMm(Number($('position').value));
 $('maximum-mm').onchange=()=>{try{setMaximumPositionMm(Number($('maximum-mm').value));$('input-error').textContent='';}catch(e){$('input-error').textContent=e.message;}};
 $('rw-view').onclick=()=>{for(const key of ['eq','sv','stapes','ow'])$(key).checked=false;$('st').checked=true;$('rw').checked=true;const n=source.windows.rw.normal;views.forEach(v=>Object.assign(v,{yaw:Math.atan2(n[0],n[1]),tilt:Math.acos(Math.max(-1,Math.min(1,n[2]))),zoom:1.2}));draw();};

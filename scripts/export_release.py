@@ -3,7 +3,7 @@ import hashlib,json,shutil,zipfile
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
-APP_FILES=['index.html','style.css','numerics.js','cochlea-data.js','cochlea-model.js','solver-client.js','audio.js','response-view.js','fluid-geometry.js','fluid-view.js','cochlea-contour.js','app.js','panel-layout.js','learning-model.js','learning-view.js','anatomy/index.html','anatomy/integration.js','.nojekyll','THIRD_PARTY_NOTICES.md']
+APP_FILES=['index.html','style.css','numerics.js','cochlea-data.js','cochlea-model.js','solver-client.js','audio.js','response-view.js','fluid-geometry.js','fluid-view.js','cochlea-contour.js','app.js','panel-layout.js','learning-model.js','learning-profiles.js','learning-view.js','learning-tour.js','anatomy/index.html','anatomy/integration.js','.nojekyll','THIRD_PARTY_NOTICES.md']
 
 def build(root,output):
     root=Path(root).resolve();output=Path(output).resolve()
