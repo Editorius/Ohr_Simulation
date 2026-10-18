@@ -58,3 +58,14 @@ Prüfung der Kachelbedienung: Ziehen von Auslenkung vor Wanderwelle, Menüsortie
 ### Unterrichtskachel
 
 „Warum schwingt die Basilarmembran?“ zeigt einen einzelnen Feder-Masse-Schwinger und seine Resonanzkurve. Ort per Regler oder Klick auf die BM wählen. „Selbst untersuchen“ gibt Masse, Steifigkeit und Dämpfung frei; „Zur Ortsvorgabe“ setzt die Parameter zurück. Die Dämpfung erscheint nur als Regler, nicht als Bauteil. Türkis markiert den Lernabschnitt in der Wanderwelle und 3D-Ansicht. Die Kachel kann über „Ansichten“ ausgeblendet und per Griff verschoben werden. Die Schwingerkette ist eine mögliche spätere Erweiterung.
+
+
+### Lokale Lerntour und Experimentierlabor
+
+Oben im Bildbereich wechseln **Geführte Tour** und **Experimentierlabor** zwischen angeleiteten Aufgaben und freier Untersuchung. Die sechs Stationen behandeln Frequenz/Ort, Anatomie, lokales Ersatzmodell, Masse/Steifigkeit, räumliche Kopplung und optional aktive Verstärkung. Die Checkbox zur Vertiefung schaltet ab Station 4 Resonanzkurve und Dämpfung frei (eA). Zurück/Weiter und die nummerierten Stationen sind per Tastatur bedienbar; Erklärungen lassen sich aufdecken.
+
+Die Tour beginnt passiv bei 1 000 Hz und 10 nm. Sie verwendet dieselben Rechenergebnisse wie das Labor. Dessen Anordnung und ausgeblendete Kacheln bleiben erhalten; Frequenz, Betriebsart, Anregungsstärke und lokale Modellparameter werden beim Rückwechsel wiederhergestellt. Ton und Wiedergabe starten dabei nicht automatisch. Ein Neuladen öffnet das Labor mit seiner gespeicherten Kachelanordnung.
+
+In „Warum schwingt die Basilarmembran?“ erklärt der aufklappbare Bereich „Vom Innenohr zum Schwingungsmodell“ die Modellbildung. Die Formel ist natives MathML mit LaTeX-Annotation, funktioniert offline und benötigt keine externe Bibliothek. Der Schwinger hat Dämpfung, obwohl sein Ersatzbild keinen Dämpfer zeigt. Die ungedämpfte Eigenfrequenz ist vom Maximum seiner erzwungenen Antwort zu unterscheiden. Die Spiralzeichnung ist schematisch, keine neue anatomische Kalibrierung.
+
+Curriculare Grundlage: [KC Physik Niedersachsen 2022, S. 37](https://cuvo.nibis.de/cuvo.php?p=download&upload=363). Die aktive Verstärkung ergänzt die Physik als biologische Anwendung. Die Tour ersetzt kein reales Experiment.

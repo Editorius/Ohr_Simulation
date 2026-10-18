@@ -723,10 +723,10 @@ dd {
 @media(prefers-reduced-motion:reduce){#view-stack>[data-view]{transition:none}}
 
 /* Compact cochlea card: status and controls above the image, no empty footer. */
-[data-view="anatomy"]{width:100%;max-width:1000px;align-self:center}
-#anatomy-frame{height:446px}
+[data-view="anatomy"]{width:100%;max-width:none;align-self:stretch}
+#anatomy-frame{height:470px}
 #anatomy-position{margin:4px 0 8px}
-@media(max-width:650px){#anatomy-frame{height:480px}}
+@media(max-width:650px){#anatomy-frame{height:520px}}
 /* Teaching view follows the app's card vocabulary. */
 .learn-subtitle,.learn-place-row{color:var(--muted)}
 .learn-place-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;border-block:1px solid #dce5eb;padding:12px 0}
@@ -744,3 +744,90 @@ dd {
 @media(max-width:700px){.learn-columns,.learn-controls{grid-template-columns:1fr}.learn-columns>div+div{border-left:0;border-top:1px solid #dce5eb;padding:16px 0 0}.learn-place-row input{flex-basis:100%}}
 #learning-panel{container-type:inline-size}
 @container(max-width:650px){.learn-columns,.learn-controls{grid-template-columns:1fr}.learn-columns>div+div{border-left:0;border-top:1px solid #dce5eb;padding:16px 0 0}.learn-columns svg{max-height:300px}}
+/* Guided learning and independent laboratory share the same mounted views. */
+.study-modes{margin-bottom:14px;padding:16px 20px}.study-mode-buttons{display:flex;gap:8px;flex-wrap:wrap}.study-mode-buttons [aria-pressed=false]{background:#edf3f4;color:#29444b}.study-modes p{font-size:14px;color:var(--muted);margin:10px 0 0}
+#tour-guide{border-top:4px solid var(--teal);margin-bottom:14px}#tour-title{margin:16px 0 10px;font-size:22px}#tour-title:focus{outline:none}.tour-top,.tour-navigation{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.tour-top{font-size:13px;color:var(--muted)}.tour-top label{margin:0;font-size:13px}.tour-tasks{background:#fff4e4;border:1px solid #efd9b8;border-radius:10px;padding:14px 18px;margin:14px 0}.tour-tasks p{line-height:1.55;margin:8px 0}.tour-tasks strong{display:block;color:#163b65}.tour-tasks summary{cursor:pointer;font-weight:600}.tour-tasks details{border-top:1px solid #efd9b8;padding-top:10px;margin-top:12px}.tour-curriculum{font-size:13px;color:var(--muted);line-height:1.6;margin-top:16px}.tour-curriculum summary{cursor:pointer}#tour-stations{display:flex;gap:8px;list-style:none;padding:0;margin:12px 0}#tour-stations button{background:#edf3f4;color:#29444b;min-width:38px;padding:7px 10px}#tour-stations [aria-current=step]{background:var(--teal);color:white}
+body[data-study-mode=tour] .panel-grip,body[data-study-mode=tour] .learn-mode{display:none}body[data-study-mode=tour] #view-stack{padding-top:0}
+.learning-bridge{background:#f7fafb;border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:14px}.learning-bridge summary{cursor:pointer;font-weight:600;color:#163b65}.sound-chain{padding:12px;background:#fff1dc;border-radius:6px;line-height:1.7}.bridge-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.bridge-grid h3{font-size:15px}.bridge-grid svg{width:100%;height:auto;display:block}.bridge-grid svg text{font:13px 'Segoe UI',sans-serif;fill:#233b49}.bridge-grid p{font-size:14px;line-height:1.5}.bridge-position{color:var(--teal);font-weight:600}.model-boundary{border-left:3px solid #163b65;padding:10px 14px;line-height:1.6}.learning-equation{display:flex;align-items:center;justify-content:space-around;gap:20px;flex-wrap:wrap;background:#eef4f8;border-radius:10px;padding:16px;margin-top:16px}.learning-equation strong{font-size:14px}.learning-equation math{font-size:28px;color:#163b65;margin:18px 0}.learning-equation p{font-size:14px;line-height:1.6;margin:5px 0}#learn-f0-summary{font-weight:600;color:var(--teal)}.learn-columns.learn-single{grid-template-columns:minmax(0,500px);justify-content:center}
+@container(max-width:650px){.bridge-grid{grid-template-columns:1fr}.bridge-grid>div{display:grid;grid-template-columns:minmax(120px,1fr) 1fr;gap:0 14px}.bridge-grid h3{grid-column:1/-1}.bridge-grid p{align-self:center}.learning-equation{justify-content:start}}
+@media(max-width:480px){.tour-top{display:block}.study-mode-buttons button{flex:1;font-size:13px}.tour-top label{margin-top:10px}.bridge-grid>div{display:block}}
+
+.workspace.study-wide{grid-template-columns:minmax(0,1fr);max-width:1320px}
+body[data-study-mode=tour] .sidebar{align-content:start}
+
+.bridge-position output{float:none;display:inline;font-weight:600}
+
+/* Independently scrollable settings, with a compact disclosure on tablets/phones. */
+.sidebar{position:sticky;top:12px;align-self:start;min-height:0;display:block;z-index:50}
+#settings-content{display:flex;flex-direction:column;gap:16px;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-width:thin;scrollbar-color:#9badb4 #edf3f4;scrollbar-gutter:stable;padding:2px 5px 2px 2px;touch-action:pan-y}
+#settings-content>.panel{flex-shrink:0;margin:0}
+#settings-content:focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:12px}
+#settings-toggle{width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;background:#fff;color:#233b49;border:1px solid #c7d8de;box-shadow:0 3px 10px #20384712}
+#settings-toggle span{font-size:18px;color:var(--teal)}
+@media(max-width:900px){
+ .workspace{grid-template-columns:minmax(0,1fr)}
+ .sidebar{top:8px;display:block;grid-template-columns:none;border-radius:10px;background:#f3f6f7;box-shadow:0 4px 12px #20384712}
+ #settings-content{max-height:55vh;max-height:min(55dvh,calc(100dvh - 80px));padding:10px 6px 6px;gap:10px;border:1px solid #dce5eb;border-top:0;border-radius:0 0 10px 10px}
+ #settings-toggle[aria-expanded=true]{border-radius:10px 10px 0 0}
+ .view-toolbar{top:62px}
+}
+
+/* Animation controls share the heading area and wrap on small screens. */
+.wave-heading{flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.wave-heading h2{margin:0;flex:0 1 auto}
+.wave-toolbar{margin-left:auto;display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px 16px;min-width:0;max-width:100%}
+.wave-toolbar .compact-controls{margin:0;padding:0;border:0;flex-wrap:wrap;justify-content:flex-end;overflow:visible;gap:8px}
+.wave-toolbar .period-player{border:0;padding:0;gap:8px;grid-template-columns:auto minmax(80px,130px) auto}
+.wave-toolbar .period-player output{grid-column:auto;font-size:12px}
+.wave-toolbar label{font-size:12px;margin:0}
+#wave-axis text{fill:#29444b;font-weight:600}
+@media(max-width:600px){.wave-heading{align-items:stretch}.wave-toolbar{width:100%;gap:12px}.wave-toolbar .period-player{width:100%;grid-template-columns:auto minmax(80px,1fr) auto}}
+
+@media(min-width:901px){
+ .wave-heading{flex-wrap:nowrap}
+ .wave-heading h2{flex:0 1 310px}
+ .wave-toolbar{flex:1 1 480px}
+}
+.wave-toolbar .period-player{order:1}
+
+/* Compact local oscillator: illustration, formula, then shared interpretation. */
+.learn-model-row{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);align-items:center;gap:12px}
+.learn-model-row #learn-mechanism{max-height:260px}
+.learn-model-row .learning-equation{display:block;margin:0;padding:12px;background:#eef4f8;min-width:0}
+.learn-model-row .learning-equation math{font-size:25px;margin:14px 0}
+.learn-model-row .learning-equation p{font-size:12px;line-height:1.5}
+.learn-frequency-notes{font-size:14px;line-height:1.6;margin:8px 0 12px}
+.learn-frequency-notes p{margin:4px 0}
+#wave-axis .wave-position{font-size:20px;fill:#a61932}
+@container(max-width:380px){.learn-model-row{grid-template-columns:1fr}.learn-model-row #learn-mechanism{max-height:220px}}
+
+#wave-axis .wave-position{fill:#126e72;font-weight:700}
+.learn-frequency-notes{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+#learn-f0-summary{padding:10px 12px;background:#e7f4f5;border-radius:7px;white-space:nowrap}
+.learn-data-toggle{display:flex;justify-content:flex-end;margin:0 0 12px}
+.learn-data-charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.learn-data-charts figure{margin:0;min-width:0}.learn-data-charts figcaption{font-size:14px;font-weight:600;margin:6px 0}
+.learn-data-charts svg text{font-size:12px}
+#learn-data-view>.hint{line-height:1.6}
+
+/* Both alternatives determine a shared height, also after responsive wrapping. */
+#learn-resonance-view{display:grid;align-items:start}
+#learn-resonance-content,#learn-data-view{grid-area:2/1;min-width:0}
+#learn-resonance-content[hidden],#learn-data-view[hidden]{display:block!important;visibility:hidden;pointer-events:none}
+.learn-plot-wrap{position:relative}
+.learn-plot-wrap .learn-frequency{position:absolute;top:0;right:0;z-index:1;margin:0;padding:6px 9px;max-width:100%;font-size:12px}
+.learn-resonance-values{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 14px}
+
+.learn-chart-toolbar{grid-area:1/1;display:flex;flex-direction:column;align-items:flex-end;gap:7px;margin-bottom:10px}
+.learn-chart-toolbar .learn-frequency{margin:0;padding:6px 9px;font-size:12px}
+.learn-chart-toolbar .learn-data-toggle{margin:0}
+.learn-resonance-values{justify-content:center;gap:8px 28px;padding:0 20px;text-align:center;line-height:1.6}
+.learn-resonance-values>span{flex:1 1 150px}
+
+/* Shared chart header mirrors the other panel headings; content keeps one footprint. */
+.learn-chart-toolbar{display:block;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.learn-chart-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:42px}
+.learn-chart-heading h3{margin:0;font-size:18px}
+.learn-chart-heading button{flex-shrink:0;min-width:125px;font-size:12px;min-height:34px;padding:7px 10px}
+.learn-chart-toolbar .learn-frequency{margin:8px 0 0;background:none;padding:0;color:var(--muted);font-size:12px;line-height:1.6}
+.learn-resonance-values{border-top:1px solid var(--border);padding:12px 16px 0;margin-top:12px}

@@ -33,3 +33,18 @@ test('Invalid inputs rejected and supported extremes remain finite',()=>{
   const r=response(f,parameters(mm,mass,stiffness,zeta));assert.ok(Number.isFinite(r.amplitude)&&Number.isFinite(r.phase));
  }
 });
+
+test('Dimensional values and dynamic bounds agree with the physical frequency law',()=>{
+ const M=require('../learning-model.js'),d=require('../learning-profiles.js');
+ for(const i of [0,200,599]){
+  const mm=d.xMm[i],p=M.parameters(mm);
+  assert.ok(Math.abs(p.massKg/d.massKgPer1mm[i]-1)<1e-10);
+  close(p.stiffnessNm,d.stiffnessNPerMPer1mm[i]);
+  close(p.f0,Math.sqrt(d.stiffnessNPerMPer1mm[i]/d.massKgPer1mm[i])/(2*Math.PI));
+  for(const kind of ['mass','stiffness']){
+   const frequencies=M.bounds(mm,1,1,kind).map(v=>M.parameters(mm,kind==='mass'?v:1,kind==='stiffness'?v:1).f0).sort((a,b)=>a-b);
+   close(frequencies[0],50);close(frequencies[1],20000);
+  }
+ }
+ for(const value of [1e-7,1,1e7]){const axis=M.amplitudeAxis(value);assert.ok(axis.maximum>value);assert.ok(value/axis.factor>=1&&value/axis.factor<10);}
+});
