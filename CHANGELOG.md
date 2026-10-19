@@ -2,6 +2,8 @@
 
 ## Unveröffentlicht · lokale Lerntour
 
+- Qualitative BM-Untersuchung mit zwei Reglern, fester geringer Dämpfung und normierter Resonanzkurve. Nur tatsächliches Maximum markiert, Frequenzachse beim Experimentieren stabil. Formel/Modelldaten in Vertiefung; qualitative Touraufgaben und Hinweis auf fehlende Flüssigkeitskopplung.
+
 - Resonanzachse als „Amplitude / Referenzauslenkung“ beschriftet; statische Referenz bei ursprünglicher örtlicher Federsteifigkeit erklärt.
 
 - Lehrschwinger aus dimensionalen Ortsprofilen: Masse in µg, Steifigkeit in N/m, dynamische Reglergrenzen für 50–20.000 Hz. Originalwerte beim Reset erhalten. Resonanzachsen mit Zehnerfaktor und runden Frequenzschritten.
@@ -122,3 +124,19 @@ Kurze fachlich relevante Historie. Die älteren Einträge sind aus lokalen Proje
 
 - Prüfung absoluter Anregung, projizierte Steigbügelfläche 2,86 mm², stabile aktive UI-Einstellung 0,80.
 - Menschliche Mittelohrmesskurve für damaligen Schalldruckmodus; heute nur in Kalibrierungsprüfungen verwendet.
+
+- Unterrichtsschwinger: feste dimensionale Reglergrenzen, gesperrte Kombinationen grau, tatsächliches Resonanzmaximum im Experiment auf 50–20.000 Hz begrenzt; Test gegen wiederholtes gegenseitiges Hochschieben.
+
+- Schwingungsmodell: erläuternde Reglertexte und Untersuchungsaufträge auf Wunsch aus der Kachel entfernt.
+
+- Ortsauswahl nur im Erklärmodus sichtbar; im freien Experiment ändert ein BM-Klick den Abschnitt nicht. Hinweis zur lokalen Modellresonanz im Erklärmodus ergänzt.
+
+- Modellhinweis als standardmäßig geschlossenes Info-Symbol neben der Überschrift des Schwingungsmodells.
+
+- Wanderwelle, Auslenkung und Cochlea-Ort erhalten ebenfalls aufklappbare Info-Symbole mit kurzen Erläuterungen.
+
+- Ortsregler entfernt: Erklärmodus folgt dem gültigen Wellenmaximum, Experiment hält den Ausgangspunkt fest. Keine Frequenzkalibrierung; Rückkehr zum aktuellen BM-Abschnitt und Tourtexte angepasst.
+
+- Schwinger-Kachel kompakter mit Positionsfeld und seitlicher Pause; Modelldaten im schließbaren Dialog. Innenohr-Erklärung unter Wanderwelle verschoben, Lupe ±4 mm und Zeitanzeige darunter.
+
+- Zeitausgabe über der Lupenskala rechts ausgerichtet; Schwinger und Resonanzkurve mit gleichen Kopfbereichen und Trennlinien. Modellhinweis gekürzt.

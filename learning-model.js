@@ -22,10 +22,24 @@
   return {amplitude:1/Math.hypot(a,b),phase:Math.atan2(b,a)};
  }
  const sliderFactor=value=>10**value;
+ const teachingZeta=.08, minHz=50, maxHz=20000;
+ const peakFactor=1-2*teachingZeta**2;
+ const massRange=[Math.min(...profiles.massKgPer1mm),Math.max(...profiles.massKgPer1mm)];
+ // Minimal teaching extension below the historical stiffness profile to reach 50 Hz.
+ const stiffnessRange=[Math.min(Math.min(...profiles.stiffnessNPerMPer1mm),massRange[1]*(2*Math.PI*minHz)**2/peakFactor),Math.max(...profiles.stiffnessNPerMPer1mm)];
+ function rails(mm,kind){const p=local(mm),values=kind==='mass'?massRange:stiffnessRange,base=kind==='mass'?p.massKg:p.stiffnessNm;return values.map(v=>v/base);}
  function bounds(mm,mass,stiffness,kind){
-  const base=parameters(mm).f0;
-  return kind==='mass'?[stiffness*(base/20000)**2,stiffness*(base/50)**2]:[mass*(50/base)**2,mass*(20000/base)**2];
+  const base=parameters(mm,1,1,teachingZeta).resonanceHz, fixed=rails(mm,kind);
+  const limits=kind==='mass'?[stiffness*(base/maxHz)**2,stiffness*(base/minHz)**2]:[mass*(minHz/base)**2,mass*(maxHz/base)**2];
+  return [Math.max(fixed[0],limits[0]),Math.min(fixed[1],limits[1])];
+ }
+ const clamp=(v,limits)=>Math.max(limits[0],Math.min(limits[1],v));
+ function constrain(mm,mass,stiffness,moved){
+  mass=clamp(mass,rails(mm,'mass'));stiffness=clamp(stiffness,rails(mm,'stiffness'));
+  if(moved==='mass')mass=clamp(mass,bounds(mm,mass,stiffness,'mass'));
+  else stiffness=clamp(stiffness,bounds(mm,mass,stiffness,'stiffness'));
+  return {mass,stiffness};
  }
  function amplitudeAxis(peak){const exponent=Math.floor(Math.log10(peak)),factor=10**exponent;return {exponent,factor,maximum:Math.ceil(peak*1.12/factor)*factor};}
- const api={parameters,response,sliderFactor,local,bounds,amplitudeAxis};if(typeof module!=='undefined')module.exports=api;root.LearningModel=api;
+ const api={parameters,response,sliderFactor,local,bounds,rails,constrain,teachingZeta,massRange,stiffnessRange,amplitudeAxis};if(typeof module!=='undefined')module.exports=api;root.LearningModel=api;
 })(globalThis);

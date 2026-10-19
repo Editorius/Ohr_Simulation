@@ -1,13 +1,13 @@
 (function(){
  'use strict';
  const $=id=>document.getElementById(id),M=LearningModel,fmt=(n,d=0)=>n.toLocaleString('de-DE',{maximumFractionDigits:d});
- let frequency=1000,mm=11.26,custom=false,playing=true,last=0,phase=0,p,answer,scale=1;
+ let currentMaximum=null,frequency=1000,mm=11.26,custom=false,playing=true,last=0,phase=0,p,answer,scale=1;
  const panel=$('learning-panel'),wave=$('wave-svg'),frame=$('anatomy-frame');
  const svgText=(x,y,t)=>`<text x="${x}" y="${y}">${t}</text>`;
  function mark(){
   const layout=CochleaContour.layout,x=layout.left+(layout.right-layout.left)*mm/33.5;
-  $('learning-wave-marker').innerHTML=panel.hidden?'':`<path d="M${x} ${layout.center-28}v56" stroke="#147b80" stroke-width="3"/><circle cx="${x}" cy="${layout.center}" r="7" fill="white" stroke="#147b80" stroke-width="3"/>`;
-  frame.contentWindow?.postMessage({type:'cochlea-learning',positionMm:mm,visible:!panel.hidden},'*');
+  $('learning-wave-marker').innerHTML=panel.hidden||(!custom&&currentMaximum===null)?'':`<path d="M${x} ${layout.center-28}v56" stroke="#147b80" stroke-width="3"/><circle cx="${x}" cy="${layout.center}" r="7" fill="white" stroke="#147b80" stroke-width="3"/>`;
+  frame.contentWindow?.postMessage({type:'cochlea-learning',positionMm:mm,visible:!panel.hidden&&(custom||currentMaximum!==null)},'*');
  }
  function bridge(){
   const point=t=>{const a=-.3+t*Math.PI*4.7,r=85*(1-t)+6;return [145+r*Math.cos(a),100+r*Math.sin(a)];};
@@ -18,15 +18,9 @@
   $('bridge-flat-marker').setAttribute('d',`M${x} ${87-42*t}V${108+42*t}`);
   $('bridge-position').textContent=fmt(mm,2)+' mm ab Basis';
  }
- let dataVisible=false;
- function showData(visible){
-  dataVisible=visible;
-  $('learn-chart-title').textContent=visible?'Modellparameter':'Resonanzkurve';
-  $('learn-data-toggle').setAttribute('aria-pressed',String(visible));
-  $('learn-data-toggle').textContent=visible?'Resonanzkurve':'Modelldaten';
-  $('learn-data-view').hidden=!visible;$('learn-resonance-content').hidden=visible;
-  if(visible){$('learn-resonance-view').hidden=false;document.querySelector('.learn-columns').classList.remove('learn-single');}
- }
+ function showData(visible){const dialog=$('learn-depth');if(visible&&!dialog.open)dialog.showModal();else if(!visible&&dialog.open)dialog.close();}
+ $('learn-depth-open').onclick=()=>showData(true);
+ $('learn-depth-close').onclick=()=>showData(false);
  function profileCharts(){
   const d=LearningProfiles;
   for(const [id,values,logarithmic] of [['learn-mass-chart',d.massKgPer1mm.map(v=>v*1e9),false],['learn-stiffness-chart',d.stiffnessNPerMPer1mm,true]]){
@@ -42,61 +36,56 @@
    $(id).innerHTML=s;
   }
  }
- $('learn-data-toggle').onclick=()=>showData(!dataVisible);
- function update(){
+ function update(moved){
   let mass=M.sliderFactor(Number($('learn-mass').value)),stiffness=M.sliderFactor(Number($('learn-stiffness').value));
-  if(custom){const [lo,hi]=M.bounds(mm,mass,stiffness,'stiffness');stiffness=Math.max(lo,Math.min(hi,stiffness));}
+  if(custom)({mass,stiffness}=M.constrain(mm,mass,stiffness,moved));
   for(const [id,kind,value] of [['learn-mass','mass',mass],['learn-stiffness','stiffness',stiffness]]){
-   const limits=M.bounds(mm,mass,stiffness,kind),log=Math.log10(value),el=$(id);
-   el.min=Math.min(Math.log10(limits[0]),log);el.max=Math.max(Math.log10(limits[1]),log);el.step='any';el.value=log;
+   const fixed=M.rails(mm,kind),limits=M.bounds(mm,mass,stiffness,kind),el=$(id);
+   const lo=Math.log10(fixed[0]),hi=Math.log10(fixed[1]);
+   el.min=lo;el.max=hi;el.step='any';el.value=Math.log10(value);
+   const percent=v=>Math.max(0,Math.min(100,100*(Math.log10(v)-lo)/(hi-lo)));
+   el.style.setProperty('--allowed-start',percent(limits[0])+'%');
+   el.style.setProperty('--allowed-end',percent(limits[1])+'%');
+   el.title='Graue Bereiche sind für die aktuelle Kombination gesperrt (50–20.000 Hz).';
   }
-  p=M.parameters(mm,M.sliderFactor(Number($('learn-mass').value)),M.sliderFactor(Number($('learn-stiffness').value)),Number($('learn-damping').value));answer=M.response(frequency,p);
-  $('learn-place-value').textContent=fmt(mm,2)+' mm ab Basis';
+  p=M.parameters(mm,M.sliderFactor(Number($('learn-mass').value)),M.sliderFactor(Number($('learn-stiffness').value)),.08);answer=M.response(p.resonanceHz,p);
+  $('learn-place-value').textContent=!custom&&currentMaximum===null?'Kein darstellbares Wellenmaximum':'Position auf der BM: '+fmt(mm,2)+' mm ab Basis';
   const massText=(p.massKg*1e9).toLocaleString('de-DE',{maximumSignificantDigits:3})+' µg',stiffnessText=p.stiffnessNm.toLocaleString('de-DE',{maximumSignificantDigits:3})+' N/m';
   $('learn-mass').setAttribute('aria-valuetext',massText);$('learn-stiffness').setAttribute('aria-valuetext',stiffnessText);
   $('learn-mass-value').textContent=massText;$('learn-stiffness-value').textContent=stiffnessText;
-  $('learn-damping-value').textContent=p.zeta<.15?'Gering':p.zeta<.4?'Mittel':'Stark';
-  $('learn-state').textContent=custom?'Eigenes Modell':'Ortsvorgabe · lokaler Ersatzschwinger';
-  for(const id of ['learn-mass','learn-stiffness','learn-damping'])$(id).disabled=!custom;
+  $('learn-columns').hidden=!custom&&currentMaximum===null;
+  $('learn-state').textContent=custom?'Eigenes Modell · Ausgangspunkt fest':'Ortsvorgabe am Wellenmaximum';
+  for(const id of ['learn-mass','learn-stiffness'])$(id).disabled=!custom;
   $('learn-explain').setAttribute('aria-pressed',String(!custom));$('learn-experiment').setAttribute('aria-pressed',String(custom));
-  $('learn-frequency').textContent='Anregung: '+fmt(frequency)+' Hz · aus Kachel Anregung';
-  $('learn-f0').textContent='Eigenfrequenz: '+fmt(p.f0)+' Hz';
-  $('learn-f0-summary').textContent=$('learn-f0').textContent;
-  if(!custom&&(p.f0<50||p.f0>20000))$('learn-state').textContent+=' · außerhalb 50–20.000 Hz';bridge();
-  $('learn-resonance').textContent=p.resonanceHz?'Resonanzmaximum: '+fmt(p.resonanceHz)+' Hz':'Kein Resonanzmaximum bei f > 0';
-  // Linear frequency axis expands to include the selected drive and the local peak.
-  const extent=Math.max(1.5*p.f0,frequency*1.1),power=10**Math.floor(Math.log10(extent/4)),step=[1,2,5,10].find(v=>v*power>=extent/4)*power;
-  const maxF=Math.ceil(extent/step)*step,peak=M.response(p.resonanceHz,p).amplitude,axis=M.amplitudeAxis(Math.max(peak,answer.amplitude));
-  scale=axis.maximum;
-  const X=f=>55+430*f/maxF,Y=a=>235-190*a/scale;
-  const frequencies=Array.from({length:351},(_,i)=>i*maxF/350).concat(p.resonanceHz,frequency).sort((a,b)=>a-b);
+  $('learn-experiment').disabled=!custom&&currentMaximum===null;
+  $('learn-defaults').disabled=currentMaximum===null;
+  bridge();
+  $('learn-resonance').textContent='Stärkste Schwingung bei '+fmt(p.resonanceHz)+' Hz';
+  // Fixed horizontal range while changing mass/stiffness: the peak moves visibly.
+  const maxF=M.parameters(mm).f0>18000?40000:20000,peak=M.response(p.resonanceHz,p).amplitude;
+  scale=peak;
+  const X=f=>55+430*f/maxF,Y=a=>235-180*a/peak;
+  const frequencies=Array.from({length:601},(_,i)=>i*maxF/600)
+   .concat(Array.from({length:101},(_,i)=>p.resonanceHz*(.5+i/100))).filter(f=>f<=maxF).sort((a,b)=>a-b);
   const curve=frequencies.map((f,i)=>(i?'L':'M')+X(f)+','+Y(M.response(f,p).amplitude)).join(' ');
   let s='<path d="M55 35V235H490" fill="none" stroke="#8da0a8"/>';
-  const kHz=maxF>=2000;
-  for(let f=0;f<=maxF+step*.01;f+=step)s+=svgText(X(f)-12,255,fmt(kHz?f/1000:f,2));
-  for(let i=0;i<=2;i++){const a=scale*i/2;s+=svgText(10,Y(a)+4,fmt(a/axis.factor,2));}
-  s+=`<path d="${curve}" fill="none" stroke="#173d67" stroke-width="3"/><path d="M${X(p.f0)} 35V235" stroke="#697c85" stroke-dasharray="4 4"/>`;
-  s+=`<path d="M${X(frequency)} ${Y(answer.amplitude)}V235" stroke="#147b80" stroke-width="2"/><circle cx="${X(frequency)}" cy="${Y(answer.amplitude)}" r="6" fill="#147b80"/>`;
-  s+=svgText(60,22,'Amplitude / Referenzauslenkung'+(axis.exponent?' · ×10^'+axis.exponent:''))+svgText(185,285,'Anregungsfrequenz f in '+(kHz?'kHz':'Hz'));
+  for(let i=0;i<=4;i++){const f=maxF*i/4;s+=svgText(X(f)-12,255,fmt(f/1000));}
+  for(const value of [0,.5,1])s+=svgText(15,235-180*value+4,fmt(value,1));
+  s+=`<path d="${curve}" fill="none" stroke="#173d67" stroke-width="3"/><path d="M${X(p.resonanceHz)} 55V235" stroke="#147b80" stroke-width="2"/><circle cx="${X(p.resonanceHz)}" cy="55" r="7" fill="#147b80" stroke="white" stroke-width="2"/>`;
+  s+=svgText(60,22,'Relative Schwingungsamplitude')+svgText(185,285,'Frequenz in kHz');
   $('learn-curve').innerHTML=s;profileCharts();mark();animateMass();
  }
  function animateMass(){
-  const y=180-48*answer.amplitude/scale*Math.cos(phase-answer.phase);
+  const y=180-32*answer.amplitude/scale*Math.cos(phase-answer.phase);
   let spring='M180 40V53';for(let i=0;i<=12;i++)spring+=`L${180+(i===0||i===12?0:i%2?15:-15)} ${53+i*(y-70)/12}`;
   spring+=`L180 ${y}`;$('learn-spring').setAttribute('d',spring);$('learn-block').setAttribute('transform',`translate(0 ${y-180})`);
  }
  function restoreSlider(id,value){const el=$(id);if(id!=='learn-damping'){el.min=-30;el.max=30;}el.value=value;}
- function defaults(){custom=false;for(const [id,value] of [['learn-mass',0],['learn-stiffness',0],['learn-damping',.18]])restoreSlider(id,value);update();}
- $('learn-place').oninput=()=>{mm=Number($('learn-place').value);update();};
- for(const id of ['learn-mass','learn-stiffness','learn-damping'])$(id).oninput=update;
- $('learn-explain').onclick=defaults;$('learn-defaults').onclick=defaults;$('learn-experiment').onclick=()=>{custom=true;update();};
+ function defaults(){custom=false;if(currentMaximum!==null)mm=currentMaximum;for(const [id,value] of [['learn-mass',0],['learn-stiffness',0]])restoreSlider(id,value);update();}
+ for(const id of ['learn-mass','learn-stiffness'])$(id).oninput=()=>update(id==='learn-mass'?'mass':'stiffness');
+ $('learn-explain').onclick=defaults;$('learn-defaults').onclick=defaults;$('learn-experiment').onclick=()=>{if(currentMaximum===null)return;custom=true;update();};
  $('learn-play').onclick=()=>{playing=!playing;$('learn-play').textContent=playing?'Pause':'Abspielen';$('learn-play').setAttribute('aria-pressed',String(playing));};
- wave.addEventListener('click',event=>{
-  const matrix=wave.getScreenCTM();if(!matrix)return;const point=new DOMPoint(event.clientX,event.clientY).matrixTransform(matrix.inverse());
-  const l=CochleaContour.layout;if(point.x<l.left||point.x>l.right||Math.abs(point.y-l.center)>100)return;
-  mm=Math.max(0,Math.min(33.5,(point.x-l.left)/(l.right-l.left)*33.5));$('learn-place').value=mm;update();
- });
- window.LearningView={showData,snapshot(){return {mm,custom,values:['learn-mass','learn-stiffness','learn-damping'].map(id=>$(id).value)};},restore(s){mm=s.mm;custom=s.custom;$('learn-place').value=mm;['learn-mass','learn-stiffness','learn-damping'].forEach((id,i)=>restoreSlider(id,s.values[i]));update();},setCustom(value){custom=value;update();},setFrequency(f){if(Number.isFinite(f)&&f>0){frequency=f;update();}},reset(){mm=11.26;$('learn-place').value=mm;phase=0;defaults();}};
+ window.LearningView={showData,snapshot(){return {mm,custom,values:['learn-mass','learn-stiffness'].map(id=>$(id).value)};},restore(s){mm=s.mm;custom=s.custom;if(!custom){defaults();return;}['learn-mass','learn-stiffness'].forEach((id,i)=>restoreSlider(id,s.values[i]));update();},setCustom(value){if(!value){defaults();return;}custom=true;update();},setMaximum(value){currentMaximum=Number.isFinite(value)&&value>=0&&value<=33.5?value:null;if(!custom)defaults();},setFrequency(f){if(Number.isFinite(f)&&f>0){frequency=f;update();}},reset(){mm=11.26;phase=0;defaults();}};
  frame.addEventListener('load',mark);window.addEventListener('message',e=>{if(e.source===frame.contentWindow&&e.data?.type==='cochlea-ready')mark();});
  new MutationObserver(mark).observe(panel,{attributes:true,attributeFilter:['hidden']});
  function tick(now){if(playing&&!document.hidden&&!panel.hidden){phase=(phase+Math.min((now-last)/1000,.1)*Math.PI)% (2*Math.PI);animateMass();}last=now;requestAnimationFrame(tick);}

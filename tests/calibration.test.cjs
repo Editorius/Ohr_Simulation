@@ -67,8 +67,9 @@ test('Global envelope axes select 8 or 18 micrometres without altering the main 
 test('Loupe preserves complex phase, interpolates boundaries and never extrapolates',()=>{
  const r={x:[0,.002,.004,.006,.008],real:[0,2,4,6,8],imag:[0,1,2,3,4],amplitude:[0,3,6,9,12],peakX:.004};
  const saved=JSON.stringify(r),a=V.waveDetail(r,0),b=V.waveDetail(r,Math.PI/2),c=V.waveDetail(r,Math.PI);
- assert.equal(a.left,.001);assert.equal(a.right,.007);
- assert.equal(a.displacement[0],1);assert.equal(a.displacement.at(-1),7);
+ assert.equal(a.left,0);assert.equal(a.right,.008);
+ assert.equal(a.displacement[0],0);assert.equal(a.displacement.at(-1),8);
+ const shifted=V.waveDetail({...r,peakX:.005},0);assert.equal(shifted.left,.001);assert.equal(shifted.displacement[0],1);
  assert.equal(a.limit,b.limit);assert.equal(a.limit,c.limit);
  a.displacement.forEach((v,i)=>{assert.ok(Math.abs(c.displacement[i]+v)<1e-12);assert.ok(Math.abs(b.displacement[i]+v/2)<1e-12);});
  assert.equal(V.waveDetail({...r,peakX:0},0).left,0);
