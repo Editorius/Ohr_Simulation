@@ -49,7 +49,7 @@
     return {min,max,ticks:[min,max/4,max/2,3*max/4,max],fraction:v=>(v-min)/(max-min)};
   }
   function waveDetail(r,phase) {
-    const left=Math.max(r.x[0],r.peakX-.003),right=Math.min(r.x.at(-1),r.peakX+.003);
+    const left=Math.max(r.x[0],r.peakX-.004),right=Math.min(r.x.at(-1),r.peakX+.004);
     const xs=[left,...r.x.filter(x=>x>left&&x<right),right];
     const sample=(values,x)=>{
       let i=1;while(i<r.x.length-1&&r.x[i]<x)i++;

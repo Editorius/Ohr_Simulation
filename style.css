@@ -831,3 +831,54 @@ body[data-study-mode=tour] .sidebar{align-content:start}
 .learn-chart-heading button{flex-shrink:0;min-width:125px;font-size:12px;min-height:34px;padding:7px 10px}
 .learn-chart-toolbar .learn-frequency{margin:8px 0 0;background:none;padding:0;color:var(--muted);font-size:12px;line-height:1.6}
 .learn-resonance-values{border-top:1px solid var(--border);padding:12px 16px 0;margin-top:12px}
+
+/* Qualitative exploration: two controls, one peak, optional depth. */
+.learn-model-row{grid-template-columns:1fr}
+.learn-model-row #learn-mechanism{max-height:300px;max-width:320px;margin:auto}
+.learn-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+.learn-peak-readout{color:#126e72;background:#e7f4f5;padding:10px 12px;border-radius:8px;font-weight:600;margin:10px 0 0}
+.learn-prompts{font-size:14px;line-height:1.6;color:#29444b}
+#learn-depth .learning-equation{max-width:420px;margin:14px 0}
+#learn-depth #learn-data-view{margin-top:16px}
+@media(max-width:600px){.learn-controls{grid-template-columns:1fr}}
+
+/* Stable logarithmic rails; only the permitted interval is colored. */
+.learn-controls input[type="range"] { appearance:none; height:8px; border-radius:4px; background:linear-gradient(to right,#cbd2d8 0 var(--allowed-start,0%),#147b80 var(--allowed-start,0%) var(--allowed-end,100%),#cbd2d8 var(--allowed-end,100%) 100%); }
+.learn-controls input[type="range"]::-webkit-slider-thumb { appearance:none; width:18px; height:18px; border-radius:50%; background:#147b80; border:2px solid white; box-shadow:0 0 2px #29444b; }
+.learn-controls input[type="range"]::-moz-range-thumb { width:14px; height:14px; border-radius:50%; background:#147b80; border:2px solid white; }
+
+.learn-heading{display:flex;align-items:center;gap:10px;position:relative;margin-bottom:12px}
+.learn-heading h2{margin:0;min-width:0}
+.learn-model-info{flex:0 0 auto}
+.learn-model-info summary{display:flex;align-items:center;justify-content:center;width:30px;height:30px;box-sizing:border-box;border:1px solid #b6ccd2;border-radius:50%;background:#edf5f6;color:#126e72;font-size:17px;font-weight:700;font-family:Georgia,serif;cursor:pointer;list-style:none}
+.learn-model-info summary::-webkit-details-marker{display:none}
+.learn-model-info[open] summary{background:#126e72;color:white}
+.learn-info-content{position:absolute;top:100%;left:0;z-index:20;box-sizing:border-box;width:560px;max-width:100%;margin:8px 0 0;padding:14px 16px;border:1px solid #cbdce1;border-radius:10px;background:#f7fafb;color:#233b49;box-shadow:0 5px 18px #20384726;font-size:14px;line-height:1.6}
+
+.panel-heading > .panel-info-heading{margin-bottom:0;min-width:0}
+.wave-heading .panel-info-heading h2{flex:0 1 auto}
+
+.learn-oscillator-heading,.learn-dialog-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.learn-oscillator-heading h3{margin:0}
+.learn-info-button{border:1px solid #b6ccd2;border-radius:50%;background:#edf5f6;color:#126e72;font:bold 17px Georgia,serif;width:30px;height:30px;padding:0;flex:0 0 auto}
+.learn-model-row{grid-template-columns:minmax(0,1fr) auto;margin-top:12px}
+.learn-model-row #learn-mechanism{max-height:260px}
+.learn-depth-dialog{width:880px;max-width:calc(100vw - 32px);max-height:85vh;overflow:auto;box-sizing:border-box;border:1px solid #cbdce1;border-radius:14px;padding:22px;color:#163b65;background:white;box-shadow:0 12px 40px #20384740}
+.learn-depth-dialog::backdrop{background:#20384766}
+.wave-views{grid-template-columns:minmax(0,3.5fr) minmax(185px,1fr)}
+#wave-loupe{max-width:235px;margin:0 auto}
+.wave-detail .period-player{display:grid;grid-template-columns:1fr;gap:5px;padding:10px 0 0;margin-top:8px}
+.wave-detail .period-player output{grid-column:auto;text-align:right;font-size:12px}
+@media(max-width:700px){.wave-views{grid-template-columns:1fr}.wave-detail .period-player{max-width:300px;margin:8px auto 0}}
+
+/* Time readout shares the label row, with the complete scale below. */
+.wave-detail .period-player{grid-template-columns:minmax(0,1fr) auto;align-items:center}
+.wave-detail .period-player label{grid-column:1;grid-row:1}
+.wave-detail .period-player output{grid-column:2;grid-row:1;justify-self:end}
+.wave-detail .period-player .time-track{grid-column:1 / -1;grid-row:2}
+/* Matching heading/readout spacing puts both separator rules at the same height. */
+.learn-columns .learn-chart-toolbar h3{margin:0;min-height:30px;display:flex;align-items:center}
+.learn-columns .learn-chart-toolbar{margin:0 0 16px;padding-bottom:12px}
+.learn-columns .learn-chart-toolbar .learn-peak-readout{margin:10px 0 0;line-height:1.5}
+#learn-resonance-view{grid-template-rows:auto 1fr}
+.learn-oscillator .learn-model-row{margin-top:0}

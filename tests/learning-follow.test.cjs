@@ -1,0 +1,23 @@
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+test('Local view follows maximum only in explain mode and never calibrates resonance',()=>{
+ const html=fs.readFileSync(require.resolve('../index.html'),'utf8'),els=new Map();
+ for(const m of html.matchAll(/\bid="([^"]+)"/g))els.set(m[1],{value:'0',hidden:false,open:false,showModal(){this.open=true;},close(){this.open=false;},style:{setProperty(){}},setAttribute(){},addEventListener(){},contentWindow:{postMessage(){}}});
+ const el=id=>{assert.ok(els.has(id),id);return els.get(id);};
+ const M=require('../learning-model.js');
+ const ctx={LearningModel:M,LearningProfiles:require('../learning-profiles.js'),CochleaContour:{layout:{left:0,right:100,center:50}},document:{getElementById:el},window:{addEventListener(){}},MutationObserver:class{observe(){}},requestAnimationFrame(){}};
+ vm.runInNewContext(fs.readFileSync(require.resolve('../learning-view.js'),'utf8'),ctx);
+ const view=ctx.window.LearningView;
+ el('learn-depth-open').onclick();assert.equal(el('learn-depth').open,true);el('learn-depth-close').onclick();assert.equal(el('learn-depth').open,false);
+ assert.equal(els.has('learn-place'),false);
+ view.setMaximum(13.46);assert.equal(view.snapshot().mm,13.46);
+ const resonance=el('learn-resonance').textContent;
+ view.setFrequency(5000);assert.equal(el('learn-resonance').textContent,resonance);
+ view.setCustom(true);el('learn-mass').value=.1;el('learn-mass').oninput();
+ const saved=JSON.stringify(view.snapshot());view.setMaximum(22);view.setFrequency(200);
+ assert.equal(JSON.stringify(view.snapshot()),saved);
+ el('learn-defaults').onclick();assert.equal(view.snapshot().mm,22);assert.equal(view.snapshot().custom,false);
+ assert.equal(Number(view.snapshot().values[0]),0);assert.equal(Number(view.snapshot().values[1]),0);
+ view.setMaximum(null);assert.equal(el('learn-columns').hidden,true);assert.equal(el('learn-experiment').disabled,true);
+ view.setMaximum(8);assert.equal(el('learn-columns').hidden,false);assert.equal(view.snapshot().mm,8);
+ const expected=M.parameters(8,1,1,.08).resonanceHz.toLocaleString('de-DE',{maximumFractionDigits:0});assert.ok(el('learn-resonance').textContent.includes(expected));
+});

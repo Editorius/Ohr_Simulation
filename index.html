@@ -125,14 +125,14 @@
           <p id="audio-status" class="small-status" role="status">Ton aus</p>
         </section>
         </div>
-      </aside>
+                </aside>
       <div class="experiment-column">
         <section class="study-modes panel" aria-label="Lernmodus">
           <div class="study-mode-buttons"><button id="study-tour" type="button" disabled aria-pressed="false">Geführte Tour</button><button id="study-lab" type="button" disabled aria-pressed="true">Experimentierlabor</button></div>
           <p id="study-mode-note">Frei beobachten, Ansichten auswählen und eigene Fragen untersuchen.</p>
         </section>
         <section id="tour-guide" class="panel" aria-labelledby="tour-title" hidden>
-          <div class="tour-top"><span id="tour-progress"></span><label class="check"><input id="tour-advanced" type="checkbox"> Vertiefung: Resonanz und Dämpfung (eA)</label></div>
+          <div class="tour-top"><span id="tour-progress"></span><label class="check"><input id="tour-advanced" type="checkbox"> Vertiefung: Formel und Modelldaten</label></div>
           <h2 id="tour-title" tabindex="-1"></h2><p id="tour-intro"></p>
           <ol id="tour-stations" aria-label="Stationen der Tour"></ol>
           <div class="tour-tasks"><p><strong>Vermuten</strong><span id="tour-predict"></span></p><p><strong>Beobachten</strong><span id="tour-observe"></span></p><details id="tour-answer"><summary>Erklärung aufdecken</summary><p id="tour-explain"></p></details></div>
@@ -150,16 +150,8 @@
 
         <section class="panel experiment" data-view="wave">
           <div class="panel-heading wave-heading">
-            <h2>Wanderwelle auf der Basilarmembran</h2>
-<div class="wave-toolbar">          <div class="period-player">
-            <label for="phase-position">Zeitpunkt t</label>
-            <div class="time-track">
-              <input id="phase-position" type="range" min="0" max="360" step="1" value="0" aria-describedby="instant-time" />
-              <div class="endpoints"><span>0</span><span id="period-end"></span></div>
-            </div>
-            <output id="instant-time" for="phase-position">0,00 ms</output>
-          </div>
-          <section class="controls compact-controls" aria-label="Darstellung">
+            <div class="learn-heading panel-info-heading"><h2>Wanderwelle auf der Basilarmembran</h2><details id="wave-model-info" class="learn-model-info"><summary aria-label="Information: Wanderwelle auf der Basilarmembran" title="Information: Wanderwelle auf der Basilarmembran">i</summary><p class="learn-info-content">Die Wanderwelle zeigt, wie sich die Basilarmembran entlang der Cochlea bewegt. Die Hüllkurve beschreibt die örtlichen Schwingungsamplituden; die rote Positionsmarke kennzeichnet deren Maximum. Die Bewegung wird in Zeitlupe gezeigt, die Auslenkung zur besseren Sichtbarkeit vergrößert.</p></details></div>
+<div class="wave-toolbar">          <section class="controls compact-controls" aria-label="Darstellung">
               <button id="animation-toggle" aria-pressed="false">
                 ▶ Abspielen</button
               ><button id="next-state" class="secondary">Einzelschritt</button
@@ -222,23 +214,24 @@
 <g id="wave-axis"/>
 </svg>
 <aside class="wave-detail" aria-label="Wanderwellenlupe">
- <h3>Vergrößert</h3><p>Um das Maximum · ±3 mm</p>
+ <h3>Vergrößert</h3><p>Um das Maximum · ±4 mm</p>
  <svg id="wave-loupe" viewBox="0 0 300 260" role="img" aria-label="Vergrößerte Wanderwelle">
   <path d="M20 130 H280" stroke="#c5d0d5" fill="none"/>
   <path id="loupe-top" class="envelope"/><path id="loupe-bottom" class="envelope"/>
   <path id="loupe-wave" class="wave-line"/><g id="loupe-peak"/>
  </svg>
+<div class="period-player">
+            <label for="phase-position">Zeitpunkt t</label>
+            <div class="time-track">
+              <input id="phase-position" type="range" min="0" max="360" step="1" value="0" aria-describedby="instant-time" />
+              <div class="endpoints"><span>0</span><span id="period-end"></span></div>
+            </div>
+            <output id="instant-time" for="phase-position">0,00 ms</output>
+          </div>
 </aside>
 </div>
 
-        </section>
-        <section class="panel" data-view="learning" id="learning-panel">
- <h2>Schwingungsmodell der Basilarmembran</h2>
- <p class="learn-subtitle">Ein Abschnitt · Vereinfachtes Schwingungsmodell</p>
- <div class="learn-place-row"><label for="learn-place">Abschnitt auswählen</label><input id="learn-place" type="range" min="0" max="33.5" step="0.01" value="11.26"><output id="learn-place-value" for="learn-place"></output></div>
- <p class="hint">Ort per Regler oder Klick auf die BM wählen. Türkis: ausgewählter Abschnitt · Rot: Wellenmaximum.</p>
-
- <details id="learning-bridge" class="learning-bridge">
+         <details id="learning-bridge" class="learning-bridge">
   <summary>Vom Innenohr zum Schwingungsmodell</summary>
   <p class="sound-chain">Schall → Trommelfell und Gehörknöchelchen → Steigbügel am ovalen Fenster → Flüssigkeitsbewegung → Basilarmembran</p>
   <div class="bridge-grid">
@@ -250,35 +243,44 @@
   <p class="model-boundary">Der einzelne Schwinger erklärt lokale Eigenschaften. Die Wanderwelle entsteht im räumlich gekoppelten System mit der Flüssigkeit.</p>
   <p class="hint">Die Ortszuordnung im 3D-Modell ist näherungsweise. <a href="https://www.nidcd.nih.gov/health/how-do-we-hear" target="_blank" rel="noopener">Hintergrund: Wie wir hören (NIDCD)</a></p>
  </details>
- <div class="learn-columns">
-  <div class="learn-oscillator"><h3>Feder-Masse-Schwinger</h3><div class="learn-model-row"><svg id="learn-mechanism" viewBox="45 15 285 280" role="img" aria-label="Erzwungener Feder-Masse-Schwinger ohne dargestellten Dämpfer">
+</section>
+        <section class="panel" data-view="learning" id="learning-panel">
+ <div class="learn-heading"><h2>Schwingungsmodell der Basilarmembran</h2><details id="learn-model-info" class="learn-model-info"><summary aria-label="Information zum vereinfachten Modell" title="Information zum vereinfachten Modell">i</summary><p class="learn-info-content">Vereinfachtes Modell: Jeder BM-Abschnitt wird als einzelner Feder-Masse-Schwinger betrachtet. Die Kopplung über die Flüssigkeit fehlt. Es erklärt die Tendenz der Frequenzzuordnung, nicht die Entstehung der Wanderwelle.</p></details></div>
+
+
+
+
+
+ <div id="learn-columns" class="learn-columns">
+  <div class="learn-oscillator"><div class="learn-chart-toolbar learn-oscillator-toolbar"><div class="learn-oscillator-heading"><h3>Feder-Masse-Schwinger</h3><button id="learn-depth-open" class="learn-info-button" aria-label="Formel und Modelldaten öffnen" title="Formel und Modelldaten" aria-haspopup="dialog">i</button></div><p id="learn-place-value" class="learn-peak-readout"></p></div><div class="learn-model-row"><svg id="learn-mechanism" viewBox="45 15 285 280" role="img" aria-label="Erzwungener Feder-Masse-Schwinger ohne dargestellten Dämpfer">
    <path d="M130 40H230 M130 40l12 -12 M150 40l12 -12 M170 40l12 -12 M190 40l12 -12 M210 40l12 -12" stroke="#233b49" stroke-width="3" fill="none"/>
    <path id="learn-spring" stroke="#233b49" stroke-width="3" fill="none"/>
    <path d="M90 205H230" stroke="#8da0a8" stroke-dasharray="5 5"/><text x="235" y="210">Ruhelage</text>
    <text x="215" y="115">D</text><g id="learn-block"><rect x="150" y="180" width="60" height="50" rx="4" fill="#566674"/><text x="173" y="212" fill="white">m</text></g>
    <path d="M75 180v50m-5 -44l5 -6 5 6m-10 38l5 6 5 -6" stroke="#233b49" fill="none"/><text x="50" y="260">Auslenkung</text><text x="180" y="280">↑ Anregung</text>
-  </svg><div class="learning-equation"><strong>Eigenfrequenz</strong>   <math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="f null gleich eins durch zwei Pi mal Wurzel aus D durch m"><semantics><mrow><msub><mi>f</mi><mn>0</mn></msub><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>π</mi></mrow></mfrac><mo>⋅</mo><msqrt><mfrac><mi>D</mi><mi>m</mi></mfrac></msqrt></mrow><annotation encoding="application/x-tex">f_0=\frac{1}{2\pi}\sqrt{\frac{D}{m}}</annotation></semantics></math><p>Ungedämpftes Ersatzmodell</p><p><i>D</i>: effektive Federsteifigkeit<br><i>m</i>: effektive Masse</p></div></div><div class="learn-frequency-notes"><button id="learn-play" aria-pressed="true">Pause</button><p id="learn-f0-summary"></p></div><div class="learn-motion"><span class="hint">Zeitlupe · 2 s pro Periode · Höhe relativ</span></div></div>
-  <div id="learn-resonance-view"><div class="learn-chart-toolbar"><div class="learn-chart-heading"><h3 id="learn-chart-title">Resonanzkurve</h3><button id="learn-data-toggle" class="secondary" aria-pressed="false" aria-controls="learn-data-view">Modelldaten</button></div><p id="learn-frequency" class="learn-frequency"></p></div><div id="learn-resonance-content"><div class="learn-plot-wrap"><svg id="learn-curve" viewBox="0 0 520 300" role="img" aria-label="Amplitude bezogen auf die Referenzauslenkung über der Anregungsfrequenz; gestrichelt: Eigenfrequenz"></svg></div><p class="hint learn-reference-note">Referenzauslenkung: statische Auslenkung bei gleicher Kraft und ursprünglicher örtlicher Federsteifigkeit. Einheitenloses Verhältnis; 1 entspricht der Referenzauslenkung.</p><div class="learn-resonance-values hint"><span><span id="learn-f0"></span> (gestrichelt)</span><span id="learn-resonance"></span></div></div>
-   <div id="learn-data-view" hidden>
-    <div class="learn-data-charts"><figure><figcaption>Effektive Masse · je 1 mm</figcaption><svg id="learn-mass-chart" viewBox="0 0 320 270" role="img" aria-label="Effektive Masse eines lokalen 1-mm-Abschnitts in Mikrogramm entlang der Cochlea"></svg></figure><figure><figcaption>Federsteifigkeit · je 1 mm</figcaption><svg id="learn-stiffness-chart" viewBox="0 0 320 270" role="img" aria-label="Federsteifigkeit eines lokalen 1-mm-Abschnitts in Newton pro Meter entlang der Cochlea"></svg></figure></div>
-    <p class="hint">Beide Kurven beziehen die örtlichen Modellparameter auf einen <strong>1 mm langen Abschnitt</strong>. Masse in µg (1 µg = 10⁻⁹ kg), Federsteifigkeit in N/m. Effektive Masse der Cochlea-Partition einschließlich Corti-Organ, ohne mitbewegte Flüssigkeit. Näherungswerte nach Nobili/Mammano (1997), keine direkten Messreihen. Türkis: ausgewählter Lernabschnitt.</p>
-   </div></div>
+  </svg><div class="learn-side-actions"><button id="learn-play" aria-pressed="true">Pause</button></div></div><div class="learn-motion"><span class="hint">Bei stärkster Schwingung · Zeitlupe · Höhe normiert</span></div></div>
+  <div id="learn-resonance-view"><div class="learn-chart-toolbar"><h3>Resonanzkurve</h3><p id="learn-resonance" class="learn-peak-readout"></p></div><div id="learn-resonance-content"><div class="learn-plot-wrap"><svg id="learn-curve" viewBox="0 0 520 300" role="img" aria-label="Relative Schwingungsamplitude über der Frequenz; markiert ist das Resonanzmaximum"></svg></div><p id="learn-local-note" class="hint">Lokale Modellresonanz ohne Flüssigkeitskopplung; sie entspricht nicht der Hörfrequenz an diesem Ort.</p></div>
+   </div>
  </div>
 
  <div class="learn-mode"><button id="learn-explain" aria-pressed="true">Cochlea erklären</button><button id="learn-experiment" aria-pressed="false">Selbst untersuchen</button><span id="learn-state"></span></div>
- <p class="hint">Masse und Steifigkeit für 1 mm · Strich am Regler: Ortsvorgabe · Experimentierbereich: 50–20.000 Hz</p><datalist id="learn-neutral"><option value="0" label="Ortsvorgabe"></option></datalist>
+ <datalist id="learn-neutral"><option value="0" label="Ortsvorgabe"></option></datalist>
  <div class="learn-controls">
-  <label for="learn-stiffness">Federsteifigkeit <output id="learn-stiffness-value"></output><input id="learn-stiffness" list="learn-neutral" type="range" min="-4" max="4" step="0.01" value="0"></label>
-  <label for="learn-mass">Masse <output id="learn-mass-value"></output><input id="learn-mass" list="learn-neutral" type="range" min="-4" max="4" step="0.01" value="0"></label>
-  <label id="learn-damping-control" for="learn-damping">Dämpfung <output id="learn-damping-value"></output><input id="learn-damping" type="range" min="0.05" max="0.8" step="0.01" value="0.18"></label>
+  <label for="learn-stiffness">Feder: weicher ↔ steifer <output id="learn-stiffness-value"></output><input id="learn-stiffness" list="learn-neutral" type="range" min="-4" max="4" step="0.01" value="0"></label>
+  <label for="learn-mass">Masse: leichter ↔ schwerer <output id="learn-mass-value"></output><input id="learn-mass" list="learn-neutral" type="range" min="-4" max="4" step="0.01" value="0"></label>
+
  </div>
- <div class="learn-footer"><button id="learn-defaults" class="secondary">Zur Ortsvorgabe</button><details><summary>Zusammenhang anzeigen</summary><p>Die Formel beschreibt die ungedämpfte Eigenfrequenz, nicht das genaue Resonanzmaximum bei Dämpfung. Der simulierte Schwinger besitzt Dämpfung; sie begrenzt seine Antwort. Ein Dämpfer wird im Ersatzbild nicht dargestellt.</p><p>Die Ortsvorgabe nutzt örtliche Masse und Steifigkeit des historischen Modells für 1 mm. Die Eigenfrequenz dieses einzelnen Schwingers unterscheidet sich vom Wanderwellenmaximum des flüssigkeitsgekoppelten Innenohrs. Die Kurve zeigt die Antwort auf eine gleichbleibende Kraftamplitude; die Anregung am Steigbügel wird hier nicht quantitativ nachgebildet.</p></details></div>
- <p class="hint">Änderungen gelten nur für dieses Lernmodell. Effektive lokale Modellparameter; keine absoluten BM-Auslenkungen.</p>
+ <div class="learn-footer"><button id="learn-defaults" class="secondary">Zum aktuellen BM-Abschnitt</button></div>
+
+ <dialog id="learn-depth" class="learn-depth-dialog" aria-labelledby="learn-depth-title"><div class="learn-dialog-heading"><h3 id="learn-depth-title">Formel und Modelldaten</h3><button id="learn-depth-close" class="secondary" aria-label="Formel und Modelldaten schließen">Schließen ×</button></div><div class="learning-equation"><strong>Eigenfrequenz</strong>   <math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="f null gleich eins durch zwei Pi mal Wurzel aus D durch m"><semantics><mrow><msub><mi>f</mi><mn>0</mn></msub><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>π</mi></mrow></mfrac><mo>⋅</mo><msqrt><mfrac><mi>D</mi><mi>m</mi></mfrac></msqrt></mrow><annotation encoding="application/x-tex">f_0=\frac{1}{2\pi}\sqrt{\frac{D}{m}}</annotation></semantics></math><p>Ungedämpftes Ersatzmodell</p><p><i>D</i>: effektive Federsteifigkeit<br><i>m</i>: effektive Masse</p></div><p class="hint">Die Formel beschreibt die ungedämpfte Eigenfrequenz. Im Modell ist eine geringe Dämpfung fest eingestellt; das angezeigte Resonanzmaximum liegt geringfügig darunter. Die Kurve wird auf ihr Maximum normiert. Die Animation zeigt die Antwort bei dieser Resonanzfrequenz in Zeitlupe. Das lokale Maximum muss nicht mit dem Wanderwellenmaximum des vollständigen Cochlea-Modells übereinstimmen.</p><div id="learn-data-view">
+    <div class="learn-data-charts"><figure><figcaption>Effektive Masse · je 1 mm</figcaption><svg id="learn-mass-chart" viewBox="0 0 320 270" role="img" aria-label="Effektive Masse eines lokalen 1-mm-Abschnitts in Mikrogramm entlang der Cochlea"></svg></figure><figure><figcaption>Federsteifigkeit · je 1 mm</figcaption><svg id="learn-stiffness-chart" viewBox="0 0 320 270" role="img" aria-label="Federsteifigkeit eines lokalen 1-mm-Abschnitts in Newton pro Meter entlang der Cochlea"></svg></figure></div>
+    <p class="hint">Beide Kurven beziehen die örtlichen Modellparameter auf einen <strong>1 mm langen Abschnitt</strong>. Masse in µg (1 µg = 10⁻⁹ kg), Federsteifigkeit in N/m. Effektive Masse der Cochlea-Partition einschließlich Corti-Organ, ohne mitbewegte Flüssigkeit. Näherungswerte nach Nobili/Mammano (1997), keine direkten Messreihen. Türkis: ausgewählter Lernabschnitt.</p>
+   </div></dialog>
 </section>
 
 <section class="panel" data-view="amplitude">
             <div class="panel-heading">
-              <h2>Auslenkung der Basilarmembran</h2>
+              <div class="learn-heading panel-info-heading"><h2>Auslenkung der Basilarmembran</h2><details id="amplitude-model-info" class="learn-model-info"><summary aria-label="Information: Auslenkung der Basilarmembran" title="Information: Auslenkung der Basilarmembran">i</summary><p class="learn-info-content">Die Darstellung zeigt die berechnete Auslenkung der Basilarmembran entlang der Cochlea. Die rote Markierung hebt den Bereich um das Amplitudenmaximum hervor. Rechts lassen sich die maximalen Auslenkungen vergleichen. Beachte die Einheiten der Achsen: Mikrometer (µm) und Nanometer (nm).</p></details></div>
             </div>
             <svg
               id="amplitude-svg"
@@ -288,7 +290,7 @@
             ></svg>
           </section>
           <section class="panel spiral-panel" data-view="anatomy">
-            <h2>Ort in der Cochlea</h2>
+            <div class="learn-heading panel-info-heading"><h2>Ort in der Cochlea</h2><details id="anatomy-model-info" class="learn-model-info"><summary aria-label="Information: Ort in der Cochlea" title="Information: Ort in der Cochlea">i</summary><p class="learn-info-content">Die rote Ortsmarkierung überträgt die Position des berechneten Amplitudenmaximums auf das räumliche Cochlea-Modell. Drehe die Ansicht, um die Lage in beiden Scalengängen zu erkunden. Die anatomische Zuordnung ist näherungsweise; die Markierung zeigt einen Ort, keine Bewegung der Basilarmembran.</p></details></div>
             <p id="anatomy-position" role="status">Maximum wird berechnet …</p>
             <iframe id="anatomy-frame" src="anatomy/index.html" title="Drehbares Cochlea-Modell mit berechnetem Maximalort"></iframe>
             <p class="hint">OpenEar · Delta · Ortszuordnung näherungsweise. Rot: Maximum der gewählten Antwort, keine dargestellte Membranbewegung.</p>

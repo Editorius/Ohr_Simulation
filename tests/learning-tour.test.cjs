@@ -22,9 +22,9 @@ test('Tour isolates its controls and restores laboratory inputs on exit',()=>{
  vm.runInNewContext(fs.readFileSync(require.resolve('../learning-tour.js'),'utf8'),context);
  element('study-tour').click();assert.equal(element('frequency').value,1000);assert.equal(element('mode-active').attrs['aria-pressed'],'false');assert.equal(element('view-menu').hidden,true);
  assert.deepEqual(Array.from(previews.at(-1)),['wave']);
- stations[3].click();assert.equal(learning.custom,true);assert.equal(element('learn-damping-control').hidden,true);
+ stations[3].click();assert.equal(learning.custom,true);assert.equal(element('learn-resonance-view').hidden,false);
  element('learn-defaults').click();assert.equal(learning.custom,true,'Reset must keep the exploration controls editable');
- element('tour-advanced').checked=true;element('tour-advanced').onchange();assert.equal(element('learn-damping-control').hidden,false);
+ element('tour-advanced').checked=true;element('tour-advanced').onchange();assert.equal(element('learn-resonance-view').hidden,false);
  stations[5].click();element('mode-active').click();element('frequency').value='200';element('drive').value='900';
  element('tour-next').click();
  assert.equal(previews.at(-1),null,'Exit restores the independent panel layout');assert.equal(element('view-menu').hidden,false);

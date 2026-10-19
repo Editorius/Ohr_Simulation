@@ -223,6 +223,7 @@
     const mm=result.peakX*1000;
     const valid=Number.isFinite(mm)&&mm>=0&&mm<=33.5&&result.peakAmplitude>0&&!result.peakOutside;
     anatomyMessage={type:"cochlea-maximum",positionMm:valid?mm:null,valid};
+    window.LearningView?.setMaximum?.(valid?mm:null);
     $("anatomy-position").textContent=valid?(activeMode?"Aktiv":"Passiv")+" · Maximum bei "+fmt(mm,2)+" mm ab Basis":"Kein darstellbares Maximum";
     sendAnatomy();
   }
@@ -496,3 +497,4 @@
   startAnimation();
   requestAnimationFrame(frame);
 })();
+
