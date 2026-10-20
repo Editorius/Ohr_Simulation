@@ -1,6 +1,6 @@
 const test=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs');
 // Exercise the real tour controller with DOM events, including a round trip through
-// active comparison and custom oscillator settings. Rendering geometry is browser-tested.
+// active comparison and custom oscillator settings. Layout needs separate browser checks.
 test('Tour isolates its controls and restores laboratory inputs on exit',()=>{
  const nodes=new Map(),stations=[],previews=[];
  function element(id){if(nodes.has(id))return nodes.get(id);
@@ -24,10 +24,22 @@ test('Tour isolates its controls and restores laboratory inputs on exit',()=>{
  assert.deepEqual(Array.from(previews.at(-1)),['wave']);
  stations[3].click();assert.equal(learning.custom,true);assert.equal(element('learn-resonance-view').hidden,false);
  element('learn-defaults').click();assert.equal(learning.custom,true,'Reset must keep the exploration controls editable');
- element('tour-advanced').checked=true;element('tour-advanced').onchange();assert.equal(element('learn-resonance-view').hidden,false);
+ stations[2].click();assert.equal(element('tour-tones').hidden,false);
+ element('tour-tone-low').click();assert.equal(element('frequency').value,200);assert.equal(element('tour-tone-low').attrs['aria-pressed'],'true');
+ element('tour-tone-high').click();assert.equal(element('frequency').value,5000);
+ stations[4].click();assert.equal(element('tour-amplification').hidden,false);element('tour-active').click();assert.equal(element('mode-active').attrs['aria-pressed'],'true');
+ assert.equal(element('tour-active').attrs['aria-pressed'],'true');
  stations[5].click();element('mode-active').click();element('frequency').value='200';element('drive').value='900';
  element('tour-next').click();
  assert.equal(previews.at(-1),null,'Exit restores the independent panel layout');assert.equal(element('view-menu').hidden,false);
  assert.equal(element('frequency').value,'5000');assert.equal(element('drive').value,'620');assert.equal(element('active-amplitude').value,'80');
  assert.equal(element('mode-active').attrs['aria-pressed'],'true');assert.deepEqual(learning,original);assert.equal(element('learning-bridge').open,true);assert.equal(stops,2);
+});
+
+test('Tour uses six explanatory stages without exercise or hidden-answer blocks',()=>{
+ const {steps}=require('../learning-tour.js'),html=fs.readFileSync(require.resolve('../index.html'),'utf8');
+ assert.equal(steps.length,6);
+ for(const s of steps){assert.ok(s.intro.length>80);assert.ok(s.key);assert.equal(s.predict,undefined);assert.equal(s.observe,undefined);}
+ assert.match(steps[5].intro,/nicht simuliert/);
+ for(const id of ['tour-predict','tour-observe','tour-answer','tour-advanced'])assert.ok(!html.includes('id="'+id+'"'));
 });

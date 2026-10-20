@@ -184,7 +184,15 @@
     $("loupe-bottom").setAttribute("d",path(dx,detail.envelope.map(v=>dy(-v))));
     for(const id of ["loupe-top","loupe-bottom"])$(id).style.display=$("envelope").checked?"":"none";
     const detailLeft=waveX(detail.left),detailRight=waveX(detail.right);
-    $("loupe-region").innerHTML=`<path d="M${detailLeft} 320v12H${detailRight}v-12" fill="none" stroke="#163b65" stroke-width="2.5"/><text x="${(detailLeft+detailRight)/2}" y="359" text-anchor="middle" fill="#163b65" stroke="white" stroke-width="4" paint-order="stroke">Lupenausschnitt</text>`;
+    const bracketTop=waveLayout.center-44,bracketBottom=waveLayout.center+44;
+    const labelGap=14,labelWidth=60,rightEdge=1580;
+    // At the anatomical ends the simulation boundary already limits the excerpt.
+    const leftBracket=detail.left>result.x[0]+1e-9?`M${detailLeft+12} ${bracketTop}H${detailLeft}V${bracketBottom}h12`:'';
+    const rightBracket=detail.right<result.x.at(-1)-1e-9?`M${detailRight-12} ${bracketTop}H${detailRight}V${bracketBottom}h-12`:'';
+    // Attach the label to an existing bracket, never to the omitted edge bracket.
+    const labelOnRight=Boolean(rightBracket)&&detailRight+labelGap+labelWidth<=rightEdge;
+    const labelX=labelOnRight?detailRight+labelGap:Math.max(20+labelWidth,detailLeft-labelGap);
+    $("loupe-region").innerHTML=`<path d="${leftBracket} ${rightBracket}" fill="none" stroke="#163b65" stroke-width="2.5"/><text x="${labelX}" y="${bracketTop}" text-anchor="${labelOnRight?'start':'end'}" font-size="22" fill="#163b65" stroke="white" stroke-width="4" paint-order="stroke">Lupe</text>`;
     const detailPeak=20+260*(result.peakX-detail.left)/(detail.right-detail.left);
     $("loupe-peak").innerHTML=result.peakAmplitude&&!result.peakOutside?`<path d="M${detailPeak} 28V232" stroke="#c93043" stroke-width="2" opacity=".7"/><circle cx="${detailPeak}" cy="${dy(result.peakAmplitude)}" r="5" fill="#c93043" stroke="white" stroke-width="2"/>`:"";
     $("wave-loupe").setAttribute("aria-label",`Vergrößerte Wanderwelle von ${fmt(detail.left*1000,1)} bis ${fmt(detail.right*1000,1)} mm, synchron zur Hauptansicht`);

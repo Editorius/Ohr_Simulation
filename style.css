@@ -882,3 +882,9 @@ body[data-study-mode=tour] .sidebar{align-content:start}
 .learn-columns .learn-chart-toolbar .learn-peak-readout{margin:10px 0 0;line-height:1.5}
 #learn-resonance-view{grid-template-rows:auto 1fr}
 .learn-oscillator .learn-model-row{margin-top:0}
+
+#tour-intro{font-size:16px;line-height:1.65;max-width:85ch;margin:12px 0}
+.tour-key{background:#e7f4f5;color:#126e72;border-radius:8px;padding:12px 16px;font-weight:600;line-height:1.5}
+.tour-choices{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.tour-choices button[aria-pressed="false"]{background:#edf3f4;color:#29444b}
+.tour-navigation{margin-top:18px}

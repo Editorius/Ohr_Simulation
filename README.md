@@ -71,3 +71,5 @@ In „Schwingungsmodell der Basilarmembran“ erklärt der aufklappbare Bereich 
 Curriculare Grundlage: [KC Physik Niedersachsen 2022, S. 37](https://cuvo.nibis.de/cuvo.php?p=download&upload=363). Die aktive Verstärkung ergänzt die Physik als biologische Anwendung. Die Tour ersetzt kein reales Experiment.
 
 Im Unterrichtsschwinger verhindern feste Wertebereiche unrealistische Parameter. Graue Reglerbereiche sperren Kombinationen mit einem Resonanzmaximum außerhalb von 50–20.000 Hz. Für 50 Hz ist die untere Steifigkeitsgrenze ausdrücklich didaktisch erweitert.
+
+Die geführte Tour begleitet sechs Stationen mit kurzen Erklärungen statt Aufgabenblöcken. Tonvorgaben und Aktiv/Passiv-Vergleich sind direkt in den passenden Stationen verfügbar. Das Experimentierlabor bleibt frei bedienbar; beim Verlassen der Tour werden seine vorherigen Einstellungen wiederhergestellt. Die Signalweitergabe ans Gehirn wird ausschließlich erläutert.
