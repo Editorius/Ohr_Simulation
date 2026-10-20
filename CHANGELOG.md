@@ -140,3 +140,11 @@ Kurze fachlich relevante Historie. Die älteren Einträge sind aus lokalen Proje
 - Schwinger-Kachel kompakter mit Positionsfeld und seitlicher Pause; Modelldaten im schließbaren Dialog. Innenohr-Erklärung unter Wanderwelle verschoben, Lupe ±4 mm und Zeitanzeige darunter.
 
 - Zeitausgabe über der Lupenskala rechts ausgerichtet; Schwinger und Resonanzkurve mit gleichen Kopfbereichen und Trennlinien. Modellhinweis gekürzt.
+
+- Lupenausschnitt in der Wanderwelle mit linker und rechter Klammer; Beschriftung rechts, bei Platzmangel am rechten Rand links.
+
+- Lupe: randseitige Klammern an Basis/Apex entfallen; kurze Beschriftung mit Abstand oberhalb der BM. Detailansicht ebenfalls in Lupe umbenannt.
+
+- Beschriftung Lupe direkt neben dem oberen Ende einer sichtbaren Klammer; Wechsel nach links bei fehlender rechter Klammer oder Randkollision.
+
+- Geführte Tour als sechs erklärende Stationen statt Aufgabenformaten: kurze Begleittexte, Merksätze, Tonvorgaben und Aktiv/Passiv-Vergleich; Abschluss mit erläutertem Übergang zu Nervensignalen.

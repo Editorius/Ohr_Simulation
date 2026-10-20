@@ -132,12 +132,14 @@
           <p id="study-mode-note">Frei beobachten, Ansichten auswählen und eigene Fragen untersuchen.</p>
         </section>
         <section id="tour-guide" class="panel" aria-labelledby="tour-title" hidden>
-          <div class="tour-top"><span id="tour-progress"></span><label class="check"><input id="tour-advanced" type="checkbox"> Vertiefung: Formel und Modelldaten</label></div>
-          <h2 id="tour-title" tabindex="-1"></h2><p id="tour-intro"></p>
+          <div class="tour-top"><span id="tour-progress"></span><span>Innenohr entdecken</span></div>
           <ol id="tour-stations" aria-label="Stationen der Tour"></ol>
-          <div class="tour-tasks"><p><strong>Vermuten</strong><span id="tour-predict"></span></p><p><strong>Beobachten</strong><span id="tour-observe"></span></p><details id="tour-answer"><summary>Erklärung aufdecken</summary><p id="tour-explain"></p></details></div>
+          <h2 id="tour-title" tabindex="-1"></h2><p id="tour-intro"></p>
+          <p id="tour-key" class="tour-key"></p>
+          <div id="tour-tones" class="tour-choices" role="group" aria-label="Tonhöhe auswählen" hidden><button id="tour-tone-low" type="button" aria-pressed="false">Tief · 200 Hz</button><button id="tour-tone-mid" type="button" aria-pressed="true">Mittel · 1.000 Hz</button><button id="tour-tone-high" type="button" aria-pressed="false">Hoch · 5.000 Hz</button></div>
+          <div id="tour-amplification" class="tour-choices" role="group" aria-label="Cochleäre Verstärkung" hidden><button id="tour-passive" type="button" aria-pressed="true">Passiv</button><button id="tour-active" type="button" aria-pressed="false">Aktiv</button></div>
           <div class="tour-navigation"><button id="tour-back" class="secondary" type="button">Zurück</button><button id="tour-next" type="button">Weiter</button></div>
-          <details class="tour-curriculum"><summary>Lernziele und Unterrichtshinweise</summary><p>Schwingungen beschreiben, den Einfluss von Masse und Steifigkeit untersuchen und ein vereinfachtes Modell auf das Innenohr übertragen. Die Vorhersagen zunächst begründen, dann mit der Simulation vergleichen. Simulationen ergänzen reale Experimente.</p><p>Qualifikationsphase: Feder-Masse-Pendel und Schwingungsgrößen; Resonanz und Dämpfung als Vertiefung für erhöhtes Anforderungsniveau. Die aktive Verstärkung ist eine biologische Erweiterung.</p><a href="https://cuvo.nibis.de/cuvo.php?p=download&amp;upload=363" target="_blank" rel="noopener">Kerncurriculum Physik Niedersachsen (2022), S. 37</a></details>
+
         </section>
         <div class="view-toolbar"><details id="view-menu"><summary>☷ Ansichten</summary><div class="view-menu-content">
           <p>Ansichten einblenden und anordnen</p>
@@ -214,7 +216,7 @@
 <g id="wave-axis"/>
 </svg>
 <aside class="wave-detail" aria-label="Wanderwellenlupe">
- <h3>Vergrößert</h3><p>Um das Maximum · ±4 mm</p>
+ <h3>Lupe</h3><p>Um das Maximum · ±4 mm</p>
  <svg id="wave-loupe" viewBox="0 0 300 260" role="img" aria-label="Vergrößerte Wanderwelle">
   <path d="M20 130 H280" stroke="#c5d0d5" fill="none"/>
   <path id="loupe-top" class="envelope"/><path id="loupe-bottom" class="envelope"/>
@@ -271,7 +273,7 @@
 
  </div>
  <div class="learn-footer"><button id="learn-defaults" class="secondary">Zum aktuellen BM-Abschnitt</button></div>
-
+ 
  <dialog id="learn-depth" class="learn-depth-dialog" aria-labelledby="learn-depth-title"><div class="learn-dialog-heading"><h3 id="learn-depth-title">Formel und Modelldaten</h3><button id="learn-depth-close" class="secondary" aria-label="Formel und Modelldaten schließen">Schließen ×</button></div><div class="learning-equation"><strong>Eigenfrequenz</strong>   <math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="f null gleich eins durch zwei Pi mal Wurzel aus D durch m"><semantics><mrow><msub><mi>f</mi><mn>0</mn></msub><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>π</mi></mrow></mfrac><mo>⋅</mo><msqrt><mfrac><mi>D</mi><mi>m</mi></mfrac></msqrt></mrow><annotation encoding="application/x-tex">f_0=\frac{1}{2\pi}\sqrt{\frac{D}{m}}</annotation></semantics></math><p>Ungedämpftes Ersatzmodell</p><p><i>D</i>: effektive Federsteifigkeit<br><i>m</i>: effektive Masse</p></div><p class="hint">Die Formel beschreibt die ungedämpfte Eigenfrequenz. Im Modell ist eine geringe Dämpfung fest eingestellt; das angezeigte Resonanzmaximum liegt geringfügig darunter. Die Kurve wird auf ihr Maximum normiert. Die Animation zeigt die Antwort bei dieser Resonanzfrequenz in Zeitlupe. Das lokale Maximum muss nicht mit dem Wanderwellenmaximum des vollständigen Cochlea-Modells übereinstimmen.</p><div id="learn-data-view">
     <div class="learn-data-charts"><figure><figcaption>Effektive Masse · je 1 mm</figcaption><svg id="learn-mass-chart" viewBox="0 0 320 270" role="img" aria-label="Effektive Masse eines lokalen 1-mm-Abschnitts in Mikrogramm entlang der Cochlea"></svg></figure><figure><figcaption>Federsteifigkeit · je 1 mm</figcaption><svg id="learn-stiffness-chart" viewBox="0 0 320 270" role="img" aria-label="Federsteifigkeit eines lokalen 1-mm-Abschnitts in Newton pro Meter entlang der Cochlea"></svg></figure></div>
     <p class="hint">Beide Kurven beziehen die örtlichen Modellparameter auf einen <strong>1 mm langen Abschnitt</strong>. Masse in µg (1 µg = 10⁻⁹ kg), Federsteifigkeit in N/m. Effektive Masse der Cochlea-Partition einschließlich Corti-Organ, ohne mitbewegte Flüssigkeit. Näherungswerte nach Nobili/Mammano (1997), keine direkten Messreihen. Türkis: ausgewählter Lernabschnitt.</p>
