@@ -68,5 +68,6 @@
  $('study-tour').onclick=enter;$('study-lab').onclick=leave;$('tour-back').onclick=()=>enterStep(Math.max(0,index-1));$('tour-next').onclick=()=>index===5?leave():enterStep(index+1);
  for(const [id,f] of [['tour-tone-low',200],['tour-tone-mid',1000],['tour-tone-high',5000]])$(id).onclick=()=>{change('frequency',f,'change');syncChoices();};
  for(const mode of ['passive','active'])$('tour-'+mode).onclick=()=>{$('mode-'+mode).click();syncChoices();};
+ root.InnerEarTour={leave};
  render();
 })(typeof window==='undefined'?globalThis:window);
