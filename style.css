@@ -888,3 +888,42 @@ body[data-study-mode=tour] .sidebar{align-content:start}
 .tour-choices{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
 .tour-choices button[aria-pressed="false"]{background:#edf3f4;color:#29444b}
 .tour-navigation{margin-top:18px}
+/* Main entry: the screenshot assets are clipped, registered and never redrawn. */
+body[data-app-mode=discover] .workspace{grid-template-columns:minmax(0,1fr);max-width:1380px}
+body[data-app-mode=discover] .sidebar,body[data-app-mode=discover] #view-stack,body[data-app-mode=discover] .view-toolbar,body[data-app-mode=discover] #tour-guide,body[data-app-mode=discover] #views-empty{display:none!important}
+body[data-app-mode=simulation] #ear-discovery{display:none}
+.study-mode-buttons{flex-wrap:wrap;gap:8px}
+.ear-heading,.ear-dialog-heading{display:flex;align-items:center;justify-content:space-between;gap:20px}.ear-heading h2,.ear-dialog h2{margin:4px 0}.ear-eyebrow{font-size:12px;letter-spacing:.04em;color:#56717c;margin:0 0 6px}.ear-intro{color:#526e7b;line-height:1.6;max-width:80ch}
+.ear-regions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}.ear-regions button{padding:13px}
+.ear-regions button,.ear-parts button{background:#edf3f4;color:#163b65;border:1px solid #cbdce1}.ear-regions button[aria-pressed=true],.ear-parts button[aria-pressed=true]{background:#147b80;color:white;border-color:#147b80;box-shadow:inset 0 0 0 1px white}
+.ear-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(290px,1fr);gap:26px;align-items:start}.ear-art{background:#f8f6f5;border-radius:12px;overflow:hidden}.ear-art svg{display:block;width:100%;height:auto;overflow:hidden}.ear-grayscale{filter:grayscale(1)}
+.ear-hotspot{fill:transparent;stroke:transparent;stroke-width:2;cursor:pointer}.ear-hotspot:hover,.ear-hotspot:focus-visible{fill:#ffffff22;stroke:#147b80;stroke-dasharray:4 3;outline:none}
+.ear-parts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.ear-parts button{text-align:left;font-size:14px;padding:10px 12px}.ear-summary{margin-top:18px;padding:20px;border-radius:10px;background:#edf7f7;border:1px solid #cce4e5;min-height:220px}.ear-summary h3{margin:0 0 10px;font-size:22px}.ear-summary p{line-height:1.6}.ear-summary button{margin-top:6px}.ear-source{font-size:11px;line-height:1.5;color:#657b88;padding:0 8px}
+.ear-dialog{width:1000px;max-width:calc(100vw - 28px);max-height:88dvh;overflow:auto;border:1px solid #cbdce1;border-radius:16px;padding:26px;box-sizing:border-box;color:#163b65;background:white;box-shadow:0 16px 60px #20384744}.ear-dialog::backdrop{background:#20384777}.ear-dialog-heading{border-bottom:1px solid #dce5eb;padding-bottom:16px;margin-bottom:22px}.ear-detail-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);align-items:start;gap:24px}.ear-detail-grid p{line-height:1.7}.ear-detail-lead{font-size:20px;font-weight:600;margin-top:0}.ear-dialog button{flex-shrink:0}
+@media(max-width:800px){.ear-grid,.ear-detail-grid{grid-template-columns:1fr}.ear-art-column{max-width:580px;width:100%;margin:auto}.ear-detail-grid .ear-art{max-width:360px;margin:auto}.ear-heading{align-items:start}.ear-regions{gap:6px}.ear-regions button{padding:11px 4px}.ear-dialog{padding:18px}.ear-summary{min-height:0}}
+@media(prefers-reduced-motion:reduce){.ear-hotspot{transition:none}}
+body[data-app-mode=discover] .model-note,body[data-app-mode=discover] #status{display:none}
+.header .version{margin-left:auto}
+/* Parent selection guides the available structures, including image hotspots. */
+.ear-parts button:disabled{background:#f0f2f3;color:#89949b;border-color:#e0e5e7;opacity:.65;cursor:not-allowed;box-shadow:none}
+.ear-hotspot[aria-disabled=true]{pointer-events:none}
+#ear-parts-hint{margin:0 0 10px;line-height:1.5}
+.ear-localization{border-top:1px solid #dce5eb;margin-top:22px;padding-top:18px}
+.ear-localization>p{line-height:1.65;max-width:85ch}.ear-localization h3{font-size:21px;margin:0 0 10px}
+.ear-local-switch{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}.ear-local-switch button[aria-pressed=false]{background:#edf3f4;color:#163b65;border:1px solid #cbdce1}
+.ear-local-content h4{font-size:18px;margin:0 0 18px}.ear-local-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:24px;align-items:start}
+.ear-local-grid figure{margin:0}.ear-local-grid svg{display:block;width:100%;height:auto;overflow:hidden;border-radius:10px;background:#f2fbfb}.ear-local-grid figcaption{font-size:11px;line-height:1.5;color:#647783;margin-top:10px}.ear-local-grid p{line-height:1.65;margin-top:0}
+.ear-pinna-detail>.ear-detail-grid{display:none}.ear-pinna-detail .ear-localization{border:0;padding-top:0;margin-top:0}
+.ear-dialog-heading{position:sticky;top:-26px;background:white;z-index:2;padding-top:12px}
+@media(max-width:800px){.ear-local-grid{grid-template-columns:1fr}.ear-local-grid figure{max-width:480px;margin:0 auto}.ear-dialog-heading{top:-18px}}
+
+/* Gehörgang: Erklärung mit vollständiger Resonanzgrafik. */
+.ear-canal-detail>.ear-detail-grid{display:none}
+.ear-canal h3{font-size:21px;margin:0 0 12px}
+.ear-canal p{line-height:1.65}
+.ear-canal-figure{margin:20px 0 24px}
+.ear-canal-figure img{display:block;width:100%;height:auto;border-radius:10px}
+.ear-canal-figure figcaption{font-size:12px;line-height:1.5;color:#647783;margin-top:10px}
+.ear-canal-explanation{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.ear-canal h4{font-size:18px;margin:0 0 12px}
+@media(max-width:800px){.ear-canal-explanation{grid-template-columns:1fr;gap:12px}}

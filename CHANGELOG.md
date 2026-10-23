@@ -148,3 +148,21 @@ Kurze fachlich relevante Historie. Die älteren Einträge sind aus lokalen Proje
 - Beschriftung Lupe direkt neben dem oberen Ende einer sichtbaren Klammer; Wechsel nach links bei fehlender rechter Klammer oder Randkollision.
 
 - Geführte Tour als sechs erklärende Stationen statt Aufgabenformaten: kurze Begleittexte, Merksätze, Tonvorgaben und Aktiv/Passiv-Vergleich; Abschluss mit erläutertem Übergang zu Nervensignalen.
+
+- Neuer Standard-Einstieg Ohr entdecken: registrierte Nutzerbilder, Graustufen-Grundansicht, Bild- und Tastaturauswahl, Funktionsdialoge und Wechsel zur bestehenden Tour / zum Labor.
+
+- Ohrmuschel: bebilderte Erklärung horizontaler und vertikaler Schallortung, ohne Kapitelverweise oder Hyperlinks. Vertikale Ortung als Auswertung richtungsabhängiger Spektralmerkmale präzisiert. Hauptbereiche mit jeweils drei zugeordneten Unterpunkten; unpassende Schaltflächen und Bild-Hotspots deaktiviert, Gesamtansicht hebt die Einschränkung auf.
+
+- Gehörgang: bebilderte Erklärung der passiven Resonanz mit linearem Schalldruckfaktor; Beispielmaximum 5,62 (15 dB) bei circa 3,5 kHz.
+
+- Außenohr: Überblick um Schallformung zur räumlichen Ortung, passive Verstärkung im Sprachbereich und Weiterleitung zum Mittelohr ergänzt.
+
+- Quellenangabe nach Kollmeier (2009) unter der Gehörgangsgrafik ergänzt; schematische Adaption ausdrücklich gekennzeichnet.
+
+- Gehörgangsgrafik vereinfacht: Untertitel und drei erklärende Fußzeilen entfernt; Inhalte bleiben im Begleittext.
+
+- Trommelfell: Abschluss des näherungsweise einseitig offenen Gehörgangsresonators und wirksame Modellfläche von circa 55 mm² für die spätere Flächentransformation ergänzt.
+
+- Außenohransicht: Trommelfell zusätzlich violett hervorgehoben.
+
+- Gehörgang: Erklärung des Schalldruckfaktors 5,62 und Abgrenzung zum Lautheitsempfinden verständlicher formuliert.

@@ -4,38 +4,34 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Innenohr · Wanderwelle</title>
-    <link rel="stylesheet" href="style.css?v=0.12.0" />
-    <script defer src="numerics.js?v=0.12.0"></script>
-    <script defer src="cochlea-data.js?v=0.12.0"></script>
-    <script defer src="cochlea-model.js?v=0.12.0"></script>
-    <script defer src="solver-client.js?v=0.12.0"></script>
-    <script defer src="audio.js?v=0.12.0"></script>
-    <script defer src="response-view.js?v=0.12.0"></script>
-    <script defer src="fluid-geometry.js?v=0.12.0"></script>
-    <script defer src="fluid-view.js?v=0.12.0"></script>
-    <script defer src="cochlea-contour.js?v=0.12.0"></script>
-    <script defer src="learning-profiles.js?v=0.12.0"></script>
-    <script defer src="learning-model.js?v=0.12.0"></script>
-    <script defer src="learning-view.js?v=0.12.0"></script>
-    <script defer src="app.js?v=0.12.0"></script>
-    <script defer src="panel-layout.js?v=0.12.0"></script>
-    <script defer src="learning-tour.js?v=0.12.0"></script>
+    <link rel="stylesheet" href="style.css?v=0.12.1" />
+    <script defer src="numerics.js?v=0.12.1"></script>
+    <script defer src="cochlea-data.js?v=0.12.1"></script>
+    <script defer src="cochlea-model.js?v=0.12.1"></script>
+    <script defer src="solver-client.js?v=0.12.1"></script>
+    <script defer src="audio.js?v=0.12.1"></script>
+    <script defer src="response-view.js?v=0.12.1"></script>
+    <script defer src="fluid-geometry.js?v=0.12.1"></script>
+    <script defer src="fluid-view.js?v=0.12.1"></script>
+    <script defer src="cochlea-contour.js?v=0.12.1"></script>
+    <script defer src="learning-profiles.js?v=0.12.1"></script>
+    <script defer src="learning-model.js?v=0.12.1"></script>
+    <script defer src="learning-view.js?v=0.12.1"></script>
+    <script defer src="app.js?v=0.12.1"></script>
+    <script defer src="panel-layout.js?v=0.12.1"></script>
+    <script defer src="learning-tour.js?v=0.12.1"></script>
+    <script defer src="ear-discovery.js?v=0.12.1"></script>
   </head>
-  <body>
+  <body data-app-mode="discover">
     <header class="header">
       <div class="brand">
         <span class="brand-icon" aria-hidden="true">∿</span>
         <div>
-          <h1>Innenohr · Wanderwelle</h1>
+          <h1>Das Ohr entdecken</h1>
           <p>Modell des menschlichen Ohrs</p>
         </div>
       </div>
-      <nav aria-label="Ohrbereiche">
-        <button class="selected" aria-current="page">Innenohr</button
-        ><button disabled>Mittelohr · später</button
-        ><button disabled>Außenohr · später</button>
-      </nav>
-      <span class="version">Arbeitsstand 0.12.0 · Innenohr</span>
+      <span class="version">Arbeitsstand 0.12.1</span>
     </header>
     <main class="workspace">
       <aside class="sidebar" aria-label="Einstellungen">
@@ -128,9 +124,58 @@
                 </aside>
       <div class="experiment-column">
         <section class="study-modes panel" aria-label="Lernmodus">
-          <div class="study-mode-buttons"><button id="study-tour" type="button" disabled aria-pressed="false">Geführte Tour</button><button id="study-lab" type="button" disabled aria-pressed="true">Experimentierlabor</button></div>
+          <div class="study-mode-buttons"><button id="study-discover" type="button" aria-pressed="true">Ohr entdecken</button><button id="study-tour" type="button" disabled aria-pressed="false">Geführte Tour</button><button id="study-lab" type="button" disabled aria-pressed="false">Experimentierlabor</button></div>
           <p id="study-mode-note">Frei beobachten, Ansichten auswählen und eigene Fragen untersuchen.</p>
         </section>
+        <section id="ear-discovery" class="panel" aria-labelledby="ear-heading">
+          <div class="ear-heading"><div><p class="ear-eyebrow">Vom Schall zum Hören</p><h2 id="ear-heading">Ein Ohr. Viele Aufgaben.</h2></div><button id="ear-clear" class="secondary" type="button">Gesamtansicht</button></div>
+          <p class="ear-intro">Wähle einen Bereich im Bild oder über seinen Namen. Entdecke anschließend, welche Aufgabe er beim Hören übernimmt.</p>
+          <div id="ear-regions" class="ear-regions" aria-label="Ohrbereiche"></div>
+          <div class="ear-grid">
+            <div class="ear-art-column"><div class="ear-art"><svg id="ear-picture" viewBox="0 0 520 440" aria-label="Ohr im Schnitt mit auswählbaren Strukturen"><defs><clipPath id="ear-crop"><rect width="520" height="440"/></clipPath></defs><g clip-path="url(#ear-crop)"><image id="ear-image"/><g id="ear-hotspots"></g></g></svg></div><p class="ear-source">Bildvorlage: <a href="https://de.schubu.org/p250/die-ohren" target="_blank" rel="noopener">SchuBu · Die Ohren</a> · vom Nutzer bereitgestellte Ansichten</p></div>
+            <div class="ear-side"><p id="ear-parts-hint" class="hint">Alle Strukturen sind auswählbar.</p><div id="ear-parts" class="ear-parts" aria-label="Einzelne Strukturen"></div>
+              <article class="ear-summary" aria-live="polite"><p id="ear-category" class="ear-eyebrow">Orientierung</p><h3 id="ear-name">Wie gelangt Schall ins Innenohr?</h3><p id="ear-description">Außenohr, Mittelohr und Innenohr arbeiten zusammen. Wähle eine Struktur, um ihre Lage und Funktion kennenzulernen.</p><button id="ear-more" type="button" disabled>Funktion entdecken</button></article>
+            </div>
+          </div>
+        </section>
+        <dialog id="ear-detail" class="ear-dialog" aria-labelledby="ear-detail-title">
+          <div class="ear-dialog-heading"><div><p id="ear-detail-category" class="ear-eyebrow"></p><h2 id="ear-detail-title"></h2></div><button id="ear-detail-close" type="button" class="secondary" aria-label="Erklärung schließen">Schließen ×</button></div>
+          <div class="ear-detail-grid"><div id="ear-detail-image" class="ear-art" aria-hidden="true"></div><div><p id="ear-detail-lead" class="ear-detail-lead"></p><p id="ear-detail-text"></p><p id="ear-detail-key" class="tour-key"></p><button id="ear-simulation" type="button" hidden>Innenohr-Simulation öffnen</button><p id="ear-detail-note" class="hint"></p></div></div>
+          <section id="ear-canal" class="ear-canal" aria-labelledby="ear-canal-title" hidden>
+            <h3 id="ear-canal-title">Schall weiterleiten und Frequenzen hervorheben</h3>
+            <p>Der äußere Gehörgang verbindet die Ohrmuschel mit dem Trommelfell. Die Luft in diesem leicht gekrümmten Gang kann schwingen: Bei bestimmten Frequenzen entsteht am Trommelfell ein besonders hoher Schalldruck.</p>
+            <figure class="ear-canal-figure"><img src="assets/ear/canal-resonance.png" alt="Schematische Gehörgangsresonanz: Der Schalldruckfaktor steigt von etwa 1 auf ein Maximum von 5,62 bei circa 3,5 kHz und fällt anschließend wieder gegen 1. Faktor 5,62 entspricht 15 dB." width="1620" height="971"><figcaption>Illustratives Beispiel bei gleicher Anregung: Die Kurve ist keine Messung eines bestimmten Ohres. Faktor 1 bedeutet gleichen Schalldruck wie beim Bezugsschall.<br><strong>Inhaltliche Vorlage:</strong> B. Kollmeier u. a.: <cite>Medizinische Akustik und Audiologie: 21. Winterschule – Das periphere Hörorgan – Funktionsweise und Modellbildung.</cite> Version: 2009. <a href="https://d-nb.info/1019015241/04" target="_blank" rel="noopener noreferrer">Quellenverweis bei der Deutschen Nationalbibliothek</a>. Schematisch adaptiert; keine Übernahme der Messkurven.</figcaption></figure>
+            <div class="ear-canal-explanation"><div><h4>Warum entsteht eine Resonanz?</h4><p>Vereinfacht lässt sich der Gehörgang als Rohr betrachten, das außen offen und am Trommelfell annähernd geschlossen ist. Einfallender und reflektierter Schall überlagern sich. Länge, Form und der Abschluss durch das Trommelfell bestimmen, welche Frequenzen besonders hervorgehoben werden.</p><p>Eine Resonanz bei <strong>circa 3,5 kHz</strong> ist ein plausibles Beispiel. Die genaue Lage und Stärke unterscheiden sich von Mensch zu Mensch. Die Anhebung betrifft auch Frequenzanteile, die zum Verstehen von Sprache beitragen.</p></div><div><h4>Verstärkung ohne zusätzliche Energie</h4><p>Der Gehörgang arbeitet <strong>passiv</strong>. Er erzeugt keine zusätzliche Schallenergie. Durch Resonanz kann der örtliche Schalldruck am Trommelfell dennoch höher sein als beim Bezugsschall.</p><p><strong>Faktor 5,62:</strong> Die Druckschwankungen am Trommelfell sind etwa 5,62-mal so groß wie beim Bezugsschall. Das entspricht einer Anhebung um <strong>15 dB</strong>. Wie laut wir den Schall empfinden, hängt zusätzlich von seiner Frequenz und unserem Gehör ab.</p><p>Die natürliche Anhebung durch das Außenohr wird auch <strong>Eigenverstärkung</strong> oder „Open Ear Gain“ genannt.</p></div></div>
+            <p class="tour-key">Der Gehörgang leitet Schall weiter und hebt durch Resonanz bestimmte Frequenzen hervor – ohne zusätzliche Energiequelle.</p>
+          </section>
+          <section id="ear-localization" class="ear-localization" aria-labelledby="ear-local-title" hidden>
+            <h3 id="ear-local-title">Woher kommt der Schall?</h3>
+            <p>Zur räumlichen Orientierung nutzt das Gehirn verschiedene Merkmale. Für links und rechts ist besonders der Vergleich beider Ohren wichtig. Für oben und unten liefert die Form der Ohrmuschel zusätzliche Hinweise.</p>
+            <div class="ear-local-switch" role="group" aria-label="Merkmale der Schallortung">
+              <button id="ear-local-tab-horizontal" type="button" aria-pressed="true" aria-controls="ear-local-horizontal">Horizontal · zwei Ohren</button>
+              <button id="ear-local-tab-vertical" type="button" aria-pressed="false" aria-controls="ear-local-vertical">Vertikal · ein Ohr</button>
+            </div>
+            <section id="ear-local-horizontal" class="ear-local-content" aria-labelledby="ear-local-h-title">
+              <h4 id="ear-local-h-title">Links oder rechts: Signale beider Ohren vergleichen</h4>
+              <div class="ear-local-grid"><figure><svg viewBox="0 90 600 362" role="img" aria-label="Zwei schematische Draufsichten: Schallquelle rechts mit unterschiedlichen Druckphasen an den Ohren, Schallquelle vorne mit gleichen Druckphasen"><image href="assets/ear/localization-horizontal.png" width="1903" height="452"/></svg><figcaption>Schallquelle rechts und vorne: Momentaufnahmen der Druckverteilung, stark schematisch. Darstellung: physiologie.cc, nach Carlson / Birkett (2017).</figcaption></figure><div>
+              <p>Trifft Schall von einer Seite ein, erreicht er das nähere Ohr früher. Das Gehirn nutzt diesen <strong>Laufzeitunterschied</strong> zur Richtungsbestimmung. Bei tiefen Tönen können dabei auch die unterschiedlichen Phasen der Schwingung eine Rolle spielen.</p>
+              <p>Zusätzlich schirmt der Kopf einen Teil des Schalls ab. Am abgewandten Ohr ist der <strong>Schallpegel</strong> daher häufig geringer. Dieser Pegelunterschied ist besonders bei hohen Frequenzen ausgeprägt.</p>
+              <p>Kommt Schall genau von vorne, sind die Laufwege zu beiden Ohren ungefähr gleich. Aus gleichen Laufzeiten und Pegeln allein lässt sich vorne jedoch nicht sicher von hinten unterscheiden. Weitere Merkmale und Kopfbewegungen helfen dabei.</p>
+              <p class="tour-key">Horizontal: vor allem Laufzeit und Schallpegel zwischen beiden Ohren vergleichen.</p>
+              </div></div>
+            </section>
+            <section id="ear-local-vertical" class="ear-local-content" aria-labelledby="ear-local-v-title" hidden>
+              <h4 id="ear-local-v-title">Oben oder unten: Das Schallmuster an einem Ohr auswerten</h4>
+              <div class="ear-local-grid"><figure><svg viewBox="1323 101 581 407" role="img" aria-label="Ohrmuschel mit direkten und reflektierten Schallwegen aus verschiedenen Einfallsrichtungen"><image href="assets/ear/localization-vertical.png" width="1906" height="707"/></svg><figcaption>Direkte und reflektierte Schallwege, schematisch. Darstellung: physiologie.cc, nach Boron / Boulpaep (2021).</figcaption></figure><div>
+              <p>Ein Teil des Schalls gelangt direkt in den Gehörgang, ein anderer wird an Falten und Vertiefungen der Ohrmuschel reflektiert. Je nach Einfallsrichtung unterscheiden sich die Wege und damit die Laufzeiten.</p>
+              <p>Direkter und reflektierter Schall <strong>überlagern sich</strong>. Dadurch werden manche Frequenzanteile verstärkt, andere abgeschwächt. Es entsteht ein richtungsabhängiges <strong>Schallmuster im Frequenzspektrum</strong>. Das Gehirn wertet dieses Muster aus – nicht zwei getrennt wahrgenommene Echos.</p>
+              <p>Solche Merkmale sind bereits im Signal eines Ohres enthalten (<strong>monaural</strong>). Sie helfen besonders bei der Höhenrichtung und auch bei der Unterscheidung von vorne und hinten. Sie sind nicht ausschließlich auf die Vertikale beschränkt.</p>
+              <p>Da Ohrmuscheln unterschiedlich geformt sind, sind auch die Muster individuell. Ihre Zuordnung zu räumlichen Richtungen wird durch Erfahrung gelernt. Geräusche mit vielen Frequenzanteilen liefern dafür mehr Hinweise als ein einzelner reiner Ton.</p>
+              <p class="tour-key">Vertikal: vor allem das durch die Ohrmuschel geformte Frequenzmuster auswerten.</p>
+              </div></div>
+            </section>
+          </section>
+        </dialog>
         <section id="tour-guide" class="panel" aria-labelledby="tour-title" hidden>
           <div class="tour-top"><span id="tour-progress"></span><span>Innenohr entdecken</span></div>
           <ol id="tour-stations" aria-label="Stationen der Tour"></ol>
@@ -273,7 +318,7 @@
 
  </div>
  <div class="learn-footer"><button id="learn-defaults" class="secondary">Zum aktuellen BM-Abschnitt</button></div>
- 
+
  <dialog id="learn-depth" class="learn-depth-dialog" aria-labelledby="learn-depth-title"><div class="learn-dialog-heading"><h3 id="learn-depth-title">Formel und Modelldaten</h3><button id="learn-depth-close" class="secondary" aria-label="Formel und Modelldaten schließen">Schließen ×</button></div><div class="learning-equation"><strong>Eigenfrequenz</strong>   <math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="f null gleich eins durch zwei Pi mal Wurzel aus D durch m"><semantics><mrow><msub><mi>f</mi><mn>0</mn></msub><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>π</mi></mrow></mfrac><mo>⋅</mo><msqrt><mfrac><mi>D</mi><mi>m</mi></mfrac></msqrt></mrow><annotation encoding="application/x-tex">f_0=\frac{1}{2\pi}\sqrt{\frac{D}{m}}</annotation></semantics></math><p>Ungedämpftes Ersatzmodell</p><p><i>D</i>: effektive Federsteifigkeit<br><i>m</i>: effektive Masse</p></div><p class="hint">Die Formel beschreibt die ungedämpfte Eigenfrequenz. Im Modell ist eine geringe Dämpfung fest eingestellt; das angezeigte Resonanzmaximum liegt geringfügig darunter. Die Kurve wird auf ihr Maximum normiert. Die Animation zeigt die Antwort bei dieser Resonanzfrequenz in Zeitlupe. Das lokale Maximum muss nicht mit dem Wanderwellenmaximum des vollständigen Cochlea-Modells übereinstimmen.</p><div id="learn-data-view">
     <div class="learn-data-charts"><figure><figcaption>Effektive Masse · je 1 mm</figcaption><svg id="learn-mass-chart" viewBox="0 0 320 270" role="img" aria-label="Effektive Masse eines lokalen 1-mm-Abschnitts in Mikrogramm entlang der Cochlea"></svg></figure><figure><figcaption>Federsteifigkeit · je 1 mm</figcaption><svg id="learn-stiffness-chart" viewBox="0 0 320 270" role="img" aria-label="Federsteifigkeit eines lokalen 1-mm-Abschnitts in Newton pro Meter entlang der Cochlea"></svg></figure></div>
     <p class="hint">Beide Kurven beziehen die örtlichen Modellparameter auf einen <strong>1 mm langen Abschnitt</strong>. Masse in µg (1 µg = 10⁻⁹ kg), Federsteifigkeit in N/m. Effektive Masse der Cochlea-Partition einschließlich Corti-Organ, ohne mitbewegte Flüssigkeit. Näherungswerte nach Nobili/Mammano (1997), keine direkten Messreihen. Türkis: ausgewählter Lernabschnitt.</p>

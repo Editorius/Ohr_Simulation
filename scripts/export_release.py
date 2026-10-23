@@ -5,6 +5,8 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 APP_FILES=['index.html','style.css','numerics.js','cochlea-data.js','cochlea-model.js','solver-client.js','audio.js','response-view.js','fluid-geometry.js','fluid-view.js','cochlea-contour.js','app.js','panel-layout.js','learning-model.js','learning-profiles.js','learning-view.js','learning-tour.js','anatomy/index.html','anatomy/integration.js','.nojekyll','THIRD_PARTY_NOTICES.md']
 
+APP_FILES += ['assets/ear/canal-resonance.png','assets/ear/localization-horizontal.png','assets/ear/localization-vertical.png','ear-discovery.js'] + ['assets/ear/'+name+'.png' for name in ['outer','middle','inner','pinna','canal','drum','ossicles','oval','tube','cochlea','nerve','balance']]
+
 def build(root,output):
     root=Path(root).resolve();output=Path(output).resolve()
     if output.exists():raise FileExistsError('Export already exists; choose a new version or archive it first: '+str(output))
